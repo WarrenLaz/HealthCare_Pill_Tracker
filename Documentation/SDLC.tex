@@ -25,9 +25,8 @@ The primary objective of the [Medication Tracker Application] is to provide an i
 The scope of this project encompasses the design and planning phases of the application development process, the implementation of client requirements, and integration and testing through comprehensive quality assurance management. As the project scales, the scope will extend to include ongoing maintenance, support, and additional testing to ensure compliance with regulatory requirements.
 
 \section{Requirement Engineering}
-\subsection{Requirements}
-\subsubsection{Client Project Description}
-I consume natural medications such as supplements to help balance the healthy vitamin and mineral levels in my body. I have a schedule of how many pills and the type of medication to take multiple times a day. I have to order the pills where it takes several days to arrive. I run out frequently because I overestimate the amount of pills I have and underestimate the time it takes for the pills to arrive. I need a way to make sure I don't miss any medication on my schedule. The schedule may change a couple times a month. The solution must account for the consumption and the time it takes for the pills to arrive. I have to order the medication manually today, but it would be nice to send a request to order more medication with my doctor so I never run out. The medication should be ordered in batches to minimize shipping costs. This solution should be shared with the doctor to add the medications and dosage while the patient can add the start date of a new bottle and verify the pill(s) were taken. Please let me know if more detail is required or if you have any questions. 
+\subsection{User Stories}
+The user stories for this software capture the essential needs and experiences of patients and doctors as they manage natural medication intake and coordination. These stories outline key features such as medication scheduling, inventory tracking, and automated reordering, providing a clear view of how the software will support users in maintaining their health regimens. By focusing on real-world challenges, such as avoiding missed doses and optimizing shipment timing, these user stories ensure the software remains practical, user-friendly, and aligned with both patient and doctor requirements throughout the development process.
 \begin{itemize}
     \item \textbf{US\_A}: There should be a patient profile and a doctor profile.
     \item \textbf{US\_B}: Doctors should be able to add dosage and medications to patient profiles.
@@ -41,8 +40,20 @@ I consume natural medications such as supplements to help balance the healthy vi
     \item \textbf{US\_J}: Ask only if you want to center around natural medication, such as supplements and vitamins. OTC?
     \item \textbf{US\_K}: The doctor should be able to place medication orders.
     \item \textbf{US\_L}: Patients should be able to see medications scheduled, dosage, and quantity. 
-
 \end{itemize}
+base on each of the user stories, the software requirements must include the following features: 
+\begin{enumerate}
+    \item \textbf{Pill Consumption Tracking:} Patients can log the type and number of pills they take based on their medication schedule, which may change a few times a month.
+    \item \textbf{Inventory Monitoring:} The system tracks medication usage in real-time, alerting the patient when the supply is running low. It also factors in the estimated shipping time for new orders.
+    \item \textbf{Automatic Reorder Requests:} The solution allows patients to send requests to their doctor for refilling prescriptions or ordering more supplements, ensuring there is no gap in their medication schedule. Medications are ordered in batches to minimize shipping costs.
+    \item \textbf{Doctor-Patient Collaboration:} The system enables doctors to input the type of medications, dosage, and other relevant information, while patients are responsible for setting the start date of a new bottle and verifying that they’ve taken the prescribed dose.
+\end{enumerate}
+\subsection{Specificiation}
+\section{Design and Planning}
+\subsection{System Architecture}
+\subsection{Data Flow }
+\subsection{Entity Relationship Diagram}
+\subsection{User Interfaces}
 
 
 \end{document}
