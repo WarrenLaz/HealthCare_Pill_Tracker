@@ -1,4 +1,4 @@
-<h1 align="center"> Medication Consumption Tracker :pill: </h1>
+<h1 align="center"> :pill:   Medication Consumption Tracker </h1>
 <p align="center">
   
 <a href="https://opensource.org/licenses/MIT">
@@ -16,4 +16,39 @@
 <a href="https://github.com/WarrenLaz/HealthCare_Pill_Tracker/stargazers">
 <img src="https://img.shields.io/github/stars/WarrenLaz/HealthCare_Pill_Tracker" alt="Stars">
 </a>
+<h4 align="center"> Physician to Patient Medication Tracker </h4>
 </p>
+
+<h2> Overview </h2>
+<p>The [Medication Tracker Application] provides an accessiblity tailored interface for efficient tracking of medication data between patients and physicians. A key feature of this product is the ability to monitor patient pill consumption and the automation of the ordering process. </p>
+
+## Supported Systems
+
+
+| Operating System | Supported? |
+|:------------:|:----------:|
+| OSX          | Yes        |
+| Windows      | Yes        |
+| IOS          | Yes        |
+| Andriod      | Yes        |
+
+\* Physician client-side is web-based
+
+
+<h2 align="center"> :zap: Usage </h2>
+
+<h4 align="center"> Usuage Guide </h4>
+
+## Installation
+
+> [!IMPORTANT]
+> ...
+>
+> ...
+
+> [!WARNING]
+> ...
+
+
+
+
