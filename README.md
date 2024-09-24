@@ -9,7 +9,7 @@
 <img src="https://img.shields.io/github/issues/markdown-templates/markdown-snippets.svg" alt="Issues">
 </a>
 
-<a href="https://github.com/markdown-templates/markdown-snippets/fork">
+<a href="https://github.com/HealthCare_Pill_Tracker/fork">
 <img src="https://img.shields.io/github/forks/markdown-templates/markdown-snippets.svg" alt="Forks">
 </a>
 
