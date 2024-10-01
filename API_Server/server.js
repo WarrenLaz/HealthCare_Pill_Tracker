@@ -19,9 +19,13 @@ async function ping(RxName) {
     try{
         await MongoClient.connect();
         console.log('connected to Mongo');
-
         const drugs = getDB('DrugProducts', 'Drugs');
-        return drugs.findOne({"DrugName" : String(RxName).toUpperCase() });
+        const druglist = [];
+        for(var i = 0; i < RxName.length; i++){
+            druglist.push(await drugs.findOne({"DrugName" : {$regex : String(RxName[i]).toUpperCase()} }));
+            console.log(RxName[i]);
+        }
+        return druglist;
     }
     catch(err){
         console.log('Error Unsucessful: ', err)
@@ -30,23 +34,22 @@ async function ping(RxName) {
 }
 
 
-console.log("Done");
-
 app.get('/', (req,res) =>{
-    ping("ozempic").then(drug => {
-        const id = drug["_id"]
-        const prodno = drug["ProductNo"]
-        const Form = drug["Form"]
-        const DrugName = drug["DrugName"]
-        const Strength = drug["Strength"]
-        const ActiveIng = drug["ActiveIngredient"]
-        res.send(
-            "<center> <h1>".concat(DrugName).concat("</h1>")
-            .concat("\n<p> product number: ").concat(prodno).concat("</p>")
-            .concat("\n<p> Form: ").concat(Form).concat("</p>")
-            .concat("\n<p> Strength: ").concat(Strength).concat("</p>")
-            .concat("\n<p> ActiveIng: ").concat(ActiveIng).concat("</p> <\center>")
-        )
+    ping(["Lyrica", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"]).then(drugDB => {
+        var html = "<style> table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}tr:nth-child(even) {background-color: #dddddd;}</style> <h1> DrugList Query Table </h1> <table> <tr> <th> ID </th> <th>ProductNo</th> <th>Form</th> <th>DrugName</th> <th> Strength </th> <th> Active Ingredient </th> </tr>" 
+        for (var i = 0; i < drugDB.length; i++){
+            const id = drugDB[i]["_id"];
+            const prodno = drugDB[i]["ProductNo"];
+            const Form = drugDB[i]["Form"];
+            const DrugName = drugDB[i]["DrugName"];
+            const Strength = drugDB[i]["Strength"];
+            const ActiveIng = drugDB[i]["ActiveIngredient"];
+            const table = `<tr> <td> ${id} </td> <td> ${prodno} </td> <td> ${Form} </td> <td> ${DrugName} </td> <td> ${Strength} </td> <td> ${ActiveIng} </td> </tr>`
+            html = html.concat(table);
+        }
+        console.log(html)
+        html = html.concat("</table>");
+        res.send(html);
     });
     console.log("Successful")
 });
