@@ -12,20 +12,12 @@ function getDB(db, collection){
     return MongoClient.db(db).collection(collection);
 }
 
-async function ping(RxName) {
+async function getData(collection, query) {
     try{
         await MongoClient.connect();
-        console.log('connected to Mongo');
-        const drugs = getDB('DrugProducts', 'Drugs');
-
-        const druglist = [];
-        for(var i = 0; i < RxName.length; i++){
-            const dlist = await drugs.find({"DrugName" : {$regex : String(RxName[i]).toUpperCase()} }).toArray();
-            for(var j = 0; j < dlist.length;j++){
-                druglist.push(dlist[j]);
-            }
-        }
-        return druglist;
+        console.log('connected to Mongo [GET]: ', collection);
+        const table = collection;
+        return await table.find(query).toArray();
     }
     catch(err){
         console.log('Error Unsucessful: ', err)
@@ -33,24 +25,53 @@ async function ping(RxName) {
     }
 }
 
-//"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
-app.get('/', (req,res) =>{
-    ping([ "ozempic"]).then(drugDB => {
-        var html = "<style> table {font-family: arial, sans-serif;border-collapse: collapse;width: 100%;}td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}tr:nth-child(even) {background-color: #dddddd;}</style> <h1> DrugList Query Table </h1> <table> <tr> <th> ID </th> <th>ProductNo</th> <th>Form</th> <th>DrugName</th> <th> Strength </th> <th> Active Ingredient </th> </tr>" 
-        for (var i = 0; i < drugDB.length; i++){
-            const id = drugDB[i]["_id"];
-            const prodno = drugDB[i]["ProductNo"];
-            const Form = drugDB[i]["Form"];
-            const DrugName = drugDB[i]["DrugName"];
-            const Strength = drugDB[i]["Strength"];
-            const ActiveIng = drugDB[i]["ActiveIngredient"];
-            const table = `<tr> <td> ${id} </td> <td> ${prodno} </td> <td> ${Form} </td> <td> ${DrugName} </td> <td> ${Strength} </td> <td> ${ActiveIng} </td> </tr>`
-            html = html.concat(table);
-        }
-        html = html.concat("</table>");
-        res.send(html);
+async function pushData(collection, query) {
+    try{
+        await MongoClient.connect();
+        console.log('connected to Mongo [INSERT]: ', collection);
+        const table = collection;
+
+        await table.insertOne(query);
+
+        return '200 OK';
+    }
+    catch(err){
+        console.log('Error Unsucessful: ', err)
+        return err;
+    }
+}
+
+app.get('/',(req,res)=> {
+    //payload would go into ping([PAYLOAD])
+    getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : "ozempic".toUpperCase()} }).then(drugDB => {
+        console.log(drugDB);
+        res.send(drugDB);
     });
+});
+
+app.get('/patient',(req,res)=> {
+    //payload would go into ping([PAYLOAD])
+    pushData(getDB('Patients', 'patient'), 
+    {
+        FirstName: "test",
+        LastName: "test",
+        Birhtday: "test",
+        Address: "test",
+        Phone_number: "test",
+        Email: "test",
+        Password: "test",
+    }).then(status => {
+        console.log(status);
+        res.send(status);
+    });
+});
+
+//"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
+app.post('/', (req,res) =>{
+    //this will get some payload
+    // payload = res.get()
     console.log("Successful")
 });
+
 
 
