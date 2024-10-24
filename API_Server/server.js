@@ -41,6 +41,14 @@ async function pushData(collection, query) {
     }
 }
 
+app.get('/time', (req,res) => {
+    const date = new Date();
+    pushData(getDB('Patients', 'medication_log'), {"timestamp" : date}).then(resp =>{
+        res.send(resp);
+    })
+});
+
+
 app.get('/',(req,res)=> {
     //payload would go into ping([PAYLOAD])
     getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : "ozempic".toUpperCase()} }).then(drugDB => {
