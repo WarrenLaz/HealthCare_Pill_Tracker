@@ -66,6 +66,23 @@ app.get('/patient',(req,res)=> {
     });
 });
 
+app.get('/physicians',(req,res)=> {
+    //payload would go into ping([PAYLOAD])
+    pushData(getDB('Physicians', 'Physician'), 
+    {
+        FirstName: "test",
+        LastName: "test",
+        Birhtday: "test",
+        Address: "test",
+        Phone_number: "test",
+        Email: "test",
+        Password: "test"
+    }).then(status => {
+        console.log(status);
+        res.send(status);
+    });
+});
+
 //"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
 app.post('/', (req,res) =>{
     //this will get some payload
