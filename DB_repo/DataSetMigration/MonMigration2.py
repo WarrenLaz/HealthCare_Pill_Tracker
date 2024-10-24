@@ -1,8 +1,11 @@
 import csv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+import os
+from dotenv import load_dotenv
 
-uri = 'mongodb+srv://wjlaz:lqtxtJVwnQwxetEl@cluster0.7ic0l.mongodb.net/'
+load_dotenv()
+uri = uri = os.environ.get("MOGO_API")
 client = MongoClient(uri, server_api = ServerApi('1'))
 
 def ping():
