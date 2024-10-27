@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios'
 
-export const Home = () => {
+export const Supp = () => {
     const[supplements, setsupplements] = useState([]);
     const[search, setsearch] = useState([]);
 
@@ -14,7 +14,7 @@ export const Home = () => {
         e.preventDefault();
         console.log(search);
         try{
-            await axios.post("/drugs", {search}).then(resp => {setsupplements(resp.data)})
+            await axios.post("/supple", {search}).then(resp => {setsupplements(resp.data)})
         }catch(e){
             console.log(e)
         }
@@ -28,7 +28,8 @@ export const Home = () => {
 
         {(typeof supplements === 'undefined') ? ( <p>loading...</p>) : (
             supplements.map((item, i) =>
-                <p key={i}>{item['DrugName']} {item['Strength']} {item['Form']}</p>
+                //URL,DSLD ID,Product Name,Brand Name,Bar Code,Net Contents,Serving Size,Product Type [LanguaL],Supplement Form [LanguaL],Date Entered into DSLD,Market Status,Suggested Use
+                <p key={i}>{item['DSLD']} {item['Product Name']} {item['Brand Name']}</p>
                 
             )
             

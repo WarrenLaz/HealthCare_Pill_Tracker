@@ -6,6 +6,12 @@ const port = process.env.PORT;
 
 const MongoClient = new mongo.MongoClient(uri);
 
+// For parsing application/json
+app.use(express.json());
+
+// For parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
 function getDB(db, collection){
     return MongoClient.db(db).collection(collection);
 }
@@ -38,9 +44,7 @@ async function pushData(collection, query) {
         return err;
     }
 }
-app.get('/testing', (req, res) => {
-    res.send({hi :"hello"});
-});
+
 app.get('/time', (req,res) => {
     const date = new Date();
     pushData(getDB('Patients', 'medication_log'), {"timestamp" : date}).then(resp =>{
@@ -48,11 +52,9 @@ app.get('/time', (req,res) => {
     })
 });
 
-
-app.get('/drugs',(req,res)=> {
+app.post('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-
-    const drugName = req.body;
+    const drugName = req.body['search'];
 
     getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : drugName.toUpperCase()} }).then(drugDB => {
         console.log(drugDB);
@@ -60,9 +62,9 @@ app.get('/drugs',(req,res)=> {
     });
 });
 
-app.get('/supple',(req,res)=> {
+app.post('/supple',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    const Supplement = "lycopene"
+    const Supplement = req.body['search']
     getData(getDB('DrugProducts', 'Supplements'), {"Product Name" : {$regex : Supplement.charAt(0).toUpperCase() + Supplement.slice(1)} }).then(drugDB => {
         console.log(drugDB);
         res.send(drugDB);
