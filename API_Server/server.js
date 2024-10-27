@@ -4,8 +4,6 @@ const app = express();
 const uri = process.env.MOGO_KEY;
 const port = process.env.PORT;
 
-app.listen(port, () => console.log('Server is running', port))
-
 const MongoClient = new mongo.MongoClient(uri);
 
 function getDB(db, collection){
@@ -40,7 +38,9 @@ async function pushData(collection, query) {
         return err;
     }
 }
-
+app.get('/testing', (req, res) => {
+    res.send({hi :"hello"});
+});
 app.get('/time', (req,res) => {
     const date = new Date();
     pushData(getDB('Patients', 'medication_log'), {"timestamp" : date}).then(resp =>{
@@ -49,13 +49,26 @@ app.get('/time', (req,res) => {
 });
 
 
-app.get('/',(req,res)=> {
+app.get('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : "ozempic".toUpperCase()} }).then(drugDB => {
+
+    const drugName = req.body;
+
+    getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : drugName.toUpperCase()} }).then(drugDB => {
         console.log(drugDB);
         res.send(drugDB);
     });
 });
+
+app.get('/supple',(req,res)=> {
+    //payload would go into ping([PAYLOAD])
+    const Supplement = "lycopene"
+    getData(getDB('DrugProducts', 'Supplements'), {"Product Name" : {$regex : Supplement.charAt(0).toUpperCase() + Supplement.slice(1)} }).then(drugDB => {
+        console.log(drugDB);
+        res.send(drugDB);
+    });
+});
+
 
 app.get('/patient',(req,res)=> {
     //payload would go into ping([PAYLOAD])
@@ -98,5 +111,6 @@ app.post('/', (req,res) =>{
     console.log("Successful")
 });
 
+app.listen(port, () => console.log('Server is running', port))
 
 
