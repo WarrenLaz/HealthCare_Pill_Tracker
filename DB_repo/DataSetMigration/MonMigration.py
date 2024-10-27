@@ -1,12 +1,15 @@
 import csv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 dataset = open('/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/DB_repo/DataSetMigration/Products.csv', 'r')
 data = csv.DictReader(dataset)
 
 #DO NOT RUN PLEASE
-uri = "APIKEY"
+uri = os.environ.get("MOGO_API")
 client = MongoClient(uri, server_api = ServerApi('1'))
 
 def ping():
