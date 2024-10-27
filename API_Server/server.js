@@ -51,7 +51,7 @@ app.get('/time', (req,res) => {
         res.send(resp);
     })
 });
-
+//"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
 app.post('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
     const drugName = req.body['search'];
@@ -64,7 +64,7 @@ app.post('/drugs',(req,res)=> {
 
 app.post('/supple',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    const Supplement = req.body['search']
+    const Supplement = req.body['search'];
     getData(getDB('DrugProducts', 'Supplements'), {"Product Name" : {$regex : Supplement.charAt(0).toUpperCase() + Supplement.slice(1)} }).then(drugDB => {
         console.log(drugDB);
         res.send(drugDB);
@@ -89,25 +89,60 @@ app.get('/patient',(req,res)=> {
     });
 });
 
-app.get('/physicians',(req,res)=> {
+app.post('/Registration',(req,res)=> {
     //payload would go into ping([PAYLOAD])
+    const payload = req.body['RegForm'];
     pushData(getDB('Physicians', 'Physician'), 
     {
-        FirstName: "test",
-        LastName: "test",
-        Birhtday: "test",
-        Address: "test",
-        Phone_number: "test",
-        Email: "test",
-        Password: "test"
+        Username: payload['Username'],
+        Password: payload['Password'],
+        First_Name: payload['First_Name'],
+        Last_Name: payload['Last_Name'],
+        Date_of_Birth: payload['Date_of_Birth'],
+        Practice_Email_Address: payload['Practice_Email_Address'],
+        Practice_Phone_Number: payload['Practice_Phone_Number'],
+        Practic_Address: payload['Practic_Address'],
+        Lisence_Number: payload['Lisence_Number'],
+        License_Expiration_Date: payload['License_Expiration_Date'],
+        Organization: payload['Organization'],
+        Specialization: payload['Specialization']
     }).then(status => {
         console.log(status);
         res.send(status);
     });
 });
 
-//"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
-app.post('/', (req,res) =>{
+//Login
+app.post('/Login', (req,res) =>{
+    let status = ""
+    payload = req.body['LoginForm']
+    getData(getDB('Physicians', 'Physician'), {Username : payload['Username']}).then(
+        data => data[0]
+    ).then(
+        data => {
+            if (typeof data === 'undefined') {
+                res.send("Invalid Username")
+            } else{
+                if(data['Password'] === payload['Password']){
+                    res.send("200 OK")
+                } else{
+                    res.send("Invalid Password")
+                }
+            }
+    })
+
+    // payload = res.get()
+    console.log("Successful")
+});
+
+//example post
+app.post('/example', (req,res) =>{
+    //this will get some payload
+    // payload = res.get()
+    console.log("Successful")
+});
+//example get
+app.get('/exampe', (req,res) =>{
     //this will get some payload
     // payload = res.get()
     console.log("Successful")
