@@ -2,7 +2,7 @@
   "name": "patient_app",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
-  "proxy" : "http: //localhost:8000",
+  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
     "nvm": "^0.0.4",
