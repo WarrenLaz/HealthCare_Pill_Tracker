@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { DrugSearch } from "./components/DrugSearch";
 import { Supp } from "./components/Supp";

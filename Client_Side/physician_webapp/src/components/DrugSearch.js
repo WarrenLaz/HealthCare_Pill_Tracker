@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from 'axios'
 
 export const DrugSearch = () => {
@@ -14,7 +14,7 @@ export const DrugSearch = () => {
         e.preventDefault();
         console.log(search);
         try{
-            await axios.post("http://localhost:8000/Login", {search}).then(resp => {setsupplements(resp.data)})
+            await axios.post("/drugs", {search}).then(resp => {setsupplements(resp.data)})
         }catch(e){
             console.log(e)
         }

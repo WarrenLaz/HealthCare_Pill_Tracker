@@ -9,7 +9,7 @@ const MongoClient = new mongo.MongoClient(uri);
 
 // For parsing application/json
 app.use(cors());
-//app.use(express.json());
+app.use(express.json());
 // For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
@@ -55,7 +55,7 @@ app.get('/time', (req,res) => {
 //"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
 app.post('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    //const drugName = req.body['search'];
+    const drugName = req.body['search'];
     console.log(req.body);
     getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : drugName.toUpperCase()} }).then(drugDB => {
         console.log(drugDB);
