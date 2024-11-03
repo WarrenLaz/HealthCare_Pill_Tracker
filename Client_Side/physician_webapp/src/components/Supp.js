@@ -14,7 +14,7 @@ export const Supp = () => {
         e.preventDefault();
         console.log(search);
         try{
-            await axios.post("/supple", {search}).then(resp => {setsupplements(resp.data)})
+            await axios.post("http://localhost:8000/supple", {search}).then(resp => {setsupplements(resp.data)})
         }catch(e){
             console.log(e)
         }

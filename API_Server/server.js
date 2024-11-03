@@ -3,12 +3,13 @@ const mongo = require('mongodb');
 const app = express();
 const uri = process.env.MOGO_KEY;
 const port = process.env.PORT;
+const cors = require('cors')
 
 const MongoClient = new mongo.MongoClient(uri);
 
 // For parsing application/json
-app.use(express.json());
-
+app.use(cors());
+//app.use(express.json());
 // For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
@@ -54,8 +55,8 @@ app.get('/time', (req,res) => {
 //"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
 app.post('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    const drugName = req.body['search'];
-
+    //const drugName = req.body['search'];
+    console.log(req.body);
     getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : drugName.toUpperCase()} }).then(drugDB => {
         console.log(drugDB);
         res.send(drugDB);
@@ -115,18 +116,18 @@ app.post('/Registration',(req,res)=> {
 //Login
 app.post('/Login', (req,res) =>{
     let status = ""
-    payload = req.body['LoginForm']
+    payload = req.body['LoginForm'];
     getData(getDB('Physicians', 'Physician'), {Username : payload['Username']}).then(
         data => data[0]
     ).then(
         data => {
             if (typeof data === 'undefined') {
-                res.send("Invalid Username")
+                res.send("Invalid Username");
             } else{
                 if(data['Password'] === payload['Password']){
-                    res.send("200 OK")
+                    res.send("200 OK");
                 } else{
-                    res.send("Invalid Password")
+                    res.send("Invalid Password");
                 }
             }
     })
@@ -141,6 +142,7 @@ app.post('/example', (req,res) =>{
     // payload = res.get()
     console.log("Successful")
 });
+
 //example get
 app.get('/exampe', (req,res) =>{
     //this will get some payload

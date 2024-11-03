@@ -21,7 +21,7 @@ export const Reg = () => {
     
     async function submittion(e) {
         e.preventDefault();
-        await axios.post("/Registration", {RegForm}).then(resp => console.log(resp))
+        await axios.post("http://localhost:8000/Registration", {RegForm}).then(resp => console.log(resp))
     }
 
     const inputs = (e) =>{
