@@ -5,7 +5,7 @@ import axios from "axios";
 export const Login = () => {
   const [Resp, setResp] = useState("waiting");
   const [LoginForm, setLoginForm] = useState({
-    Username: "",
+    Practice_Email_Address: "",
     Password: "",
   });
 
@@ -51,7 +51,7 @@ export const Login = () => {
               </label>
               <input
                 type="text"
-                name="Username"
+                name="Practice_Email_Address"
                 onChange={handle}
                 className="w-full h-[55px] px-4 py-2 mt-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               />
