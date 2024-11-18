@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export const Login = () => {
-  const [Resp, setResp] = useState("waiting");
+  const [Resp, setResp] = useState("");
   const [LoginForm, setLoginForm] = useState({
     Username: "",
     Password: "",
@@ -21,7 +21,7 @@ export const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex lg:flex-row  md:flex-row flex-col ">
+    <div className="min-h-screen flex lg:flex-row md:flex-row flex-col ">
       {/* Left Section for logo and image */}
       <div className="lg:md:w-1/2 w-[100%] bg-secondary flex flex-col justify-center items-center">
         <header className="w-full py-4 px-8">
@@ -44,6 +44,11 @@ export const Login = () => {
             If you are already a member, please log in with your email and
             password.
           </p>
+          {Resp && (
+            <div className="bg-red-200 flex justify-center items-center rounded-sm p-4 m-4">
+              <p className="font-semibold text-red-500 ">{Resp}</p>
+            </div>
+          )}
           <form onSubmit={submittion} className="space-y-4">
             <div className="">
               <label className="block text-gray-700 font-semibold">
@@ -92,7 +97,6 @@ export const Login = () => {
               Sign up here
             </a>
           </p>
-          <p>{Resp}</p>
         </div>
       </div>
     </div>
