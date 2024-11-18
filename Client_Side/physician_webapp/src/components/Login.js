@@ -15,7 +15,7 @@ export const Login = () => {
 
   async function submittion(e) {
     e.preventDefault();
-    axios.post("/Login", { LoginForm }).then((resp) => {
+    axios.post("http://141.215.202.56:8000/Login", { LoginForm }).then((resp) => {
       setResp(resp.data);
     });
   }

@@ -14,7 +14,7 @@ export const DrugSearch = () => {
         e.preventDefault();
         console.log(search);
         try{
-            await axios.post("/drugs", {search}).then(resp => {setsupplements(resp.data)})
+            await axios.post("http://141.215.202.56:8000/drugs", {search}).then(resp => {setsupplements(resp.data)})
         }catch(e){
             console.log(e)
         }

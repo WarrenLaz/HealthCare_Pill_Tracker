@@ -46,12 +46,6 @@ async function pushData(collection, query) {
     }
 }
 
-app.get('/time', (req,res) => {
-    const date = new Date();
-    pushData(getDB('Patients', 'medication_log'), {"timestamp" : date}).then(resp =>{
-        res.send(resp);
-    })
-});
 //"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
 app.post('/drugs',(req,res)=> {
     //payload would go into ping([PAYLOAD])
@@ -73,17 +67,18 @@ app.post('/supple',(req,res)=> {
 });
 
 
-app.get('/patient',(req,res)=> {
+app.post('/patient',(req,res)=> {
     //payload would go into ping([PAYLOAD])
+    const payload = req.body['RegForm'];
     pushData(getDB('Patients', 'patient'), 
     {
-        FirstName: "test",
-        LastName: "test",
-        Birhtday: "test",
-        Address: "test",
-        Phone_number: "test",
-        Email: "test",
-        Password: "test",
+        Password: payload['Password'],
+        First_Name: payload['First_Name'],
+        Last_Name: payload['Last_Name'],
+        Date_of_Birth: payload['Date_of_Birth'],
+        Phone_Number: payload['Phone_number'],
+        Email_Address: payload['Email_Address'],
+        Address: payload['Address'],
     }).then(status => {
         console.log(status);
         res.send(status);
