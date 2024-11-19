@@ -1,28 +1,25 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios'
 
 export const PhyDash = () => {
-    const[supplements, setsupplements] = useState([]); 
-    const[search, setsearch] = useState({});
+    const[Logs, setLogs] = useState([]); 
 
-    const searchbar = (event) =>{
-        setsearch(event.target.value);
-    }
-
-    async function submit(e){
-        e.preventDefault();
-        console.log(search);
-        try{
-            await axios.post("/drugs", {search}).then(resp => {setsupplements(resp.data)})
-        }catch(e){
-            console.log(e)
-        }
-    }
-    
+    useEffect(() => {
+        axios.get('http://141.215.219.104:8000/logs')
+          .then(response => response.data)
+          .then(data => setLogs(data))
+          .catch(error => console.error('Error fetching data:', error));
+      }, []);
+    console.log(Logs)
     return (
     <div>
-
+        current Logs:
+        {(typeof Logs === 'undefined') ? ( <p>loading...</p>) : (
+            Logs.map((item, i) =>
+                <p key={i}>{item['_id']} {item['medication']} {item['timestamp']}</p>
+            )     
+        )}
     </div>
     );
 };

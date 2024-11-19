@@ -5,6 +5,7 @@ import { Reg } from "./components/Reg";
 import { Login } from "./components/Login";
 import { Home } from "./components/Home";
 import { NewPatient } from "./components/NewPatient";
+import { PhyDash } from "./components/PhyDash";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/Reg" element={<Reg />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/NewPatient" element={<NewPatient />} />
+          <Route path="/PhyDash" element={<PhyDash />} />
           </Routes>
         </div>
       </Router>
