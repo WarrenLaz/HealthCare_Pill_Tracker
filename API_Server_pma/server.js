@@ -15,9 +15,31 @@ function getDB(db, collection){
     return MongoClient.db(db).collection(collection);
 }
 
+async function pushData(collection, query) {
+    try{
+        await MongoClient.connect();
+        console.log('connected to Mongo [INSERT]: ', collection);
+        const table = collection;
+
+        await table.insertOne(query);
+
+        return '200 OK';
+    }
+    catch(err){
+        console.log('Error Unsucessful: ', err)
+        return err;
+    }
+}
+
 app.post('/Log',(req,res) => {
-    Log = req.body;
-    console.log(Log['date']);
+    Log = req.body['date']['log'];
+    console.log(Log);
+    pushData(getDB("Prescriptions", "Log"), 
+    {
+       timestamp : new Date(Log),
+       medication : "002"
+    }
+    )
     res.send("GOOD OK");
 });
 

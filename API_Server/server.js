@@ -107,6 +107,11 @@ app.post('/Registration',(req,res)=> {
         res.send(status);
     });
 });
+app.get('/Logs', (req,res) =>{
+    getData(getDB("Prescriptions", "Log"), {}).then(
+       data => res.send(data)
+    )
+})
 
 //Login
 app.post('/Login', (req,res) =>{

@@ -9,12 +9,14 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.3",
     "axios": "^1.7.7",
-    "expo": "~51.0.28",
+    "expo": "^52.0.7",
     "expo-status-bar": "~1.12.1",
     "nvm": "^0.0.4",
     "react": "18.2.0",
-    "react-native": "0.74.5"
+    "react-native": "0.74.5",
+    "expo-font": "~13.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
