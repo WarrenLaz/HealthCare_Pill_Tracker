@@ -48,7 +48,7 @@ export const Reg = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/Registration",
+        "http://141.215.219.104:8000/Registration",
         data
       );
       alert("Registration successful");
