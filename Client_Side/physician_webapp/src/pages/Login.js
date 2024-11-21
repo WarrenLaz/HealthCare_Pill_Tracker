@@ -1,8 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
+import AuthContext from "../context/Auth";
 
 export const Login = () => {
+  const {setAuth} = useContext(AuthContext);
   const [Resp, setResp] = useState("");
   const [LoginForm, setLoginForm] = useState({
     Username: "",
@@ -16,7 +18,10 @@ export const Login = () => {
   async function submittion(e) {
     e.preventDefault();
     axios.post("http://localhost:8000/Login", { LoginForm }).then((resp) => {
-      setResp(resp.data);
+        setResp(resp.data['status']);
+        const token = resp.data['packet']
+        setAuth({token});
+        console.log(resp);
     });
   }
 

@@ -106,17 +106,18 @@ app.get('/Logs', (req,res) =>{
 app.post('/Login', (req,res) =>{
     let status = ""
     payload = req.body['LoginForm'];
-    getData(getDB('Physicians', 'Physician'), {Username : payload['Username']}).then(
+    getData(getDB('Physicians', 'Physician'), {Username : payload['Email_Address']}).then(
         data => data[0]
     ).then(
         data => {
             if (typeof data === 'undefined') {
-                res.send("Invalid Username");
+                res.send("Invalid Email");
             } else{
                 if(data['Password'] === payload['Password']){
-                    res.send("200 OK");
+                    console.log(data)
+                    res.send({status: "200 OK", packet: data['_id']});
                 } else{
-                    res.send("Invalid Password");
+                    res.send({status: "Invalid Password",packet: ""} );
                 }
             }
     })

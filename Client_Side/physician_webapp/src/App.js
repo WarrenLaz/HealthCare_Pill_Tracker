@@ -6,7 +6,7 @@ import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import { NewPatient } from "./components/newPatient";
 import { PhyDash } from "./components/PhyDash";
-
+import { Auth } from "./context/Auth";
 function App() {
   return (
     <>
