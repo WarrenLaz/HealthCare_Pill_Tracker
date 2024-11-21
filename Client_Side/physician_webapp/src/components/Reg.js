@@ -20,7 +20,7 @@ const schema = z
       .min(1, "Confirm Password is required"),
     First_Name: z.string().min(1, "First Name is required"),
     Last_Name: z.string().min(1, "Last Name is required"),
-    Date_of_Birth: z.string().min(1, "Date of Birth is required"),
+
     Practice_Phone_Number: z
       .string()
       .min(1, "Practice Phone Number is required")
@@ -29,7 +29,6 @@ const schema = z
         return /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val);
       }, "Invalid phone number format"),
     Practice_Address: z.string().min(1, "Practice Address is required"),
-    Lisence_Number: z.string().min(1, "License Number is required"),
   })
   .refine((data) => data.Password === data.Confirm_Password, {
     message: "Passwords don't match",
@@ -163,22 +162,6 @@ export const Reg = () => {
             </div>
 
             <div>
-              <label htmlFor="Date_of_Birth">Date of Birth</label>
-              <input
-                type="date"
-                {...register("Date_of_Birth")}
-                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Date_of_Birth ? "border-red-500" : "border-gray-500"
-                } focus:ring-2 focus:ring-primary`}
-              />
-              {errors.Date_of_Birth && (
-                <span className="text-red-500">
-                  {errors.Date_of_Birth.message}
-                </span>
-              )}
-            </div>
-
-            <div>
               <label htmlFor="Practice_Phone_Number">
                 Practice Phone Number
               </label>
@@ -210,22 +193,6 @@ export const Reg = () => {
               {errors.Practice_Address && (
                 <span className="text-red-500">
                   {errors.Practice_Address.message}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="Lisence_Number">License Number</label>
-              <input
-                type="number"
-                {...register("Lisence_Number")}
-                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Lisence_Number ? "border-red-500" : "border-gray-500"
-                } focus:ring-2 focus:ring-primary`}
-              />
-              {errors.Lisence_Number && (
-                <span className="text-red-500">
-                  {errors.Lisence_Number.message}
                 </span>
               )}
             </div>
