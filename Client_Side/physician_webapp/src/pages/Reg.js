@@ -23,12 +23,11 @@ const schema = z
 
     Practice_Phone_Number: z
       .string()
-      .min(1, "Practice Phone Number is required")
+      .min(1, "Phone Number is required")
       .refine((val) => {
         // Check if the phone number follows a simple US format
         return /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val);
       }, "Invalid phone number format"),
-    Practice_Address: z.string().min(1, "Practice Address is required"),
   })
   .refine((data) => data.Password === data.Confirm_Password, {
     message: "Passwords don't match",
@@ -45,10 +44,11 @@ export const Reg = () => {
   });
 
   const onSubmit = async (data) => {
+    //console.log(data)
     try {
       const response = await axios.post(
-        "http://141.215.219.104:8000/Registration",
-        data
+        "http://localhost:8000/Registration",
+        {data}
       );
       alert("Registration successful");
     } catch (error) {
@@ -56,7 +56,6 @@ export const Reg = () => {
       alert("There was an issue with the registration");
     }
   };
-
   return (
     <div className="min-h-screen flex lg:flex-row md:flex-row flex-col">
       {/* Left Section for logo and image */}
@@ -81,57 +80,7 @@ export const Reg = () => {
             Become a member and make managing your patients easier.
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label htmlFor="Practice_Email_Address">
-                Practice Email Address
-              </label>
-              <input
-                type="text"
-                {...register("Practice_Email_Address")}
-                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Practice_Email_Address
-                    ? "border-red-500"
-                    : "border-gray-500"
-                } focus:ring-2 focus:ring-primary`}
-              />
-              {errors.Practice_Email_Address && (
-                <span className="text-red-500">
-                  {errors.Practice_Email_Address.message}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="Password">Password</label>
-              <input
-                type="password"
-                {...register("Password")}
-                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Password ? "border-red-500" : "border-gray-500"
-                } focus:ring-2 focus:ring-primary`}
-              />
-              {errors.Password && (
-                <span className="text-red-500">{errors.Password.message}</span>
-              )}
-            </div>
-
-            <div>
-              <label htmlFor="Confirm_Password">Confirm Password</label>
-              <input
-                type="password"
-                {...register("Confirm_Password")}
-                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Confirm_Password ? "border-red-500" : "border-gray-500"
-                } focus:ring-2 focus:ring-primary`}
-              />
-              {errors.Confirm_Password && (
-                <span className="text-red-500">
-                  {errors.Confirm_Password.message}
-                </span>
-              )}
-            </div>
-
-            <div>
+          <div>
               <label htmlFor="First_Name">First Name</label>
               <input
                 type="text"
@@ -162,9 +111,31 @@ export const Reg = () => {
             </div>
 
             <div>
-              <label htmlFor="Practice_Phone_Number">
-                Practice Phone Number
+              <label htmlFor="Practice_Email_Address">
+                Email Address
               </label>
+              <input
+                type="text"
+                {...register("Practice_Email_Address")}
+                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
+                  errors.Practice_Email_Address
+                    ? "border-red-500"
+                    : "border-gray-500"
+                } focus:ring-2 focus:ring-primary`}
+              />
+              {errors.Practice_Email_Address && (
+                <span className="text-red-500">
+                  {errors.Practice_Email_Address.message}
+                </span>
+              )}
+            </div>
+
+
+            <div>
+              <label htmlFor="Practice_Phone_Number">
+                Phone Number
+              </label>
+
               <input
                 type="text"
                 {...register("Practice_Phone_Number")}
@@ -174,25 +145,41 @@ export const Reg = () => {
                     : "border-gray-500"
                 } focus:ring-2 focus:ring-primary`}
               />
+
               {errors.Practice_Phone_Number && (
                 <span className="text-red-500">
                   {errors.Practice_Phone_Number.message}
                 </span>
               )}
+
             </div>
 
             <div>
-              <label htmlFor="Practice_Address">Practice Address</label>
+              <label htmlFor="Password">Password</label>
               <input
-                type="text"
-                {...register("Practice_Address")}
+                type="password"
+                {...register("Password")}
                 className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
-                  errors.Practice_Address ? "border-red-500" : "border-gray-500"
+                  errors.Password ? "border-red-500" : "border-gray-500"
                 } focus:ring-2 focus:ring-primary`}
               />
-              {errors.Practice_Address && (
+              {errors.Password && (
+                <span className="text-red-500">{errors.Password.message}</span>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="Confirm_Password">Confirm Password</label>
+              <input
+                type="password"
+                {...register("Confirm_Password")}
+                className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
+                  errors.Confirm_Password ? "border-red-500" : "border-gray-500"
+                } focus:ring-2 focus:ring-primary`}
+              />
+              {errors.Confirm_Password && (
                 <span className="text-red-500">
-                  {errors.Practice_Address.message}
+                  {errors.Confirm_Password.message}
                 </span>
               )}
             </div>

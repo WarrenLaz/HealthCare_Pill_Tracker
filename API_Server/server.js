@@ -87,21 +87,15 @@ app.post('/patient',(req,res)=> {
 
 app.post('/Registration',(req,res)=> {
     //payload would go into ping([PAYLOAD])
-    const payload = req.body['RegForm'];
+    const payload = req.body['data'];
+    console.log(payload)
     pushData(getDB('Physicians', 'Physician'), 
     {
-        Username: payload['Username'],
-        Password: payload['Password'],
         First_Name: payload['First_Name'],
         Last_Name: payload['Last_Name'],
-        Date_of_Birth: payload['Date_of_Birth'],
-        Practice_Email_Address: payload['Practice_Email_Address'],
-        Practice_Phone_Number: payload['Practice_Phone_Number'],
-        Practic_Address: payload['Practic_Address'],
-        Lisence_Number: payload['Lisence_Number'],
-        License_Expiration_Date: payload['License_Expiration_Date'],
-        Organization: payload['Organization'],
-        Specialization: payload['Specialization']
+        Password: payload['Password'],
+        Email_Address: payload['Practice_Email_Address'],
+        Phone_Number: payload['Practice_Phone_Number']
     }).then(status => {
         console.log(status);
         res.send(status);
