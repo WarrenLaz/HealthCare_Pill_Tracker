@@ -66,41 +66,36 @@ app.post('/supple',(req,res)=> {
     });
 });
 
-
-app.post('/patient',(req,res)=> {
-    //payload would go into ping([PAYLOAD])
-    const payload = req.body['RegForm'];
-    pushData(getDB('Patients', 'patient'), 
-    {
-        Password: payload['Password'],
-        First_Name: payload['First_Name'],
-        Last_Name: payload['Last_Name'],
-        Date_of_Birth: payload['Date_of_Birth'],
-        Phone_Number: payload['Phone_number'],
-        Email_Address: payload['Email_Address'],
-        Address: payload['Address'],
-    }).then(status => {
-        console.log(status);
-        res.send(status);
-    });
-});
-
 app.post('/Registration',(req,res)=> {
     //payload would go into ping([PAYLOAD])
     const payload = req.body['data'];
-    console.log(payload)
-    pushData(getDB('Physicians', 'Physician'), 
-    {
-        First_Name: payload['First_Name'],
-        Last_Name: payload['Last_Name'],
-        Password: payload['Password'],
-        Email_Address: payload['Practice_Email_Address'],
-        Phone_Number: payload['Practice_Phone_Number']
-    }).then(status => {
-        console.log(status);
-        res.send(status);
-    });
+
+    getData(getDB('Physicians', 'Physician'), {
+        "$or": [
+            {Phone_Number : payload['Practice_Phone_Number']},
+            {Email_Address : payload['Practice_Email_Address']}
+        ]
+    }).then(
+        data => data[0]
+    ).then(
+        data => {
+            if (!(typeof data === 'undefined')) {
+                res.send("Account Already Exists");
+            }
+            else{
+                pushData(getDB('Physicians', 'Physician'), 
+                {
+                    First_Name: payload['First_Name'],
+                    Last_Name: payload['Last_Name'],
+                    Password: payload['Password'],
+                    Email_Address: payload['Practice_Email_Address'],
+                    Phone_Number: payload['Practice_Phone_Number']
+                })
+                res.send("Account Successfully Created")
+            }
+    })
 });
+
 app.get('/Logs', (req,res) =>{
     getData(getDB("Prescriptions", "Log"), {}).then(
        data => res.send(data)

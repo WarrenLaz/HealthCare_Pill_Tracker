@@ -50,7 +50,7 @@ export const Reg = () => {
         "http://localhost:8000/Registration",
         {data}
       );
-      alert("Registration successful");
+      alert(String(response.data));
     } catch (error) {
       console.error("Error submitting form", error);
       alert("There was an issue with the registration");
