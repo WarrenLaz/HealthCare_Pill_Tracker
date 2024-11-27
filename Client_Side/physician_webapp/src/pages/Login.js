@@ -1,10 +1,14 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import axios from "axios";
-import AuthContext from "../context/Auth";
+import useAuth from "../hooks/useAuth";
+import {Link, useNavigate, useLocation} from 'react-router-dom';
 
 export const Login = () => {
-  const {setAuth} = useContext(AuthContext);
+  const {setAuth} = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/Dashboard";
   const [Resp, setResp] = useState("");
   const [LoginForm, setLoginForm] = useState({
     Username: "",
@@ -19,9 +23,14 @@ export const Login = () => {
     e.preventDefault();
     axios.post("http://localhost:8000/Login", { LoginForm }).then((resp) => {
         setResp(resp.data['status']);
-        const token = resp.data['packet']
+        const token = resp?.data?.packet;
         setAuth({token});
-        console.log(resp);
+        console.log(resp.data);
+        if(resp.data['status'] == "200 OK"){
+          console.log('ok');
+          navigate(from, {replace:true});
+        }
+
     });
   }
 
@@ -77,7 +86,6 @@ export const Login = () => {
                 className="w-full  h-[55px] px-4 py-2 mt-2 border border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
-
             {/* Remember Me Checkbox */}
             <div className="flex items-center pb-4">
               <input
