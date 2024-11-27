@@ -16,7 +16,7 @@ export const Dashboard = () => {
     console.log(Logs)
     return (
     <div>
-        <h1>{auth.token}</h1>
+        <h1>TOKEN: {auth.token}</h1>
         current Logs:
         {(typeof Logs === 'undefined') ? ( <p>loading...</p>) : (
             Logs.map((item, i) =>

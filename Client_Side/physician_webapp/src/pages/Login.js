@@ -21,11 +21,13 @@ export const Login = () => {
 
   async function submittion(e) {
     e.preventDefault();
-    axios.post("http://localhost:8000/Login", { LoginForm }).then((resp) => {
+    axios.post("http://localhost:8000/Login", { LoginForm },{
+      withCredentials : true
+    }).then((resp) => {
+        console.log(resp.data);
         setResp(resp.data['status']);
         const token = resp?.data?.packet;
         setAuth({token});
-        console.log(resp.data);
         if(resp.data['status'] == "200 OK"){
           console.log('ok');
           navigate(from, {replace:true});

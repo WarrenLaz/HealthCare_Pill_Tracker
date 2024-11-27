@@ -4,14 +4,25 @@ const app = express();
 const uri = process.env.MOGO_KEY;
 const port = process.env.PORT;
 const cors = require('cors')
-
 const MongoClient = new mongo.MongoClient(uri);
-
+const allowedOrigins = require('./config/allowedOrigins');
 // For parsing application/json
-app.use(cors());
 app.use(express.json());
 // For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+const corsOptions = {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g., mobile apps or Postman) or validate against the allowedOrigins list
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true); // Allow request
+      } else {
+        callback(new Error('Not allowed by CORS')); // Deny request
+      }
+    },
+    credentials: true, // Allow credentials (cookies, auth headers)
+};
+app.use(cors(corsOptions));
 
 function getDB(db, collection){
     return MongoClient.db(db).collection(collection);
@@ -104,14 +115,14 @@ app.get('/Logs', (req,res) =>{
 
 //Login
 app.post('/Login', (req,res) =>{
-    let status = ""
     payload = req.body['LoginForm'];
-    getData(getDB('Physicians', 'Physician'), {Username : payload['Email_Address']}).then(
+    console.log(payload);
+    getData(getDB('Physicians', 'Physician'), {Email_Address : payload['Username']}).then(
         data => data[0]
     ).then(
         data => {
             if (typeof data === 'undefined') {
-                res.send("Invalid Email");
+                res.send({status: "Invalid Email", packet: ""});
             } else{
                 if(data['Password'] === payload['Password']){
                     console.log(data)
