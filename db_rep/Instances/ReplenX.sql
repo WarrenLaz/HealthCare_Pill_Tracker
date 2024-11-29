@@ -38,7 +38,7 @@ CREATE TABLE `Medication` (
     `Form` ENUM(
         'TAB', 'CAP', 'ER', 'CR', 'SR', 'DR', 'ODT', 'CHEW', 
         'SOL', 'SUSP', 'ELIX', 'SYR', 'LOZ', 'POW', 'IM', 
-        'IV', 'SC', 'SubQ', 'ID', 'IVP', 'IVPB', 'CRM', 
+        'IV', 'SC', 'SUBQ', 'ID', 'IVP', 'IVPB', 'CRM', 
         'OINT', 'LOTION', 'PATCH', 'POWDER', 'PASTE', 'MDI', 
         'DPI', 'NEB', 'INH', 'EYE DROP', 'EAR DROP', 'SUPP', 
         'ENEMA', 'GEL', 'OVULE', 'BUC', 'SL', 'PR', 'PV', 'TOP', 'TD'

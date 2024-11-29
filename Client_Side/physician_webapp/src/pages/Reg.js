@@ -47,7 +47,7 @@ export const Reg = () => {
     //console.log(data)
     try {
       const response = await axios.post(
-        "http://localhost:8000/Registration",
+        "http://localhost:8000/Reg",
         {data}
       );
       alert(String(response.data));

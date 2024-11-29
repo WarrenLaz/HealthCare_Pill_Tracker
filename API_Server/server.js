@@ -3,12 +3,12 @@ const mongo = require('mongodb');
 const app = express();
 const uri = process.env.MOGO_KEY;
 const port = process.env.PORT;
-const cors = require('cors')
+const cors = require('cors');
+const corsOptions = require('./middleware/creds');
 
 const MongoClient = new mongo.MongoClient(uri);
-
 // For parsing application/json
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 // For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
@@ -66,36 +66,6 @@ app.post('/supple',(req,res)=> {
     });
 });
 
-app.post('/Registration',(req,res)=> {
-    //payload would go into ping([PAYLOAD])
-    const payload = req.body['data'];
-
-    getData(getDB('Physicians', 'Physician'), {
-        "$or": [
-            {Phone_Number : payload['Practice_Phone_Number']},
-            {Email_Address : payload['Practice_Email_Address']}
-        ]
-    }).then(
-        data => data[0]
-    ).then(
-        data => {
-            if (!(typeof data === 'undefined')) {
-                res.send("Account Already Exists");
-            }
-            else{
-                pushData(getDB('Physicians', 'Physician'), 
-                {
-                    First_Name: payload['First_Name'],
-                    Last_Name: payload['Last_Name'],
-                    Password: payload['Password'],
-                    Email_Address: payload['Practice_Email_Address'],
-                    Phone_Number: payload['Practice_Phone_Number']
-                })
-                res.send("Account Successfully Created")
-            }
-    })
-});
-
 app.get('/Logs', (req,res) =>{
     getData(getDB("Prescriptions", "Log"), {}).then(
        data => res.send(data)
@@ -103,42 +73,10 @@ app.get('/Logs', (req,res) =>{
 })
 
 //Login
-app.post('/Login', (req,res) =>{
-    let status = ""
-    payload = req.body['LoginForm'];
-    getData(getDB('Physicians', 'Physician'), {Username : payload['Email_Address']}).then(
-        data => data[0]
-    ).then(
-        data => {
-            if (typeof data === 'undefined') {
-                res.send("Invalid Email");
-            } else{
-                if(data['Password'] === payload['Password']){
-                    console.log(data)
-                    res.send({status: "200 OK", packet: data['_id']});
-                } else{
-                    res.send({status: "Invalid Password",packet: ""} );
-                }
-            }
-    })
+app.use('/Login', require('./routes/login'));
 
-    // payload = res.get()
-    console.log("Successful")
-});
-
-//example post
-app.post('/example', (req,res) =>{
-    //this will get some payload
-    // payload = res.get()
-    console.log("Successful")
-});
-
-//example get
-app.get('/exampe', (req,res) =>{
-    //this will get some payload
-    // payload = res.get()
-    console.log("Successful")
-});
+//Registration
+app.use('/Reg', require('./routes/reg'));
 
 app.listen(port, () => console.log('Server is running', port))
 
