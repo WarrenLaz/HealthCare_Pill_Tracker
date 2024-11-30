@@ -36,4 +36,20 @@ async function pushData(collection, query) {
     }
 }
 
-module.exports = {getData, pushData, getDB};
+async function updateData(collection, id, query) {
+    try{
+        await MongoClient.connect();
+        console.log('connected to Mongo [UPDATE]: ', collection);
+        const table = collection;
+
+        await table.updateOne(id, query);
+
+        return '200 OK';
+    }
+    catch(err){
+        console.log('Error Unsucessful: ', err)
+        return err;
+    }
+}
+
+module.exports = {getData, pushData, getDB, updateData};

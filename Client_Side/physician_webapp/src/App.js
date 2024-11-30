@@ -4,8 +4,7 @@ import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import RequireAuth from "./components/RequireAuth";
 import { Dashboard } from "./pages/Dashboard";
-import { Patientadd} from "./components/Patientadd";
-import { Searchsup } from "./components/Searchsup";
+import { Prescadd } from "./components/Prescadd";
 
 function App() {
   return (
@@ -17,8 +16,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Reg" element={<Reg />} />
             <Route path="/Login" element={<Login />} />
-            <Route path="/padd" element={<Patientadd />} />
-            <Route path="/Searchsup" element={<Searchsup/>}/>
+            {/* Test component */}
+            <Route path="/Prescadd" element={<Prescadd/>}/>
             {/* private Routes*/}
             <Route element={<RequireAuth/>}>
             <Route path="/Dashboard" element={<Dashboard/>} />

@@ -22,15 +22,11 @@ def ping():
 cluster = ping()
 
 def ConvertForm(form):
+   
     form_abbreviation_map = {
-        'TAB': 'Tablet',
-        'CAP': 'Capsule',
-        'ER': 'Extended Release',
-        'CR': 'Controlled Release',
-        'SR': 'Sustained Release',
-        'DR': 'Delayed Release',
-        'ODT': 'Orally Disintegrating Tablet',
-        'CHEW': 'Chewable',
+        'TAB': 'Tablet or Pill [E0155]',
+        'CAP': 'Capsule [E0159]',
+        'LQD' : 'Liquid [E0165]'
         'SOL': 'Solution',
         'SUSP': 'Suspension',
         'ELIX': 'Elixir',
@@ -48,7 +44,7 @@ def ConvertForm(form):
         'OINT': 'Ointment',
         'LOTION': 'Lotion',
         'PATCH': 'Patch',
-        'POWDER': 'Powdered',
+        'POWDER': 'Powder [E0162]',
         'PASTE': 'Paste',
         'MDI': 'Metered-Dose Inhaler',
         'DPI': 'Dry Powder Inhaler',
@@ -80,13 +76,13 @@ def ConvertForm(form):
     return best
 
 cluster.delete_many({})
-dataset = open('/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/DB_repo/DataSetMigration/Products.csv','r')
+dataset = open('/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/db_rep/DataSetMigration/Products.csv','r')
 data = csv.DictReader(dataset)
 for item in data:
     print(item)
     cluster.insert_one({
         "Product Name" : str(item["ActiveIngredient"]),
         "Brand Name" : str(item["DrugName"]),
-        "Form" : ConvertForm(item["Form"]),
+        "Form" : str(item["Form"]),
     })
 print("FINISHED")

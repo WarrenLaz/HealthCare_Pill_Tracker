@@ -3,7 +3,6 @@ const sha256 = require('../encryptor/sha256')
 //Login
 const handleLogin  = (req,res) =>{
     payload = req.body['LoginForm'];
-    console.log(payload);
     db.getData(db.getDB('Physicians', 'Physician'), {Email_Address : payload['Username']}).then(
         data => data[0]
     ).then(
@@ -12,9 +11,7 @@ const handleLogin  = (req,res) =>{
                 res.send({status : "Invalid Email", packet: ""});
             } else{
                 const pass = sha256(payload['Password']);
-                console.log(data['Password'], pass);
                 if(data['Password'] === pass){
-                    console.log(data)
                     res.send({status: "200 OK", packet: data['_id']});
                 } else{
                     res.send({status: "Invalid Password",packet: ""} );
@@ -23,7 +20,7 @@ const handleLogin  = (req,res) =>{
     })
 
     // payload = res.get()
-    console.log("Successful")
+    console.log("Login Successful");
 }
 
 module.exports = handleLogin;

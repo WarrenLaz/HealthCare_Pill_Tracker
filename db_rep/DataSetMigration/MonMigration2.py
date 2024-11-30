@@ -4,6 +4,7 @@ from pymongo.server_api import ServerApi
 import os
 from dotenv import load_dotenv
 import spacy
+import re
 
 load_dotenv()
 uri = uri = os.environ.get("MOGO_API")
@@ -76,21 +77,20 @@ def ConvertForm(form):
         if sim > bsim:
              best, bsim = key, sim
     return best
-
+pattern = "\s?\[.*?\]"
 cluster.delete_many({})
 for i in range(1, 8):
     print(i)
-    dataset = open('/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/DB_repo/DataSetMigration/ProductOverview_'+str(i)+'.csv', 'r')
+    dataset = open('/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/db_rep/DataSetMigration/ProductOverview_'+str(i)+'.csv', 'r')
     data = csv.DictReader(dataset)
 
-    count = 1
     for item in data:
         print(i)
 
         cluster.insert_one({
             "Product Name" : str(item["Product Name"]),
             "Brand Name" : str(item["Brand Name"]),
-            "Form" : ConvertForm(item["Supplement Form [LanguaL]"]),
+            "Form" : str(re.sub(pattern, "", item["Supplement Form [LanguaL]"])),
         })
 
     print("FINISHED")

@@ -1,6 +1,6 @@
 
 import spacy
-
+import re
 nlp = spacy.load('en_core_web_md')
 
 def ConvertForm(form):
@@ -11,7 +11,6 @@ def ConvertForm(form):
         'CR': 'Controlled Release',
         'SR': 'Sustained Release',
         'DR': 'Delayed Release',
-        'ODT': 'Orally Disintegrating Tablet',
         'CHEW': 'Chewable',
         'SOL': 'Solution',
         'SUSP': 'Suspension',
@@ -72,3 +71,5 @@ testc = 'Softgel Capsule'
 testd = '4 Tablet(s)'
 print(ConvertForm(testa),ConvertForm(testb),ConvertForm(testc))
 print(ConvertDosage(testd))
+pattern = "\s?\[.*?\]"
+print(re.sub(pattern, "", "item [asdfadsfasfasdfadsfas]"))
