@@ -27,7 +27,6 @@ export const Login = () => {
         setResp(resp.data['status']);
         const token = resp?.data?.packet;
         setAuth({token});
-        console.log(resp.data);
         if(resp.data['status'] == "200 OK"){
           console.log('ok');
           navigate(from, {replace:true});

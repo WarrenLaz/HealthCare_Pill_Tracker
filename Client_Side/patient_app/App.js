@@ -11,7 +11,7 @@ export default function App() {
     setdate({log});
     console.log(String(date));
     try {
-      const response = await axios.post("http://141.215.219.104:8080/Logs", {date}, {
+      const response = await axios.post("http://192.168.0.122:8080/Logs", {date}, {
         headers: {
           "Content-Type": "application/json",
         },

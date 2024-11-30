@@ -31,7 +31,7 @@ async function pushData(collection, query) {
     }
 }
 
-app.post('/Log',(req,res) => {
+app.post('/Logs',(req,res) => {
     Log = req.body['date']['log'];
     console.log(Log);
     pushData(getDB("Prescriptions", "Log"), 

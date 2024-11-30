@@ -13,49 +13,8 @@ app.use(express.json());
 // For parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-function getDB(db, collection){
-    return MongoClient.db(db).collection(collection);
-}
+app.use(cors(corsOptions));
 
-async function getData(collection, query) {
-    try{
-        await MongoClient.connect();
-        console.log('connected to Mongo [GET]: ', collection);
-        const table = collection;
-        return await table.find(query).toArray();
-    }
-    catch(err){
-        console.log('Error Unsucessful: ', err)
-        return err;
-    }
-}
-
-async function pushData(collection, query) {
-    try{
-        await MongoClient.connect();
-        console.log('connected to Mongo [INSERT]: ', collection);
-        const table = collection;
-
-        await table.insertOne(query);
-
-        return '200 OK';
-    }
-    catch(err){
-        console.log('Error Unsucessful: ', err)
-        return err;
-    }
-}
-
-//"Xanax", "adderall","Lupron Depot", "Ozempic", "Ibuprofen", "Zyprexa", "Wezlana"
-app.post('/drugs',(req,res)=> {
-    //payload would go into ping([PAYLOAD])
-    const drugName = req.body['search'];
-    console.log(req.body);
-    getData(getDB('DrugProducts', 'Drugs'), {"DrugName" : {$regex : drugName.toUpperCase()} }).then(drugDB => {
-        console.log(drugDB);
-        res.send(drugDB);
-    });
-});
 
 app.post('/supple',(req,res)=> {
     //payload would go into ping([PAYLOAD])
@@ -66,17 +25,12 @@ app.post('/supple',(req,res)=> {
     });
 });
 
-app.get('/Logs', (req,res) =>{
-    getData(getDB("Prescriptions", "Log"), {}).then(
-       data => res.send(data)
-    )
-})
-
 //Login
 app.use('/Login', require('./routes/login'));
-
 //Registration
 app.use('/Reg', require('./routes/reg'));
+//Add Patient
+app.use('/AddPatient', require('./routes/addpatient'));
 
 app.listen(port, () => console.log('Server is running', port))
 
