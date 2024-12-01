@@ -1,7 +1,7 @@
 const db = require('./dbcontroller');
 const sha256 = require('../encryptor/sha256');
 
-const handleReg = (req,res)=> {
+const Reg = (req,res)=> {
     //payload would go into ping([PAYLOAD])
     const payload = req.body['data'];
 
@@ -34,4 +34,4 @@ const handleReg = (req,res)=> {
     })
 }
 
-module.exports = handleReg;
+module.exports = Reg;

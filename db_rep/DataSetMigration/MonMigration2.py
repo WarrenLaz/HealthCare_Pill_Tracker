@@ -22,61 +22,6 @@ def ping():
 
 cluster = ping()
 
-def ConvertForm(form):
-    form_abbreviation_map = {
-        'TAB': 'Tablet',
-        'CAP': 'Capsule',
-        'ER': 'Extended Release',
-        'CR': 'Controlled Release',
-        'SR': 'Sustained Release',
-        'DR': 'Delayed Release',
-        'CHEW': 'Chewable',
-        'SOL': 'Solution',
-        'SUSP': 'Suspension',
-        'ELIX': 'Elixir',
-        'SYR': 'Syrup',
-        'LOZ': 'Lozenge',
-        'POW': 'Powder',
-        'IM': 'Intramuscular',
-        'IV': 'Intravenous',
-        'SC': 'Subcutaneous',
-        'SUBQ': 'SubQ',
-        'ID': 'Intradermal',
-        'IVP': 'IV Push',
-        'IVPB': 'IV Piggyback',
-        'CRM': 'Cream',
-        'OINT': 'Ointment',
-        'LOTION': 'Lotion',
-        'PATCH': 'Patch',
-        'POWDER': 'Powdered',
-        'PASTE': 'Paste',
-        'MDI': 'Metered-Dose Inhaler',
-        'DPI': 'Dry Powder Inhaler',
-        'NEB': 'Nebulizer',
-        'INH': 'Inhaler',
-        'EYE DROP': 'Eye Drop',
-        'EAR DROP': 'Ear Drop',
-        'SUPP': 'Suppository',
-        'ENEMA': 'Enema',
-        'GEL': 'Gel',
-        'OVULE': 'Ovule',
-        'BUC': 'Buccal',
-        'SL': 'Sublingual',
-        'PR': 'Per Rectum',
-        'PV': 'Per Vagina',
-        'TOP': 'Topical',
-        'TD': 'Transdermal'
-    }
-
-    form_ = nlp(form)
-    best = None
-    bsim = 0
-    for key,value in form_abbreviation_map.items():
-        v = nlp(value)
-        sim = form_.similarity(v)
-        if sim > bsim:
-             best, bsim = key, sim
-    return best
 pattern = "\s?\[.*?\]"
 cluster.delete_many({})
 for i in range(1, 8):
@@ -88,8 +33,8 @@ for i in range(1, 8):
         print(i)
 
         cluster.insert_one({
-            "Product Name" : str(item["Product Name"]),
-            "Brand Name" : str(item["Brand Name"]),
+            "Product_Name" : str(item["Product Name"]),
+            "Brand_Name" : str(item["Brand Name"]),
             "Form" : str(re.sub(pattern, "", item["Supplement Form [LanguaL]"])),
         })
 

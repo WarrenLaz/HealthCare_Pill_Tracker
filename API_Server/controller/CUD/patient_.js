@@ -1,8 +1,10 @@
-const db = require('./dbcontroller');
-const sha256 = require('../encryptor/sha256');
-const generatePassword = require('../encryptor/passgen')
+const db = require('../dbcontroller');
+const sha256 = require('../../encryptor/sha256');
+const generatePassword = require('../../encryptor/passgen')
 const { ObjectId } = require('mongodb');
-const addpatient = (req,res)=> {
+
+
+const addPatient = (req,res)=> {
     //payload would go into ping([PAYLOAD])
     const payload = req.body['RegForm'];
 
@@ -30,6 +32,7 @@ const addpatient = (req,res)=> {
                     Email_Address: payload['Email_Address'],
                     Phone_Number: payload['Phone_Number'],
                     Physician: ObjectId(payload['Phy_id']),
+                    Prescriptions: [],
                     isNew: 1
                 });
                 db.getData(db.getDB('Patients', 'patient'),{Email_Address : payload['Email_Address']}).then(
@@ -49,4 +52,12 @@ const addpatient = (req,res)=> {
     })
 }
 
-module.exports = addpatient;
+const deletePatient = (req, res) => {
+    const payload = req.body["id"];
+    db.deleteData(db.getDB("Patients", "patient"), {
+        "_id" : payload
+    });
+}
+
+
+module.exports = {addPatient, deletePatient};

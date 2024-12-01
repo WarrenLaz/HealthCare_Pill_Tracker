@@ -15,22 +15,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
 
-
-app.post('/supple',(req,res)=> {
-    //payload would go into ping([PAYLOAD])
-    const Supplement = req.body['search'];
-    getData(getDB('DrugProducts', 'Supplements'), {"Product Name" : {$regex : Supplement.charAt(0).toUpperCase() + Supplement.slice(1)} }).then(drugDB => {
-        console.log(drugDB);
-        res.send(drugDB);
-    });
-});
-
 //Login
 app.use('/Login', require('./routes/login'));
 //Registration
 app.use('/Reg', require('./routes/reg'));
 //Add Patient
 app.use('/AddPatient', require('./routes/addpatient'));
+//Add Patient
+app.use('/DeletePatient', require('./routes/deletepatient'));
 
 app.listen(port, () => console.log('Server is running', port))
 

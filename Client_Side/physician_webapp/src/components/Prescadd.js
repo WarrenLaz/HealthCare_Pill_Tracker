@@ -47,6 +47,7 @@ export const Prescadd = () => {
                 </select> <br></br>
             <button type="submit">Submit</button>
         </form>
+        
         <h1>Schedule</h1>
         <form>
             Monday: <input type ="time"  name ="Note"></input> <br></br>
