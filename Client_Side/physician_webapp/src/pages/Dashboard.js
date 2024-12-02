@@ -16,10 +16,10 @@ export const Dashboard = () => {
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
+  console.log(auth.payload);
   return (
     <div className="px-12 py-6 bg-secondary">
-      <h1 className="text-sm font-bold mb-4">TOKEN: {auth.token}</h1>
+      <h1 className="text-sm font-bold mb-4">WELCOME DR.{String(auth.payload.ln).toUpperCase()}</h1>
       <div className="flex justify-between items-center ">
         <h1 className="text-4xl">My Patients</h1>
         <button

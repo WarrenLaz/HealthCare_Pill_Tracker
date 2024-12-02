@@ -28,7 +28,12 @@ const Login  = (req,res) =>{
                     
                     console.log(refreshToken);
                     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 864 * 100 * 100})
-                    res.send({status: "200 OK", packet: refreshToken});
+                    res.send({status: "200 OK", packet: {
+                        id : data["_id"],
+                        fn : data['First_Name'],
+                        ln: data['Last_Name'],
+                        p: data['Patients']
+                    }});
                 } else{
                     //invalid password
                     res.send({status: "Invalid Password",packet: ""} );

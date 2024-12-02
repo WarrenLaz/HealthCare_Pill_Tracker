@@ -23,6 +23,10 @@ app.use('/Reg', require('./routes/reg'));
 app.use('/AddPatient', require('./routes/addpatient'));
 //Add Patient
 app.use('/DeletePatient', require('./routes/deletepatient'));
+//userinfo
+app.use('/user', require('./routes/user_'));
+//patient info
+app.use ('/patients', require('./routes/getpatient'));
 
 app.listen(port, () => console.log('Server is running', port))
 

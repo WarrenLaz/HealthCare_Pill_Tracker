@@ -1,18 +1,13 @@
 const db = require('../dbcontroller');
-
+const { ObjectId } = require('mongodb');
 const getPatient = (req, res) =>{
+    const keys = req.body["keys"].map(item => ObjectId(item));
     db.getData(db.getDB('Patients', "patient"), {
-        id_ : req.body["user"]
-    }).then( data => data[0]).then(
+        _id : {$in : keys}
+    }).then(
         data => {
-            res.send(                {
-                First_Name: data['First_Name'],
-                Last_Name: data['Last_Name'],
-                Email_Address: data['Email_Address'],
-                Phone_Number: data['Phone_Number'],
-                Prescriptions: data['Prescriptions'],
-                isNew: data['isNew']
-            })
+            console.log(data);
+            res.send(data);
         }
     )
 }

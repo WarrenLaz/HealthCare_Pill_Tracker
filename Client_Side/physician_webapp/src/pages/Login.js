@@ -26,8 +26,8 @@ export const Login = () => {
       withCredentials: true
     }).then((resp) => {
         setResp(resp.data['status']);
-        const token = resp?.data?.packet;
-        setAuth({token});
+        const payload = resp?.data?.packet;
+        setAuth({payload});
         if(resp.data['status'] == "200 OK"){
           console.log('ok');
           navigate(from, {replace:true});

@@ -7,7 +7,7 @@ export const Patientadd = () => {
   const { auth } = useAuth();
   const [Resp, setResp] = useState("");
   const [RegForm, setRegForm] = useState({
-    Phy_id: auth.token,
+    Phy_id: auth.payload.id,
     First_Name: "",
     Last_Name: "",
     Email_Address: "",

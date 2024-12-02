@@ -52,4 +52,20 @@ async function updateData(collection, id, query) {
     }
 }
 
-module.exports = {getData, pushData, getDB, updateData};
+async function deleteData(collection, id, query) {
+    try{
+        await MongoClient.connect();
+        console.log('connected to Mongo [DELETE]: ', collection);
+        const table = collection;
+
+        await table.deleteOne(query);
+
+        return '200 OK';
+    }
+    catch(err){
+        console.log('Error Unsucessful: ', err)
+        return err;
+    }
+}
+
+module.exports = {getData, pushData, getDB, updateData, deleteData};
