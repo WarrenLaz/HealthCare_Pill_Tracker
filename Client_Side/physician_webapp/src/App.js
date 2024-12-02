@@ -5,6 +5,7 @@ import { Home } from "./pages/Home";
 import RequireAuth from "./components/RequireAuth";
 import { Dashboard } from "./pages/Dashboard";
 import { Prescadd } from "./components/Prescadd";
+import "./App.css";
 
 function App() {
   return (
@@ -17,10 +18,10 @@ function App() {
             <Route path="/Reg" element={<Reg />} />
             <Route path="/Login" element={<Login />} />
             {/* Test component */}
-            <Route path="/Prescadd" element={<Prescadd/>}/>
+            <Route path="/Prescadd" element={<Prescadd />} />
             {/* private Routes*/}
-            <Route element={<RequireAuth/>}>
-            <Route path="/Dashboard" element={<Dashboard/>} />
+            <Route element={<RequireAuth />}>
+              <Route path="/Dashboard" element={<Dashboard />} />
             </Route>
           </Routes>
         </div>
