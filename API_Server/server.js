@@ -28,4 +28,6 @@ app.use("/user", require("./routes/user_"));
 //patient info
 app.use("/patients", require("./routes/getpatient"));
 
+app.use("/patientLogin", require("./route/patientLogin"));
+
 app.listen(port, () => console.log("Server is running", port));
