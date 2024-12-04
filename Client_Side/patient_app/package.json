@@ -10,13 +10,21 @@
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",
+    "@react-navigation/bottom-tabs": "^7.1.2",
+    "@react-navigation/native": "^7.0.12",
+    "@react-navigation/native-stack": "^7.1.13",
     "axios": "^1.7.7",
     "expo": "^52.0.7",
+    "expo-font": "~13.0.1",
     "expo-status-bar": "~1.12.1",
     "nvm": "^0.0.4",
     "react": "18.2.0",
     "react-native": "0.74.5",
-    "expo-font": "~13.0.1"
+    "react-native-gesture-handler": "^2.21.2",
+    "react-native-reanimated": "^3.16.3",
+    "react-native-safe-area-context": "^4.14.0",
+    "react-native-screens": "^4.3.0",
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
