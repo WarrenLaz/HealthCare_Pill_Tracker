@@ -12,7 +12,8 @@ const getUser = (req, res) =>{
                 Lastname : data['Last_Name'], 
                 Email : data['Email_Address'],
                 Phone: data['Phone_Number'],
-                Patients : data['Patients']
+                Patients : data['Patients'],
+                
             })
         }
         else{
