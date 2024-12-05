@@ -1,10 +1,12 @@
 const db = require('../dbcontroller');
-
+const { ObjectId } = require('mongodb');
 const getUser = (req, res) =>{
+    console.log(req.body);
     db.getData(db.getDB('Physicians', "Physician"), {
-        id_ : req.body["user"]
+        _id : ObjectId(req.body["id"])
     }).then( data => data[0]).then(
         data => {
+            if(!(typeof data === 'undefined')){
             res.send({
                 Firstname : data['First_Name'],
                 Lastname : data['Last_Name'], 
@@ -12,6 +14,10 @@ const getUser = (req, res) =>{
                 Phone: data['Phone_Number'],
                 Patients : data['Patients']
             })
+        }
+        else{
+            res.send("401");
+        }
         }
     )
 }

@@ -27,7 +27,8 @@ const Reg = (req,res)=> {
                     Password: pass,
                     Email_Address: payload['Practice_Email_Address'],
                     Phone_Number: payload['Practice_Phone_Number'],
-                    Patients: []
+                    Patients: [],
+                    jwtauth: ""
                 })
                 res.send("Account Successfully Created")
             }

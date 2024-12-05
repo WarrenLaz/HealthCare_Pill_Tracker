@@ -33,7 +33,8 @@ const addPatient = (req,res)=> {
                     Phone_Number: payload['Phone_Number'],
                     Physician: ObjectId(payload['Phy_id']),
                     Prescriptions: [],
-                    isNew: 1
+                    isNew: 1,
+                    jwtauth: ""
                 }).then(d => {
                 db.getData(db.getDB('Patients', 'patient'),{Email_Address : payload['Email_Address']}).then(
                     data => data[0] 
@@ -53,10 +54,12 @@ const addPatient = (req,res)=> {
 }
 
 const deletePatient = (req, res) => {
+
     const payload = req.body["id"];
     db.deleteData(db.getDB("Patients", "patient"), {
         "_id" : payload
     });
+
 }
 
 
