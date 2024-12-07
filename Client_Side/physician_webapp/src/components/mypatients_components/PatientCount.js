@@ -12,7 +12,7 @@ export const PatientCount = () => {
 
       <div className="ml-4 flex flex-col  justify-center">
         <p className="text-md">Total Number of Patients:</p>
-        <p className="text-sm">{auth.payload.p.length}</p> {/* replace with actual number*/}
+        <p className="text-sm">{1}</p> {/* replace with actual number*/}
       </div>
     </div>
   );

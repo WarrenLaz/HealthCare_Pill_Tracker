@@ -7,7 +7,6 @@ export const Patientadd = () => {
   const { auth } = useAuth();
   const [Resp, setResp] = useState("");
   const [RegForm, setRegForm] = useState({
-    Phy_id: auth.payload.id,
     First_Name: "",
     Last_Name: "",
     Email_Address: "",
@@ -18,7 +17,11 @@ export const Patientadd = () => {
     e.preventDefault();
     console.log(RegForm);
     await axios
-      .post("http://localhost:8000/AddPatient", { RegForm })
+      .post("http://localhost:8000/patients", { RegForm },  {
+        headers: {
+          'Authorization': 'Bearer ' + String(auth.payload)
+        }
+      })
       .then((resp) => {
         console.log(resp.data);
         setResp(resp.data);

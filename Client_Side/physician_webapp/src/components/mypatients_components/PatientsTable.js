@@ -5,16 +5,21 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 
+
 const PatientsTable = () => {
   const{auth} = useAuth();
   const [patient, setPatients] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const keys = auth.payload.p; // Extract keys from auth
         console.log(keys);
-        const res = await axios.post("http://localhost:8000/patients", { keys });
+        const res = await axios.get("http://localhost:8000/patients", 
+          {
+            headers: {
+              'Authorization': 'Bearer ' + String(auth.payload)
+            }
+          });
         console.log(res.data);
         setPatients(res.data); // Update state with the fetched data
       } catch (error) {

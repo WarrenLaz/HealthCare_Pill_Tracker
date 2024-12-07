@@ -28,7 +28,7 @@ const addPatient = (req, res) => {
           Physician: ObjectId(req.user['user']),
           Prescriptions: [],
           isNew: 1,
-        });
+        }).then(d => {
         db.getData(db.getDB("Patients", "patient"), {
           Email_Address: payload["Email_Address"],
         })
@@ -39,8 +39,9 @@ const addPatient = (req, res) => {
               db.getDB("Physicians", "Physician"),
               { _id: ObjectId(req.user['user']) },
               { $push: { Patients: data["_id"] } }
-            );
-          });
+            )
+          })
+        });
         res.send("200 OK");
       }
     });

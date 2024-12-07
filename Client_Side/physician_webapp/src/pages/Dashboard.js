@@ -9,25 +9,44 @@ import PatientCount from "../components/mypatients_components/PatientCount";
 import PatientsTable from "../components/mypatients_components/PatientsTable";
 
 export const Dashboard = () => {
+
   const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [credentials, setCreds] = useState({});
 
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(auth.payload)
+        const res = await axios.get("http://localhost:8000/user",{
+          headers: {
+            'Authorization': 'Bearer ' + String(auth.payload)
+          }
+        });
+        console.log(res.data);// Update state with the fetched data
+        setCreds(res.data);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    fetchData();
+  }, [auth.payload]); 
+
   console.log(auth.payload);
   return (
     <div className="px-12 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
-        <h1 className="text-sm font-bold mb-2">
-          WELCOME DR.{String(auth.payload.ln).toUpperCase()}
-        </h1>
-        <h1 className="text-4xl">My Patients</h1>
+        <h1 className="text-4xl"> WELCOME DR.{String(credentials.Last_Name).toUpperCase()}</h1>
       </div>
       <div className="flex mt-6 flex-col">
         <div className="flex justify-between">
-          <PatientCount />
+         <PatientCount />
           <button
             onClick={toggleModal}
             className="w-[100px] h-[100px] bg-white rounded-full flex justify-center items-center"
