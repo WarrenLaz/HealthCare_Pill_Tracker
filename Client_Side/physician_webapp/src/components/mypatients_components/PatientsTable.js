@@ -30,9 +30,9 @@ const PatientsTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between px-16 pt-12">
+      <div className="flex justify-between px-4 pt-12">
         {/* Search Bar */}
-        <div className="bg-slate-50 w-[800px] h-9 rounded-full flex items-center px-4">
+        <div className="bg-slate-50 w-3/5 h-9 rounded-full flex items-center px-4">
           <input
             type="text"
             placeholder="Search Patient"
@@ -42,7 +42,7 @@ const PatientsTable = () => {
         </div>
 
         {/* Sort By Dropdown */}
-        <div className="bg-slate-50 w-64 h-9 rounded-full flex items-center px-4">
+        <div className="bg-slate-50 w-1/5 h-9 rounded-full flex items-center px-4">
           <select className="bg-transparent outline-none w-full text-slate-600 cursor-pointer">
             <option value="">Sort By</option>
             <option value="name">Alphabetical (A-Z)</option>
