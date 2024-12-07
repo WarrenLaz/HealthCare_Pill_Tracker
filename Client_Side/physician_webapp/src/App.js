@@ -6,29 +6,30 @@ import RequireAuth from "./components/RequireAuth";
 import { Dashboard } from "./pages/Dashboard";
 import { PatientProfile } from "./pages/patientprofile/PatientProfile";
 import { Prescadd } from "./components/Prescadd";
+import { SidebarLayout } from "./layouts/SidebarLayout";
 import "./App.css";
 
 function App() {
   return (
-    <>
-      <Router>
-        <div className="App">
-          <Routes>
-            {/* public Routes*/}
-            <Route path="/" element={<Home />} />
-            <Route path="/Reg" element={<Reg />} />
-            <Route path="/Login" element={<Login />} />
-            {/* Test component */}
-            <Route path="/Prescadd" element={<Prescadd />} />
-            {/* private Routes*/}
-            <Route element={<RequireAuth />}>
+    <Router>
+      <div className="App">
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/Reg" element={<Reg />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Prescadd" element={<Prescadd />} />
+
+          {/* Private Routes */}
+          <Route element={<RequireAuth />}>
+            <Route element={<SidebarLayout />}>
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/PatientProfile" element={<PatientProfile />} />
             </Route>
-          </Routes>
-        </div>
-      </Router>
-    </>
+          </Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
