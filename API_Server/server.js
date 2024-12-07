@@ -19,14 +19,10 @@ app.use(cors(corsOptions));
 app.use("/Login", require("./routes/login"));
 //Registration
 app.use("/Reg", require("./routes/reg"));
-//Add Patient
-app.use("/AddPatient", require("./routes/addpatient"));
-//Add Patient
-app.use("/DeletePatient", require("./routes/deletepatient"));
 //userinfo
 app.use("/user", require("./routes/user_"));
 //patient info
-app.use("/patients", require("./routes/getpatient"));
+app.use("/patients", require("./routes/patient"));
 
 app.use("/patientLogin", require("./routes/patientLogin"));
 

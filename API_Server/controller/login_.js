@@ -12,8 +12,7 @@ const Login  = (req,res) =>{
                 //invalid email
                 res.send({status : "Invalid Email", packet: ""});
             } else{
-                //const pass = sha256(payload['Password']);
-                const pass = payload['Password'];
+                const pass = sha256(payload['Password']);
                 if(data['Password'] === pass){
                     //VALID
                     accessToken = jwt.sign(
@@ -21,6 +20,7 @@ const Login  = (req,res) =>{
                         process.env.ATS, 
                         {expiresIn: '30s'}
                     );
+
                     refreshToken = jwt.sign(
                         {"user" : data['_id']}, 
                         process.env.RTS, 
@@ -30,13 +30,7 @@ const Login  = (req,res) =>{
                     console.log(refreshToken);
                     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 864 * 100 * 100})
                     
-                    res.send({status: "200 OK", packet: {
-                        id : data["_id"],
-                        fn : data['First_Name'],
-                        ln: data['Last_Name'],
-                        p: data['Patients']
-                    }});
-
+                    res.send({status: "200 OK", packet: accessToken});
                 } else{
                     //invalid password
                     res.send({status: "Invalid Password",packet: ""} );

@@ -1,7 +1,8 @@
 const db = require('../dbcontroller');
 
-const getUser = (req, res) =>{
-    db.getData(db.getDB('Prescriptions', "Prescription"), {
+
+const getProd = (req, res) =>{
+    db.getData(db.getDB('Products', "Product"), {
         id_ : req.body["user"]
     }).then( data => data[0]).then(
         data => {
@@ -16,4 +17,12 @@ const getUser = (req, res) =>{
     )
 }
 
-module.exports = getUser;
+const deleteProd = (req, res) =>{
+    
+}
+
+const updateProd = (req, res) =>{
+    
+}
+
+module.exports = {getProd,deleteProd,updateProd};
