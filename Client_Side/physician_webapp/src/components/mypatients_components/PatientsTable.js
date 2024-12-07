@@ -5,21 +5,19 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 
-
 const PatientsTable = () => {
-  const{auth} = useAuth();
+  const { auth } = useAuth();
   const [patient, setPatients] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const keys = auth.payload.p; // Extract keys from auth
         console.log(keys);
-        const res = await axios.get("http://localhost:8000/patients", 
-          {
-            headers: {
-              'Authorization': 'Bearer ' + String(auth.payload)
-            }
-          });
+        const res = await axios.get("http://localhost:8000/patients", {
+          headers: {
+            Authorization: "Bearer " + String(auth.payload),
+          },
+        });
         console.log(res.data);
         setPatients(res.data); // Update state with the fetched data
       } catch (error) {
@@ -28,9 +26,8 @@ const PatientsTable = () => {
     };
 
     fetchData();
-  }, [auth.payload.p]); 
+  }, [auth.payload.p]);
 
-  
   return (
     <div>
       <div className="flex justify-between px-16 pt-12">
@@ -47,9 +44,7 @@ const PatientsTable = () => {
         {/* Sort By Dropdown */}
         <div className="bg-slate-50 w-64 h-9 rounded-full flex items-center px-4">
           <select className="bg-transparent outline-none w-full text-slate-600 cursor-pointer">
-            <option value="">
-              Sort By
-            </option>
+            <option value="">Sort By</option>
             <option value="name">Alphabetical (A-Z)</option>
             <option value="option2">(another option here)</option>
           </select>
@@ -81,7 +76,10 @@ const PatientsTable = () => {
           <tbody>
             {/* Map over the dummy data */}
             {patient.map((patient, index) => (
-              <tr key={index} className="hover:bg-gray-100">
+              <tr
+                key={index}
+                className="hover:bg-gray-100  border-b  border-gray-300"
+              >
                 <td className="px-4 py-2">{patient.First_Name}</td>
                 <td className="px-4 py-2">{patient.Last_Name}</td>
                 <td className="px-4 py-2">{patient.Email_Address}</td>
