@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{html,jsx,tsx}",
+    "./node_modules/@rewind-ui/core/dist/theme/styles/*.js",
+    "./node_modules/@rewind-ui/core/dist/theme/styles/Button.styles.js",
+    "./node_modules/@rewind-ui/core/dist/theme/styles/Text.styles.js",
+  ],
   theme: {
     extend: {
       colors: {
@@ -28,5 +34,11 @@ module.exports = {
       components: {},
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography"),
+    require("tailwind-scrollbar")({ nocompatible: true }),
+    require("@tailwindcss/forms")({
+      strategy: "class",
+    }),
+  ],
 };
