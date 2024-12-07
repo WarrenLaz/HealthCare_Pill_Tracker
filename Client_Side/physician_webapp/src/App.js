@@ -4,6 +4,7 @@ import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import RequireAuth from "./components/RequireAuth";
 import { Dashboard } from "./pages/Dashboard";
+import { PatientProfile } from "./pages/patientprofile/PatientProfile";
 import { Prescadd } from "./components/Prescadd";
 import "./App.css";
 
@@ -22,6 +23,7 @@ function App() {
             {/* private Routes*/}
             <Route element={<RequireAuth />}>
               <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/PatientProfile" element={<PatientProfile />} />
             </Route>
           </Routes>
         </div>
