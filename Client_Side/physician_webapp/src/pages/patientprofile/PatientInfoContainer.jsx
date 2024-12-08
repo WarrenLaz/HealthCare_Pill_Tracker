@@ -21,7 +21,7 @@ const PatientInfoContainer = () => {
   };
 
   return (
-    <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[500px] h-fit bg-white mt-4">
+    <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold text-gray-800">Patient Info</h1>
         <button

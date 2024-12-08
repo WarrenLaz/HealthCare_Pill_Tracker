@@ -18,15 +18,18 @@ export const PatientProfile = () => {
   };
   console.log(auth.payload);
   return (
-    <div className="flex-col sm px-12 py-6 bg-secondary w-full h-full">
-      <h1 className="text-3xl">Patient Name Goes Here</h1>
-      <div className=" flex px-12 py-6 bg-secondary w-full h-full">
+    <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
+      <div className="flex-col items-center ">
+        <h1 className="text-3xl">Patient Name Goes Here</h1>
+      </div>
+
+      <div className="flex sm:flex-col md:flex-col lg:flex-row  px-4 py-6 bg-secondary w-full justify-center">
         {/*left side for user info*/}
-        <div className="bg-secondary w-1/2 flex-col justify-center items-center align-middle">
+        <div className=" sm:w-full md:w-full lg:w-1/2 flex flex-col justify-start items-center">
           <PatientInfoContainer />
         </div>
         {/*right side for prescriptions*/}
-        <div className="bg-secondary w-1/2">
+        <div className="sm:w-full md:w-full lg:w-1/2">
           <div className="flex justify-between items-center p-6">
             <h2 className="text-xl font-semibold text-gray-800">
               Prescriptions (4) {/*Change this here to get actual number*/}
@@ -38,7 +41,11 @@ export const PatientProfile = () => {
               <BsPlusLg className="text-3xl color-[#001A72]" />
             </button>
           </div>
-          <div>
+          <div className="flex flex-col justify-center items-center">
+            <PrescriptionContainer />
+            <PrescriptionContainer />
+            <PrescriptionContainer />
+            <PrescriptionContainer />
             <PrescriptionContainer />
           </div>
         </div>
