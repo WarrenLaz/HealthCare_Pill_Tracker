@@ -23,7 +23,7 @@ export const PatientProfile = () => {
         <h1 className="text-3xl">Patient Name Goes Here</h1>
       </div>
 
-      <div className="flex sm:flex-col md:flex-col lg:flex-row  px-4 py-6 bg-secondary w-full justify-center">
+      <div className="flex flex-col sm:px-4 sm:py-6 md:flex-row bg-secondary w-full justify-center">
         {/*left side for user info*/}
         <div className=" sm:w-full md:w-full lg:w-1/2 flex flex-col justify-start items-center">
           <PatientInfoContainer />
