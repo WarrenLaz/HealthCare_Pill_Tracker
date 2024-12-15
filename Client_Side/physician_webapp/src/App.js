@@ -8,6 +8,7 @@ import { PatientProfile } from "./pages/patientprofile/PatientProfile";
 import { Prescadd } from "./components/Prescadd";
 import { SidebarLayout } from "./layouts/SidebarLayout";
 import "./App.css";
+import { Batches } from "./pages/BatchesPage/Batches";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route element={<SidebarLayout />}>
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/PatientProfile" element={<PatientProfile />} />
+              <Route path="/Batches" element={<Batches />} />
             </Route>
           </Route>
         </Routes>

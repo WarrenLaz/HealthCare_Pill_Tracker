@@ -57,7 +57,7 @@ export const SidebarLayout = () => {
                     />
                   </div>
                 </Link>
-                <Link to="/PatientProfile">
+                <Link to="/Batches">
                   <div className="hover:bg-gray-100">
                     <Sidebar.Nav.Section.Item
                       icon={<LuPackageOpen className="text-2xl" />}
