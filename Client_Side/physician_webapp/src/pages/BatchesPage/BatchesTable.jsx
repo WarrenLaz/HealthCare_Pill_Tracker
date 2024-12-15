@@ -29,7 +29,7 @@ const BatchesTable = () => {
 
   return (
     <div>
-      <div className="flex justify-between px-4 pt-12">
+      <div className="flex justify-between px-4 pt-6">
         {/* Search Bar */}
         <div className="bg-slate-50 w-3/5 h-9 rounded-full flex items-center px-4">
           <input

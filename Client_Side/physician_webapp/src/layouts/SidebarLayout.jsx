@@ -66,7 +66,7 @@ export const SidebarLayout = () => {
                   </div>
                 </Link>
 
-                <Link to="/PatientProfile">
+                <Link to="/MyProfile">
                   <div className="hover:bg-gray-100">
                     <Sidebar.Nav.Section.Item
                       icon={<LuUserCircle className="text-2xl" />}
