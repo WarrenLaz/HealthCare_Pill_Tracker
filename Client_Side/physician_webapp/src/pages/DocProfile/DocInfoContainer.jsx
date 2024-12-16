@@ -1,14 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
+import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 const DocInfoContainer = () => {
+  const { auth } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [credentials, setCreds] = useState({});
   const [formData, setFormData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
-    phoneNumber: "123-456-7890",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/user", {
+          headers: {
+            Authorization: "Bearer " + String(auth.payload),
+          },
+        });
+        setCreds(res.data);
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      }
+    };
+
+    fetchData();
+  }, [auth.payload]);
+
+  useEffect(() => {
+    if (credentials) {
+      setFormData({
+        firstName: credentials.First_Name || "",
+        lastName: credentials.Last_Name || "",
+        email: credentials.Email_Address || "",
+        phoneNumber: credentials.Phone_Number || "",
+      });
+    }
+  }, [credentials]); // Update formData when credentials change
 
   const [initialData, setInitialData] = useState({ ...formData });
 
@@ -41,7 +73,6 @@ const DocInfoContainer = () => {
             className="text-gray-600 hover:text-gray-900 transition"
           >
             <FiEdit size={20} />{" "}
-            {/* Only show the edit icon when not in edit mode */}
           </button>
         )}
       </div>
