@@ -8,7 +8,6 @@ const handleRefreshToken = (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
 
-
     db.getData(db.getDB("Physicians", "Physician"), {jwtauth : refreshToken}).then( foundUser => {
     if (!foundUser) return res.sendStatus(403); //Forbidden 
     // evaluate jwt 
@@ -18,14 +17,14 @@ const handleRefreshToken = (req, res) => {
         (err, decoded) => {
             if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
             const accessToken = jwt.sign(
-                { "username": decoded.username },
+                { "user": decoded.user },
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '30s' }
             );
-            res.json({ accessToken })
+            res.send({status: "200 OK", packet: accessToken});
         }
     );
 });
 }
 
-module.exports = { handleRefreshToken }
+module.exports = handleRefreshToken

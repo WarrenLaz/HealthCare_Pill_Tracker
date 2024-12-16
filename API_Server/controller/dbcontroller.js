@@ -1,6 +1,6 @@
 const mongo = require('mongodb');
-const uri = process.env.MOGO_KEY;
 
+const uri = process.env.MOGO_KEY;
 const MongoClient = new mongo.MongoClient(uri);
 
 function getDB(db, collection){

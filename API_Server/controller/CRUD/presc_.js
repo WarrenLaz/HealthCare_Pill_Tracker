@@ -1,7 +1,7 @@
 const db = require('../dbcontroller');
 
 const addPrescription = (req, res) =>{
-    db.updateData(db.getDB('Patients', "patient"), {
+    db.updateData(db.getDB('Prescriptions', "Prescription"), {
         _id : req.body["id"]
     },{
         $push : {
@@ -35,7 +35,7 @@ const getPresc = (req, res) =>{
     )
 }
 
-const deletePres= (req, res) =>{
+const deletePres = (req, res) =>{
     
 }
 

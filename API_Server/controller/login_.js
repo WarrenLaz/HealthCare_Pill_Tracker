@@ -1,6 +1,8 @@
 const db = require('./dbcontroller');
 const sha256 = require('../encryptor/sha256');
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require("mongodb");
+
 //Login
 const Login  = (req,res) =>{
     payload = req.body['LoginForm'];
@@ -29,7 +31,11 @@ const Login  = (req,res) =>{
                     
                     console.log(refreshToken);
                     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 864 * 100 * 100})
-                    
+                    db.updateData(db.getDB('Physicians', 'Physician'), 
+                        {_id : ObjectId(data['_id'])}, 
+                        {$set : {jwtauth : refreshToken}}
+                    ).then(res => console.log(res));
+
                     res.send({status: "200 OK", packet: accessToken});
                 } else{
                     //invalid password
