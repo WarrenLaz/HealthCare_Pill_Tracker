@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import { FiCheck } from "react-icons/fi";
 
 const DocInfoContainer = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,6 +10,8 @@ const DocInfoContainer = () => {
     phoneNumber: "123-456-7890",
   });
 
+  const [initialData, setInitialData] = useState({ ...formData });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -20,16 +21,29 @@ const DocInfoContainer = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleCancel = () => {
+    setFormData({ ...initialData }); // Reset the form to its initial state
+    setIsEditing(false); // Exit edit mode
+  };
+
+  const handleSave = () => {
+    setInitialData({ ...formData }); // Save current form data as initial data
+    setIsEditing(false); // Exit edit mode
+  };
+
   return (
     <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold text-gray-800">My Profile</h1>
-        <button
-          onClick={toggleEdit}
-          className="text-gray-600 hover:text-gray-900 transition"
-        >
-          {isEditing ? <FiCheck size={20} /> : <FiEdit size={20} />}
-        </button>
+        {!isEditing && (
+          <button
+            onClick={toggleEdit}
+            className="text-gray-600 hover:text-gray-900 transition"
+          >
+            <FiEdit size={20} />{" "}
+            {/* Only show the edit icon when not in edit mode */}
+          </button>
+        )}
       </div>
       <div className="space-y-4">
         <div className="flex gap-6">
@@ -91,6 +105,19 @@ const DocInfoContainer = () => {
           )}
         </div>
       </div>
+      {isEditing && (
+        <div className="flex justify-end gap-4 mt-4">
+          <button onClick={handleCancel} className=" text-gray-500 py-2">
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            className="bg-primary text-white rounded-md px-4 py-2"
+          >
+            Save
+          </button>
+        </div>
+      )}
     </div>
   );
 };
