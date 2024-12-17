@@ -4,13 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Auth} from './context/Auth'
+import { PatInfo } from './context/PatInfo';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
+
   <Auth>
+  <PatInfo>
   <React.StrictMode>
     <App />
   </React.StrictMode>
+  </PatInfo>
   </Auth>
 );
 

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { FiCheck } from "react-icons/fi";
+import usePat from "../../hooks/usePat";
 
 const PatientInfoContainer = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const { pat } = usePat();
   const [formData, setFormData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "johndoe@example.com",
-    phoneNumber: "123-456-7890",
+    firstName: pat.patientData.First_Name,
+    lastName: pat.patientData.Last_Name,
+    email: pat.patientData.Email_Address,
+    phoneNumber: pat.patientData.Phone_Number,
   });
 
   const handleInputChange = (e) => {

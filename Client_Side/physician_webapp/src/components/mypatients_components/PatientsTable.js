@@ -4,10 +4,19 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import useAxiosPrivate from "../../hooks/axiosPrivate";
+import usePat from "../../hooks/usePat";
+import {useNavigate, useLocation} from 'react-router-dom';
+
 const PatientsTable = () => {
   const { auth } = useAuth();
   const [patient, setPatients] = useState([]);
   const axiosprivate = useAxiosPrivate();
+  const { setPat } = usePat();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/PatientProfile";
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,7 +33,13 @@ const PatientsTable = () => {
     };
 
     fetchData();
-  }, [auth.payload.p]);
+  }, [auth.payload]);
+
+  const handleRowSubmit = (patientData) => {
+    console.log(patientData);
+    setPat({patientData});
+    navigate(from, {replace:true});
+  }
 
   return (
     <div>
@@ -83,9 +98,11 @@ const PatientsTable = () => {
                 <td className="px-4 py-2">{patient.Email_Address}</td>
                 <td className="px-4 py-2">{patient.Phone_Number}</td>
                 <td className="px-4 py-2">
-                  <button className="bg-[#e1f6df] text-[#5F8D4E] px-4 py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-[#5F8D4E] hover:text-[#F4FFF3] hover:shadow-lg">
-                    <p className="font-semibold">Manage</p>
-                  </button>
+                <button className="bg-[#e1f6df] text-[#5F8D4E] px-4 py-2 rounded-md 
+                transition-all duration-300 ease-in-out hover:bg-[#5F8D4E] hover:text-[#F4FFF3] hover:shadow-lg" 
+                onClick={() => handleRowSubmit(patient)}>
+                  <p className="font-semibold">Manage</p>
+                </button>
                 </td>
               </tr>
             ))}

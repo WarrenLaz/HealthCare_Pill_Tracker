@@ -42,7 +42,7 @@ const addPatient = (req, res) => {
             )
           })
         });
-        res.send("200 OK");
+        res.send("Patient Added");
       }
     });
 };

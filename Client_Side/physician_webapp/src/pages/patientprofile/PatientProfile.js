@@ -7,19 +7,21 @@ import { BsPlusLg } from "react-icons/bs";
 import Prescadd from "../../components/Prescadd";
 import PatientInfoContainer from "./PatientInfoContainer";
 import PrescriptionContainer from "./PrescriptionContainer";
-
+import usePat from "../../hooks/usePat";
 export const PatientProfile = () => {
   const { auth } = useAuth();
+  const { pat } = usePat();
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
   console.log(auth.payload);
+  console.log(pat);
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
-        <h1 className="text-3xl">Patient Name Goes Here</h1>
+        <h1 className="text-3xl">{pat.patientData.First_Name + " " + pat.patientData.Last_Name}</h1>
       </div>
 
       <div className="flex flex-col sm:px-4 sm:py-6 md:flex-row bg-secondary w-full justify-center">
