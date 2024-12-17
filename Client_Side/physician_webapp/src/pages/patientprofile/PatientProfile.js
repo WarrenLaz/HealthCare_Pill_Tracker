@@ -11,7 +11,6 @@ import PrescriptionContainer from "./PrescriptionContainer";
 export const PatientProfile = () => {
   const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);

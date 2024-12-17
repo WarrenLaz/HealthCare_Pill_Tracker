@@ -1,19 +1,17 @@
 import React from "react";
 import { CiSearch } from "react-icons/ci";
-import dummyPatients from "./dummypatient";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
-
+import useAxiosPrivate from "../../hooks/axiosPrivate";
 const PatientsTable = () => {
   const { auth } = useAuth();
   const [patient, setPatients] = useState([]);
+  const axiosprivate = useAxiosPrivate();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const keys = auth.payload.p; // Extract keys from auth
-        console.log(keys);
-        const res = await axios.get("http://localhost:8000/patients", {
+        const res = await axiosprivate.get("http://localhost:8000/patients", {
           headers: {
             Authorization: "Bearer " + String(auth.payload),
           },

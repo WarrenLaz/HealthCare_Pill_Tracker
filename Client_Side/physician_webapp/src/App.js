@@ -10,11 +10,11 @@ import { SidebarLayout } from "./layouts/SidebarLayout";
 import "./App.css";
 import { Batches } from "./pages/BatchesPage/Batches";
 import { MyProfile } from "./pages/DocProfile/MyProfile";
+import PersistLogin from "./components/PersistLogin";
 
 function App() {
   return (
     <Router>
-      <div className="App">
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -23,16 +23,17 @@ function App() {
           <Route path="/Prescadd" element={<Prescadd />} />
 
           {/* Private Routes */}
+          <Route element = {<PersistLogin/>}>
           <Route element={<RequireAuth />}>
-            <Route element={<SidebarLayout />}>
+            <Route element={<SidebarLayout />}> 
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/PatientProfile" element={<PatientProfile />} />
               <Route path="/Batches" element={<Batches />} />
               <Route path="/MyProfile" element={<MyProfile />} />
-            </Route>
+            </Route> 
+          </Route>
           </Route>
         </Routes>
-      </div>
     </Router>
   );
 }

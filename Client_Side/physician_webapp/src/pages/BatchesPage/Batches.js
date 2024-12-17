@@ -7,12 +7,13 @@ import Modal from "../../components/modals/Modal";
 import { BsPlusLg } from "react-icons/bs";
 import BatchCount from "./BatchCount";
 import BatchesTable from "./BatchesTable";
+import useAxiosPrivate from "../../hooks/axiosPrivate";
 
 export const Batches = () => {
   const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [credentials, setCreds] = useState({});
-
+  const axiosprivate = useAxiosPrivate();
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -22,7 +23,7 @@ export const Batches = () => {
     const fetchData = async () => {
       try {
         console.log(auth.payload);
-        const res = await axios.get("http://localhost:8000/user", {
+        const res = await axiosprivate.get("http://localhost:8000/user", {
           headers: {
             Authorization: "Bearer " + String(auth.payload),
           },

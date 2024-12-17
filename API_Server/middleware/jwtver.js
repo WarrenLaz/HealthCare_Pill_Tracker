@@ -6,13 +6,11 @@ const JWTver = (req, res, next) =>{
 
     if(!authHead) return res.send('401');
     const token = authHead.split(' ')[1];
-    console.log("AUTH: " + token);
-
     jwt.verify(
         token,
         process.env.ATS, 
         (err, decoded) => {
-            if(err) return res.send('403');
+            if(err) return res.sendStatus(403);
             req.user = decoded
             next();
         } 

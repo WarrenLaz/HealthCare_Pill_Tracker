@@ -1,26 +1,31 @@
 const db = require('./dbcontroller');
-
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const { ObjectId } = require("mongodb");
 
 const handleRefreshToken = (req, res) => {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
 
-    db.getData(db.getDB("Physicians", "Physician"), {jwtauth : refreshToken}).then( foundUser => {
+    console.log("Refresh: ", refreshToken);
+    db.getData(db.getDB("Physicians", "Physician"), {jwtauth : refreshToken}).then( data => data[0]).then(foundUser => {
     if (!foundUser) return res.sendStatus(403); //Forbidden 
     // evaluate jwt 
-    jwt.verify(
+    jwt.verify( 
         refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
+        process.env.RTS,
         (err, decoded) => {
-            if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
+            console.log(foundUser['_id'].toString());
+            console.log(decoded.user.toString());
+            console.log(err);
+            if (err || foundUser['_id'].toString() !== decoded.user.toString()) return res.sendStatus(403);
             const accessToken = jwt.sign(
-                { "user": decoded.user },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '30s' }
+                {"user" : foundUser['_id']}, 
+                process.env.ATS, 
+                {expiresIn: '30s'}
             );
+            console.log("GOOD");
             res.send({status: "200 OK", packet: accessToken});
         }
     );

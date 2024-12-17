@@ -22,7 +22,6 @@ const Login  = (req,res) =>{
                         process.env.ATS, 
                         {expiresIn: '30s'}
                     );
-
                     refreshToken = jwt.sign(
                         {"user" : data['_id']}, 
                         process.env.RTS, 
@@ -30,7 +29,9 @@ const Login  = (req,res) =>{
                     );
                     
                     console.log(refreshToken);
-                    res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 864 * 100 * 100})
+
+                    res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
+
                     db.updateData(db.getDB('Physicians', 'Physician'), 
                         {_id : ObjectId(data['_id'])}, 
                         {$set : {jwtauth : refreshToken}}

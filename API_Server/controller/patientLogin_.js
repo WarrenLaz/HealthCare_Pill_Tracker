@@ -13,8 +13,8 @@ const patientLogin = (req, res) => {
       if (typeof data === "undefined") {
         return res.send({ status: "Invalid Email", packet: "" });
       } else {
-        //const pass = sha256(payload["Password"]);
-        const pass = payload["Password"];
+        const pass = sha256(payload["Password"]);
+        //const pass = payload["Password"];
         if (data["Password"] === pass) {
           const accessToken = jwt.sign(
             { user: data["_id"], role: "patient" },

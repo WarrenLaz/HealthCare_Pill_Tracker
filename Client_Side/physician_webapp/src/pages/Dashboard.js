@@ -7,11 +7,13 @@ import Modal from "../components/modals/Modal";
 import { BsPlusLg } from "react-icons/bs";
 import PatientCount from "../components/mypatients_components/PatientCount";
 import PatientsTable from "../components/mypatients_components/PatientsTable";
+import useAxiosPrivate from "../hooks/axiosPrivate";
 
 export const Dashboard = () => {
   const { auth } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [credentials, setCreds] = useState({});
+  const axiosPrivate = useAxiosPrivate();
 
   // Function to toggle the modal visibility
   const toggleModal = () => {
@@ -22,7 +24,7 @@ export const Dashboard = () => {
     const fetchData = async () => {
       try {
         console.log(auth.payload);
-        const res = await axios.get("http://localhost:8000/user", {
+        const res = await axiosPrivate.get("http://localhost:8000/user", {
           headers: {
             Authorization: "Bearer " + String(auth.payload),
           },

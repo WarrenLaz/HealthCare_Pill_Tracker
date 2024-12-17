@@ -10,8 +10,8 @@ const getProd = (req, res) =>{
                 End_Date : data['End_Date'],
                 Start_Date : data['Start_Date'], 
                 Email : data['Quantity'],
-                Phone: data['Dosage'],
-                Patients : data['Product_id'],
+                Dosage: data['Dosage'],
+                Product_id : data['Product_id'],
             })
         }
     )

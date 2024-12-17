@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
-
+import useAxiosPrivate from "../hooks/axiosPrivate";
 export const Patientadd = () => {
   const { auth } = useAuth();
   const [Resp, setResp] = useState("");
@@ -12,11 +12,13 @@ export const Patientadd = () => {
     Email_Address: "",
     Phone_Number: "",
   });
+  
+  const axiosprivate = useAxiosPrivate();
 
   async function submittion(e) {
     e.preventDefault();
     console.log(RegForm);
-    await axios
+    await axiosprivate
       .post("http://localhost:8000/patients", { RegForm },  {
         headers: {
           'Authorization': 'Bearer ' + String(auth.payload)

@@ -3,6 +3,6 @@ const express = require("express");
 const router = express.Router();
 const handlereferesh = require("../controller/refresh_");
 
-router.post("/", handlereferesh);
+router.get("/", handlereferesh);
 
 module.exports = router;
