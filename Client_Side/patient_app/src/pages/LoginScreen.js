@@ -17,12 +17,11 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [focusedInput, setFocusedInput] = useState("");
-
   const handleLogin = async () => {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://141.215.222.111:8000/patientLogin",
+        "http://localhost:8000/patientLogin",
         {
           LoginForm: { Username: username, Password: password },
         },
@@ -44,7 +43,6 @@ export default function LoginScreen() {
       setError("Login failed, please try again.");
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Welcome to ReplenX</Text>
@@ -94,7 +92,6 @@ export default function LoginScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

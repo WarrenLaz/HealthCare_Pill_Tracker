@@ -1,0 +1,29 @@
+# Use the official Node.js image for building
+FROM node:latest as build
+
+# Set the working directory
+WORKDIR /Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/Client_side/physician_webapp/
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the React app
+COPY . .
+
+# Build the React app
+RUN npm run build
+
+# Use Nginx for serving the production build
+FROM nginx:stable-alpine
+
+# Copy the build output to Nginx's default HTML directory
+COPY --from=build /Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/Client_side/physician_webapp/ /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,20 @@
+# Use the official Node.js image
+FROM node:latest
+
+# Set the working directory in the container
+WORKDIR /app/data
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Expose the port your server runs on
+EXPOSE 8000
+
+# Start the server
+CMD ["npm", "start"]
