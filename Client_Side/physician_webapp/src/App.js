@@ -11,6 +11,7 @@ import "./App.css";
 import { Batches } from "./pages/BatchesPage/Batches";
 import { MyProfile } from "./pages/DocProfile/MyProfile";
 import PersistLogin from "./components/PersistLogin";
+import RequirePatient from "./components/RequirePatient";
 
 function App() {
   return (
@@ -27,9 +28,11 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route element={<SidebarLayout />}> 
               <Route path="/Dashboard" element={<Dashboard />} />
-              <Route path="/PatientProfile" element={<PatientProfile />} />
               <Route path="/Batches" element={<Batches />} />
               <Route path="/MyProfile" element={<MyProfile />} />
+              <Route element = {<RequirePatient/>}>
+              <Route path="/PatientProfile" element={<PatientProfile />} />
+              </Route>
             </Route> 
           </Route>
           </Route>

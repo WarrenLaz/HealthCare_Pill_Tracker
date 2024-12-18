@@ -53,9 +53,15 @@ export const Dashboard = () => {
           <PatientCount />
           <button
             onClick={toggleModal}
-            className="w-[100px] h-[100px] bg-white rounded-full flex justify-center items-center"
+            className="flex items-center justify-center w-[100px] h-[100px] rounded-full bg-white 
+      transition-all duration-300 ease-in-out 
+      hover:bg-[#e1f6df] hover:shadow-lg cursor-pointer"
           >
-            <BsPlusLg className="text-5xl color-[#001A72]" />
+                  <BsPlusLg 
+        className="text-5xl text-[#001A72] 
+        transition-all duration-300 ease-in-out 
+        hover:text-[#006400]"
+      />
           </button>
         </div>
 

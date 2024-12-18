@@ -1,20 +1,34 @@
 import { Outlet, Link } from "react-router-dom";
-import { useState } from "react";
-import { Sidebar, useSidebar, Overlay } from "@rewind-ui/core";
-import useAuth from "../hooks/useAuth";
+import { useState, useEffect } from "react";
+import { Sidebar, useSidebar } from "@rewind-ui/core";
 import {
   LuPackageOpen,
   LuUserCircle,
   LuUsers,
-  LuMenu,
   LuArrowLeftToLine,
 } from "react-icons/lu";
+import axios from "../api/axios";
 
 export const SidebarLayout = () => {
-  const { auth } = useAuth();
   const [expanded, setExpanded] = useState(true);
   const [mobile, setMobile] = useState(false);
   const sidebar = useSidebar();
+
+  const LogOut = async () =>{
+    console.log("logout");
+      try{
+      const loggedout = await axios.get("http://localhost:8000/logout", {
+        withCredentials : true
+      });
+      console.log(loggedout);
+      } catch(err){
+        console.log(err);
+      } finally{
+        window.location.reload()
+      }
+
+  }
+
 
   return (
     <div className="flex h-screen">
@@ -80,13 +94,13 @@ export const SidebarLayout = () => {
             <div>
               <Sidebar.Nav.Section>
                 <Sidebar.Separator />
-                <div className="hover:bg-gray-100">
+                <button className="hover:bg-gray-100" onClick={LogOut}>
                   <Sidebar.Nav.Section.Item
                     icon={<LuArrowLeftToLine className="text-2xl" />}
                     label="Logout"
                     href="#"
                   />
-                </div>
+                </button>
               </Sidebar.Nav.Section>
             </div>
           </Sidebar.Nav>

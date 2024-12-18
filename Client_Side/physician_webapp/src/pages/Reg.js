@@ -137,7 +137,7 @@ export const Reg = () => {
               </label>
 
               <input
-                type="text"
+                type="number"
                 {...register("Practice_Phone_Number")}
                 className={`w-full h-[45px] px-4 py-2 mt-2 mb-2 border rounded-lg focus:outline-none ${
                   errors.Practice_Phone_Number

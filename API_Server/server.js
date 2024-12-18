@@ -28,9 +28,10 @@ app.use("/patientLogin", require("./routes/patientLogin"));
 app.use("/Login", require("./routes/login"));
 //Registration
 app.use("/Reg", require("./routes/reg"));
-
 //refresh
 app.use("/refresh", require("./routes/refresh"));
+//refresh
+app.use("/logout", require("./routes/logout"));
 
 app.use(JWTver);
 //userinfo
@@ -39,3 +40,5 @@ app.use("/user", require("./routes/user_"));
 app.use("/patients", require("./routes/patient"));
 
 app.listen(port, () => console.log("Server is running", port));
+
+

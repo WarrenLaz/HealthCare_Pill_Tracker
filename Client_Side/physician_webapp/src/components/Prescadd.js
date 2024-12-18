@@ -28,10 +28,9 @@ export const Prescadd = () => {
             Search : <input type="text" onChange={searchbar} name = 'search'></input> <br></br>
         </form>
 
-        <h1>Supplement Information</h1>
+        <h1>Prescripti Information</h1>
         <form onSubmit={submittion}>
             Note: <input type ="text" name="Note"></input><br></br>
-            Start Date: <input type ="date"  name = "Start"></input> <br></br>
             Quantity: <input  type ="number" name = "Qunatity"></input> <br></br>
             Dosage: <input type ="number"  name = "Phone_Number"></input> <br></br>
             Units: <select name ="Password">

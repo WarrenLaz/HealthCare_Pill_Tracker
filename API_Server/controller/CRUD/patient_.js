@@ -2,11 +2,42 @@ const db = require("../dbcontroller");
 const sha256 = require("../../encryptor/sha256");
 const generatePassword = require("../../encryptor/passgen");
 const { ObjectId } = require("mongodb");
+const nodemailer = require('nodemailer');
+
+async function sendSecureEmail(Email_Address, Password) {
+    try {
+      // 1️⃣ Configure the email transporter
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com', // SMTP service (Gmail, Outlook, etc.)
+        port: 465, // Port for secure connections (SSL/TLS)
+        secure: true, // Use SSL/TLS
+        auth: {
+          user: process.env.Email, // Email address from .env
+          pass: process.env.Password // Email password from .env
+        },
+      });
+  
+      // 2️⃣ Set email options
+      const mailOptions = {
+        from: process.env.Email, // Sender address
+        to: Email_Address, // Recipient(s)
+        subject: 'Secure Email from ReplenX', // Email subject
+        text: Password, // Plain text body
+        html: '<p>This is a Password: </p> <strong>' + Password + '</strong>', // HTML email body
+      };
+  
+      // 3️⃣ Send the email
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent successfully:', info.messageId);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
+  }
 
 const addPatient = (req, res) => {
   //payload would go into ping([PAYLOAD])
   const payload = req.body["RegForm"];
-  console.log(ObjectId(req.user['user']))
+  console.log(ObjectId(req.user['user']));
   db.getData(db.getDB("Patients", "patient"), {
     $or: [
       { Phone_Number: payload["Phone_Number"] },
@@ -18,7 +49,9 @@ const addPatient = (req, res) => {
       if (!(typeof data === "undefined")) {
         res.send("Patient Already Exists");
       } else {
-        const pass = sha256(generatePassword(12));
+        const nonhashpass = generatePassword(12);
+        const pass = sha256(nonhashpass);
+        sendSecureEmail(payload['Email_Address'], nonhashpass);
         db.pushData(db.getDB("Patients", "patient"), {
           First_Name: payload["First_Name"],
           Last_Name: payload["Last_Name"],

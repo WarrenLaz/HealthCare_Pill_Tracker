@@ -7,10 +7,10 @@ const PatientInfoContainer = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { pat } = usePat();
   const [formData, setFormData] = useState({
-    firstName: pat.patientData.First_Name,
-    lastName: pat.patientData.Last_Name,
-    email: pat.patientData.Email_Address,
-    phoneNumber: pat.patientData.Phone_Number,
+    firstName: pat.First_Name,
+    lastName: pat.Last_Name,
+    email: pat.Email_Address,
+    phoneNumber: pat.Phone_Number,
   });
 
   const handleInputChange = (e) => {

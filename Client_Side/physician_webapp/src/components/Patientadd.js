@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/axiosPrivate";
+
 export const Patientadd = () => {
   const { auth } = useAuth();
   const [Resp, setResp] = useState("");
@@ -76,7 +77,7 @@ export const Patientadd = () => {
             Phone Number
           </label>
           <input
-            type="text"
+            type="number"
             name="Phone_Number"
             onChange={inputs}
             className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
