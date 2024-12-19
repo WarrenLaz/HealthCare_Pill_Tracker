@@ -32,6 +32,8 @@ app.use("/Reg", require("./routes/reg"));
 app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
+//supplement
+app.use("/supplement", require("./routes/supplement_"));
 
 app.use(JWTver);
 //userinfo

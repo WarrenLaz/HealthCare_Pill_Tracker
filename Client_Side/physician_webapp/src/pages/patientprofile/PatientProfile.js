@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import Modal from "../../components/modals/Modal";
@@ -8,16 +8,16 @@ import Prescadd from "../../components/Prescadd";
 import PatientInfoContainer from "./PatientInfoContainer";
 import PrescriptionContainer from "./PrescriptionContainer";
 import usePat from "../../hooks/usePat";
+
 export const PatientProfile = () => {
   const { auth } = useAuth();
   const { pat } = usePat();
+  const [Precription, setPrescription] = useState(pat.Prescriptions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-  console.log(auth.payload);
-  console.log(pat.First_Name);
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
@@ -43,11 +43,13 @@ export const PatientProfile = () => {
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-            <PrescriptionContainer />
-            <PrescriptionContainer />
-            <PrescriptionContainer />
-            <PrescriptionContainer />
-            <PrescriptionContainer />
+          {Precription.length > 0 ? (
+              Precription.map((prec) => (
+                <PrescriptionContainer key={prec._id} Name={prec.Name.toString()} Quantity={prec.Quantity} Dosage={prec.Dosage} Units={prec.Units}/>
+              ))
+            ) : (
+              <p>None</p>
+            )}
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://localhost:8000/patientLogin",
+        "http://141.215.223.200:8000/patientLogin",
         {
           LoginForm: { Username: username, Password: password },
         },

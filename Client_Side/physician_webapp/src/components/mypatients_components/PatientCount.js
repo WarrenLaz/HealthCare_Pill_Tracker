@@ -28,24 +28,16 @@ export const PatientCount = () => {
   }, [auth.payload]);
 
   return (
-    <div 
-    className="flex bg-white w-[21rem] rounded-xl px-6 py-3 
-    transition-all duration-300 ease-in-out 
-    hover:bg-[#e1f6df] hover:shadow-lg cursor-pointer"
-  >
-    <div>
-      <PiUsersLight 
-        className="text-7xl transition-all duration-300 ease-in-out hover:text-[#5F8D4E]" 
-      />
-    </div>
+    <div className="flex bg-white w-[21rem] rounded-xl px-6 py-3">
+      <div>
+        <PiUsersLight className="text-7xl" />
+      </div>
 
-    <div className="ml-4 flex flex-col justify-center">
-      <p className="text-md">Total Number of Patients:</p>
-      <p className="text-sm transition-all duration-300 ease-in-out hover:text-[#5F8D4E]">
-        {patient.length}
-      </p>
+      <div className="ml-4 flex flex-col  justify-center">
+        <p className="text-md">Total Number of Patients:</p>
+        <p className="text-sm">{patient.length}</p> {/* replace with actual number*/}
+      </div>
     </div>
-  </div>
   );
 };
 

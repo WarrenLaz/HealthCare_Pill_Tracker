@@ -7,8 +7,8 @@ async function sendSecureEmail() {
         port: 465, // Port for secure connections (SSL/TLS)
         secure: true, // Use SSL/TLS
         auth: {
-          user: "replen.x.bot@gmail.com", // Email address from .env
-          pass: "qubx nyyv yooe nhbe", // Email password from .env
+          user: "", // Email address from .env
+          pass: "", // Email password from .env
         },
       });
   

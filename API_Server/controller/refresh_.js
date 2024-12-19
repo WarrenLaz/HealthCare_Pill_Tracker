@@ -1,7 +1,6 @@
 const db = require('./dbcontroller');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { ObjectId } = require("mongodb");
 
 const handleRefreshToken = (req, res) => {
     const cookies = req.cookies;

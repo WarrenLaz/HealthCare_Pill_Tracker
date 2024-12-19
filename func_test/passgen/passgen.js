@@ -10,4 +10,4 @@ function generatePassword(length) {
     return password;
 }
 
-console.log(generatePassword(16))
+console.log(generatePassword(16));

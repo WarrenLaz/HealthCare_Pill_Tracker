@@ -1,35 +1,45 @@
 const db = require('../dbcontroller');
+const { ObjectId } = require("mongodb");
 
 const addPrescription = (req, res) =>{
-    db.updateData(db.getDB('Prescriptions', "Prescription"), {
-        _id : req.body["id"]
-    },{
-        $push : {
-            Prescriptions : {
-            Product_ID: req.body["Product_ID"] ,
-            Start : req.body["Start_Date"],
-            End: req.body["End_date"],
-            Note: req.body["Note"],
-            Form: req.body["Form"],
-            Quantity : req.body["Quantity"],
-            Daily_Intake : req.body["Daily_Intake"],
-            pill_log: [],
-            schedule: [],
-        }} 
-    })
+    try{
+        const payload = req.body["prescData"];
+        console.log(payload);
+        db.updateData(db.getDB('Patients', "patient"), {
+            _id : ObjectId(payload["id"])
+        },{
+            $push : {
+                Prescriptions : {
+                _id: ObjectId(),
+                Name: payload["PrescName"] ,
+                Start: "",
+                End: "",
+                Note: payload["Note"],
+                Units: payload["Units"],
+                Quantity : payload["Quantity"],
+                Dosage: payload["Dosage"],
+                pill_log: [],
+                schedule: [],
+            }
+        } 
+        }).then(data => {
+            console.log(data);
+            res.send("Succcessfully Added");
+        })
+    } catch(e){
+        console.log(e);
+        res.json(401);
+    }
 }
 
 const getPresc = (req, res) =>{
-    db.getData(db.getDB('Prescriptions', "Prescription"), {
-        id_ : req.body["user"]
+    const payload = req.body["user"]
+    db.getData(db.getDB('Patients', "Patient"), {
+        id_ : payload["id"]
     }).then( data => data[0]).then(
         data => {
             res.send({
-                End_Date : data['End_Date'],
-                Start_Date : data['Start_Date'], 
-                Email : data['Quantity'],
-                Phone: data['Dosage'],
-                Patients : data['Product_id'],
+                Prescriptions: data['Prescriptions']
             })
         }
     )
@@ -43,4 +53,4 @@ const updatePresc = (req, res) =>{
     
 }
 
-module.exports = {getPresc,deletePres,updatePresc};
+module.exports = {getPresc,deletePres,updatePresc, addPrescription};
