@@ -81,6 +81,35 @@ export const Prescadd = () => {
     }));
   };
 
+  const handleFrequencyChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value); // Update the search query for the dropdown
+    setPrescData((prev) => ({
+      ...prev,
+      Frequency: value, // Directly update the Frequency field
+    }));
+  };
+
+  // Clear Frequency
+  const clearFrequency = () => {
+    setSearchQuery(""); // Clear the search query
+    setFrequency(""); // Clear the selected frequency
+    setPrescData((prev) => ({
+      ...prev,
+      Frequency: "", // Reset Frequency in prescData
+    }));
+  };
+
+  // Frequency Select Update
+  const handleFrequencySelect = (selectedFrequency) => {
+    setFrequency(selectedFrequency.meaning);
+    setPrescData((prev) => ({
+      ...prev,
+      Frequency: selectedFrequency.meaning,
+    }));
+    setSearchQuery(""); // Clear the search field
+  };
+
   // Add time to a specific day
   const addTime = (day, time) => {
     setPrescData((prev) => ({
@@ -124,14 +153,10 @@ export const Prescadd = () => {
   ];
   const quickTimes = {
     Morning: "Morning",
-    Lunch: "Lunch",
-    Dinner: "Dinner",
-    Bedtime: "Bedtime",
+    Afternoon: "Afternoon",
+    Night: "Night",
   };
   const abbreviationOptions = [
-    { abbreviation: "OD", meaning: "Right Eye" },
-    { abbreviation: "OS", meaning: "Left Eye" },
-    { abbreviation: "OU", meaning: "Both Eyes" },
     { abbreviation: "BID", meaning: "Twice a Day" },
     { abbreviation: "TID", meaning: "Three Times a Day" },
     { abbreviation: "QID", meaning: "Four Times a Day" },
@@ -153,14 +178,6 @@ export const Prescadd = () => {
 
   const handleClick = () => {
     console.log(prescData);
-  };
-  const handleFrequencySelect = (selectedFrequency) => {
-    setPrescData((prev) => ({
-      ...prev,
-      Frequency: selectedFrequency.meaning,
-    }));
-    setFrequency(selectedFrequency.meaning);
-    setSearchQuery("");
   };
 
   return (
@@ -260,21 +277,37 @@ export const Prescadd = () => {
                 }))
               }
             />
-            {}
             <div className="relative">
-              {/* Search Input */}
               <input
                 type="text"
                 placeholder="Frequency"
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded pr-10" // Extra padding for the "X"
                 value={prescData.Frequency}
-                onChange={(e) =>
-                  setPrescData((prev) => ({
-                    ...prev,
-                    Frequency: e.target.value,
-                  }))
-                }
+                onChange={handleFrequencyChange}
               />
+              {prescData.Frequency && (
+                <button
+                  className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={clearFrequency}
+                  aria-label="Clear Frequency"
+                >
+                  &times; {/* X icon */}
+                </button>
+              )}
+              {/* Dropdown */}
+              {searchQuery && (
+                <div className="absolute w-full bg-white shadow-lg mt-1 max-h-40 overflow-y-auto border border-gray-300 rounded">
+                  {filteredAbbreviations.map((option) => (
+                    <div
+                      key={option.abbreviation}
+                      className="p-2 cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleFrequencySelect(option)}
+                    >
+                      <strong>{option.abbreviation}</strong> - {option.meaning}
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Dropdown */}
               {searchQuery && (
