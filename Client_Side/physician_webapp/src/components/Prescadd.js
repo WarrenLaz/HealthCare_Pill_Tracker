@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import useAxiosPrivate from "../hooks/axiosPrivate";
 import usePat from "../hooks/usePat";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 export const Prescadd = () => {
   const [activeTab, setActiveTab] = useState("Search");
   const [selectedDays, setSelectedDays] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDrug, setSelectedDrug] = useState(null);
-  const [frequency, setFrequency] = useState("");
+  const [tempFrequency, setTempFrequency] = useState("");
+  const [tempPillCount, setTempPillCount] = useState("");
+  const [date, setDate] = useState(new Date());
+
   const { pat } = usePat();
-  // Dummy data for drugs
+  // dummy data for drugs
   const drugs = [
     {
       name: "Aspirin",
@@ -23,6 +28,12 @@ export const Prescadd = () => {
       route: "Oral",
       form: "Capsule",
     },
+    {
+      name: "Magnesium Glycinate",
+      dosage: "200mg",
+      route: "Oral",
+      form: "Capsule",
+    },
   ];
 
   const [prescData, setPrescData] = useState({
@@ -31,7 +42,7 @@ export const Prescadd = () => {
     Dosage: "",
     Form: "",
     RouteOfAdmin: "",
-    Frequency: "",
+    FrequencyDetails: [],
     Startdate: "",
     Quantity: "",
     Note: "",
@@ -46,14 +57,24 @@ export const Prescadd = () => {
     },
   });
 
-  // Filter drugs based on the search query
+  const frequencyOptions = [
+    "Before Breakfast",
+    "MidMorning",
+    "At Breakfast",
+    "At Lunch",
+    "Midday",
+    "At Dinner",
+    "Before Bed",
+  ];
+
+  // filter drugs based on the search query
   const filteredDrugs = drugs.filter((drug) =>
     `${drug.name} ${drug.dosage} ${drug.form}`
       .toLowerCase()
       .includes(searchQuery.toLowerCase())
   );
 
-  // Handle drug selection and auto-fill details
+  // handlea drug selection an  details
   const handleDrugSelect = (drug) => {
     setPrescData((prev) => ({
       ...prev,
@@ -66,115 +87,24 @@ export const Prescadd = () => {
     setActiveTab("Details");
   };
 
-  // Toggle days selection
-  const toggleDay = (day) => {
-    setSelectedDays((prev) =>
-      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
-    );
-
+  const addFrequency = (frequency, pillCount) => {
     setPrescData((prev) => ({
       ...prev,
-      Schedule: {
-        ...prev.Schedule,
-        [day]: prev.Schedule[day] || [],
-      },
+      FrequencyDetails: [...prev.FrequencyDetails, { frequency, pillCount }],
     }));
   };
 
-  const handleFrequencyChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value); // Update the search query for the dropdown
-    setPrescData((prev) => ({
-      ...prev,
-      Frequency: value, // Directly update the Frequency field
-    }));
+  // Remove a frequency
+  const removeFrequency = (index) => {
+    setPrescData((prev) => {
+      const updatedFrequencies = [...prev.FrequencyDetails];
+      updatedFrequencies.splice(index, 1);
+      return {
+        ...prev,
+        FrequencyDetails: updatedFrequencies,
+      };
+    });
   };
-
-  // Clear Frequency
-  const clearFrequency = () => {
-    setSearchQuery(""); // Clear the search query
-    setFrequency(""); // Clear the selected frequency
-    setPrescData((prev) => ({
-      ...prev,
-      Frequency: "", // Reset Frequency in prescData
-    }));
-  };
-
-  // Frequency Select Update
-  const handleFrequencySelect = (selectedFrequency) => {
-    setFrequency(selectedFrequency.meaning);
-    setPrescData((prev) => ({
-      ...prev,
-      Frequency: selectedFrequency.meaning,
-    }));
-    setSearchQuery(""); // Clear the search field
-  };
-
-  // Add time to a specific day
-  const addTime = (day, time) => {
-    setPrescData((prev) => ({
-      ...prev,
-      Schedule: {
-        ...prev.Schedule,
-        [day]: [...new Set([...(prev.Schedule[day] || []), time])],
-      },
-    }));
-  };
-
-  // Remove time
-  const removeTime = (day, time) => {
-    setPrescData((prev) => ({
-      ...prev,
-      Schedule: {
-        ...prev.Schedule,
-        [day]: (prev.Schedule[day] || []).filter((t) => t !== time),
-      },
-    }));
-  };
-  // Select all days
-  const selectAllDays = () => {
-    setSelectedDays(daysOfWeek);
-    setPrescData((prev) => ({
-      ...prev,
-      Schedule: daysOfWeek.reduce((acc, day) => {
-        acc[day] = prev.Schedule[day] || [];
-        return acc;
-      }, {}),
-    }));
-  };
-  const daysOfWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  const quickTimes = {
-    Morning: "Morning",
-    Afternoon: "Afternoon",
-    Night: "Night",
-  };
-  const abbreviationOptions = [
-    { abbreviation: "BID", meaning: "Twice a Day" },
-    { abbreviation: "TID", meaning: "Three Times a Day" },
-    { abbreviation: "QID", meaning: "Four Times a Day" },
-    { abbreviation: "PRN", meaning: "As Needed" },
-    { abbreviation: "QOD", meaning: "Every Other Day" },
-    { abbreviation: "HS", meaning: "At Bedtime" },
-    { abbreviation: "AC", meaning: "Before Meals" },
-    { abbreviation: "PC", meaning: "After Meals" },
-    { abbreviation: "QAM", meaning: "Every Morning" },
-    { abbreviation: "QPM", meaning: "Every Evening" },
-  ];
-
-  // filters through objects (insuring lower case comparision) when searching th
-  const filteredAbbreviations = abbreviationOptions.filter(
-    (option) =>
-      option.abbreviation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      option.meaning.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleClick = () => {
     console.log(prescData);
@@ -191,7 +121,7 @@ export const Prescadd = () => {
         ></button>
       </div>
 
-      {/* Tabs */}
+      {}
       <div className="flex border-b">
         {["Search", "Details", "Schedule"].map((tab) => (
           <button
@@ -208,7 +138,7 @@ export const Prescadd = () => {
         ))}
       </div>
 
-      {/* Tab Content */}
+      {}
       <div
         className="flex-1 p-4 overflow-y-auto"
         style={{ maxHeight: "calc(600px - 120px)" }}
@@ -277,67 +207,59 @@ export const Prescadd = () => {
                 }))
               }
             />
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Frequency"
-                className="w-full p-2 border rounded pr-10" // Extra padding for the "X"
-                value={prescData.Frequency}
-                onChange={handleFrequencyChange}
-              />
-              {prescData.Frequency && (
-                <button
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  onClick={clearFrequency}
-                  aria-label="Clear Frequency"
+            <div>
+              <h3 className="font-medium">Add Time/Frequency:</h3>
+              <div className="flex items-center space-x-2">
+                <select
+                  className="p-2 border rounded w-full"
+                  value={tempFrequency}
+                  onChange={(e) => setTempFrequency(e.target.value)}
                 >
-                  &times; {/* X icon */}
-                </button>
-              )}
-              {/* Dropdown */}
-              {searchQuery && (
-                <div className="absolute w-full bg-white shadow-lg mt-1 max-h-40 overflow-y-auto border border-gray-300 rounded">
-                  {filteredAbbreviations.map((option) => (
-                    <div
-                      key={option.abbreviation}
-                      className="p-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleFrequencySelect(option)}
-                    >
-                      <strong>{option.abbreviation}</strong> - {option.meaning}
-                    </div>
+                  <option value="">Select Time</option>
+                  {frequencyOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
                   ))}
-                </div>
-              )}
-
-              {/* Dropdown */}
-              {searchQuery && (
-                <div className="absolute w-full bg-white shadow-lg mt-1 max-h-40 overflow-y-auto border border-gray-300 rounded">
-                  {filteredAbbreviations.map((option) => (
-                    <div
-                      key={option.abbreviation}
-                      className="p-2 cursor-pointer hover:bg-gray-100"
-                      onClick={() => handleFrequencySelect(option)}
+                </select>
+                <input
+                  type="number"
+                  placeholder="Count"
+                  className="p-2 border rounded w-20"
+                  value={tempPillCount}
+                  onChange={(e) => setTempPillCount(e.target.value)}
+                />
+              </div>
+              <button
+                className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                onClick={() => {
+                  if (tempFrequency && tempPillCount) {
+                    addFrequency(tempFrequency, tempPillCount);
+                    setTempFrequency("");
+                    setTempPillCount("");
+                  } else {
+                    alert("Please select a frequency and enter a pill count.");
+                  }
+                }}
+              >
+                Add Frequency
+              </button>
+              <div className="mt-2">
+                {prescData.FrequencyDetails.map((freq, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <span>
+                      {freq.pillCount} - {freq.frequency}
+                    </span>
+                    <button
+                      onClick={() => removeFrequency(index)}
+                      className="text-red-500 hover:underline"
                     >
-                      <div>{option.meaning}</div> {}
-                    </div>
-                  ))}
-                </div>
-              )}
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <input
-              type="text"
-              placeholder="Start Date (mm/dd/yyyy)"
-              className="w-full p-2 border rounded"
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-              onChange={(e) =>
-                setPrescData((prev) => ({
-                  ...prev,
-                  Startdate: e.target.value,
-                }))
-              }
-            />
 
             <input
               type="number"
@@ -367,91 +289,21 @@ export const Prescadd = () => {
 
         {activeTab === "Schedule" && (
           <div className="space-y-3">
-            {/* Select All Button */}
-            <button
-              onClick={selectAllDays}
-              className="mb-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            >
-              Select All Days
-            </button>
-
-            {/* Day Selection */}
-            <div className="mb-4">
-              <h3 className="font-medium mb-2">Select Days:</h3>
-              <div className="grid grid-cols-4 gap-2">
-                {daysOfWeek.map((day) => (
-                  <button
-                    key={day}
-                    onClick={() => toggleDay(day)}
-                    className={`p-2 border rounded ${
-                      selectedDays.includes(day)
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-100"
-                    }`}
-                  >
-                    {day.slice(0, 3)}
-                  </button>
-                ))}
+            <div className="app">
+              <h1 className="text-center">Schedule</h1>
+              <div className="calendar-container">
+                <Calendar onChange={setDate} value={date} />
               </div>
-            </div>
-
-            {/* Time Selection */}
-            <div
-              className="mb-4 overflow-y-auto"
-              style={{
-                maxHeight: "200px",
-                borderTop: "1px solid #ddd",
-                overflowY: "auto",
-              }}
-            >
-              {selectedDays.map((day) => (
-                <div key={day} className="mb-4 border-b pb-2">
-                  <h3 className="font-medium">{day}</h3>
-                  <div className="flex gap-2 mb-2 flex-wrap">
-                    {prescData.Schedule[day]?.map((time) => (
-                      <span
-                        key={time}
-                        className="bg-blue-100 text-blue-700 px-2 py-1 rounded cursor-pointer"
-                        onClick={() => removeTime(day, time)}
-                      >
-                        {time} &times;
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    {Object.entries(quickTimes).map(([label, time]) => (
-                      <button
-                        key={time}
-                        onClick={() => addTime(day, time)}
-                        className="px-2 py-1 bg-gray-200 rounded"
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Schedule Summary */}
-            <div className="mt-4 p-4 bg-gray-50 rounded">
-              <h3 className="font-medium mb-2">Current Schedule:</h3>
-              <div className="overflow-y-auto" style={{ maxHeight: "100px" }}>
-                {Object.entries(prescData.Schedule).map(
-                  ([day, times]) =>
-                    times.length > 0 && (
-                      <div key={day}>
-                        <strong>{day}:</strong> {times.join(", ")}
-                      </div>
-                    )
-                )}
-              </div>
+              <p className="text-center">
+                <span className="bold">Selected Date:</span>{" "}
+                {date.toDateString()}
+              </p>
             </div>
           </div>
         )}
       </div>
 
-      {/* Action Button */}
+      {}
       <div className="px-6 py-4 bg-gray-50">
         <button
           onClick={handleClick}
