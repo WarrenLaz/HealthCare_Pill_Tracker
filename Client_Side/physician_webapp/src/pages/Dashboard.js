@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { Patientadd } from "../components/Patientadd";
 import Modal from "../components/modals/Modal";
@@ -20,6 +19,7 @@ export const Dashboard = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  {/*Getting data from users using the auth JWT refer to the CRUD folder, user refers to current user*/}
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,6 +50,7 @@ export const Dashboard = () => {
       </div>
       <div className="flex mt-6 flex-col">
         <div className="flex justify-between">
+          {/*Patient Count refer to components/mypatients_components/PatientCount.js/*/}
           <PatientCount />
           <button
             onClick={toggleModal}

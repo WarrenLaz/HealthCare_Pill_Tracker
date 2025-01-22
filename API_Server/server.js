@@ -33,14 +33,13 @@ app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
 //supplement
-app.use("/supplement", require("./routes/supplement_"));
+app.use("/prescription", require("./routes/prescription_"));
 
+//used for verification, cannot sql inject without the jwt cookie. 
 app.use(JWTver);
 //userinfo
 app.use("/user", require("./routes/user_"));
 //patient info
 app.use("/patients", require("./routes/patient"));
-
+//Prescription Info
 app.listen(port, () => console.log("Server is running", port));
-
-

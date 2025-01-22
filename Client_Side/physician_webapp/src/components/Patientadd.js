@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/axiosPrivate";
 
@@ -19,6 +18,7 @@ export const Patientadd = () => {
   async function submittion(e) {
     e.preventDefault();
     console.log(RegForm);
+    {/*Axios private uses the UseAxiosPrivate hook which uses a private domain to use stuff*/}
     await axiosprivate
       .post("http://localhost:8000/patients", { RegForm },  {
         headers: {

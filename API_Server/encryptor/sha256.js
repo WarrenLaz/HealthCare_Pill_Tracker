@@ -1,6 +1,6 @@
 
 function sha256(message) {
-    // Constants used in SHA-256
+    // Constants used in SHA-256, these bytes can be distributed 
     const K = [
         0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
         0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
@@ -83,7 +83,7 @@ function sha256(message) {
         H[6] = (H[6] + g) & 0xffffffff;
         H[7] = (H[7] + h) & 0xffffffff;
     }
-
+    
     // Convert hash to hexadecimal string
     return H.map(x => x.toString(16).padStart(8, '0')).join('');
 }

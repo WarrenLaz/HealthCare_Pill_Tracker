@@ -48,3 +48,5 @@ plt.plot([i for i in range(100)],a4, label = "4")
 plt.plot([i for i in range(100)],a5, label = "5")
 plt.scatter(signals, [0 for i in range(100)])
 plt.show()
+
+

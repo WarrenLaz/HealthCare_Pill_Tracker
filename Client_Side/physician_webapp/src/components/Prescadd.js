@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useAxiosPrivate from "../hooks/axiosPrivate";
 import usePat from "../hooks/usePat";
 import Calendar from "react-calendar";
+import useAuth from "../hooks/useAuth";
 import "react-calendar/dist/Calendar.css";
 
 export const Prescadd = () => {
@@ -12,7 +13,8 @@ export const Prescadd = () => {
   const [tempFrequency, setTempFrequency] = useState("");
   const [tempPillCount, setTempPillCount] = useState("");
   const [date, setDate] = useState(new Date());
-
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useAuth();
   const { pat } = usePat();
   // dummy data for drugs
   const drugs = [
@@ -40,6 +42,7 @@ export const Prescadd = () => {
     id: pat._id,
     MedName: "",
     Dosage: "",
+    Units: "",
     Form: "",
     RouteOfAdmin: "",
     FrequencyDetails: [],
@@ -67,6 +70,13 @@ export const Prescadd = () => {
     "Before Bed",
   ];
 
+  async function submission(e){
+    e.preventDefault();
+    await axiosPrivate.post("http://localhost:8000/prescription", {prescData},{
+    headers: {
+      'Authorization': 'Bearer ' + String(auth.payload)
+    }}).then(data => console.log(data))
+  }
   // filter drugs based on the search query
   const filteredDrugs = drugs.filter((drug) =>
     `${drug.name} ${drug.dosage} ${drug.form}`
@@ -166,6 +176,7 @@ export const Prescadd = () => {
           </div>
         )}
 
+        {/*Details*/}
         {activeTab === "Details" && (
           <div className="space-y-3">
             <input
@@ -184,6 +195,15 @@ export const Prescadd = () => {
               value={prescData.Dosage}
               onChange={(e) =>
                 setPrescData((prev) => ({ ...prev, Dosage: e.target.value }))
+              }
+            />
+            <input
+              type="text"
+              placeholder="Units"
+              className="w-full p-2 border rounded"
+              value={prescData.Units}
+              onChange={(e) =>
+                setPrescData((prev) => ({ ...prev, Units: e.target.value }))
               }
             />
             <input
@@ -286,7 +306,7 @@ export const Prescadd = () => {
             ></textarea>
           </div>
         )}
-
+        {/*Schedule*/}
         {activeTab === "Schedule" && (
           <div className="space-y-3">
             <div className="app">
