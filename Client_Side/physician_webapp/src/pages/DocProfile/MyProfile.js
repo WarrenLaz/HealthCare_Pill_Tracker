@@ -40,7 +40,8 @@ export const MyProfile = () => {
       <div className="flex-col items-center ">
         <h1 className="text-2xl font-semibold">
           {" "}
-          Welcome Dr.{String(credentials.Last_Name)}
+          Welcome {String(credentials.First_Name)}{" "}
+          {String(credentials.Last_Name)}
         </h1>
       </div>
       <div className="flex mt-6 flex-col">

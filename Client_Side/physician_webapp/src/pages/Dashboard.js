@@ -19,7 +19,9 @@ export const Dashboard = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  {/*Getting data from users using the auth JWT refer to the CRUD folder, user refers to current user*/}
+  {
+    /*Getting data from users using the auth JWT refer to the CRUD folder, user refers to current user*/
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +47,8 @@ export const Dashboard = () => {
       <div className="flex-col items-center ">
         <h1 className="text-2xl font-semibold">
           {" "}
-          Welcome Dr.{String(credentials.Last_Name)}
+          Welcome {String(credentials.First_Name)}{" "}
+          {String(credentials.Last_Name)}
         </h1>
       </div>
       <div className="flex mt-6 flex-col">
@@ -58,11 +61,11 @@ export const Dashboard = () => {
       transition-all duration-300 ease-in-out 
       hover:bg-[#e1f6df] hover:shadow-lg cursor-pointer"
           >
-                  <BsPlusLg 
-        className="text-5xl text-[#001A72] 
+            <BsPlusLg
+              className="text-5xl text-[#001A72] 
         transition-all duration-300 ease-in-out 
         hover:text-[#006400]"
-      />
+            />
           </button>
         </div>
 
