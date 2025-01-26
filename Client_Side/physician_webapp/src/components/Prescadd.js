@@ -17,26 +17,7 @@ export const Prescadd = () => {
   const { auth } = useAuth();
   const { pat } = usePat();
   // dummy data for drugs
-  const drugs = [
-    {
-      name: "Aspirin",
-      dosage: "500mg",
-      route: "Oral",
-      form: "Tablet",
-    },
-    {
-      name: "Amoxicillin",
-      dosage: "250mg",
-      route: "Oral",
-      form: "Capsule",
-    },
-    {
-      name: "Magnesium Glycinate",
-      dosage: "200mg",
-      route: "Oral",
-      form: "Capsule",
-    },
-  ];
+  const [drugs, setDrugs] = useState([]);
 
   const [prescData, setPrescData] = useState({
     id: pat._id,
@@ -71,6 +52,7 @@ export const Prescadd = () => {
   ];
 
   async function submission(e){
+    console.log(prescData);
     e.preventDefault();
     await axiosPrivate.post("http://localhost:8000/prescription", {prescData},{
     headers: {
@@ -88,10 +70,8 @@ export const Prescadd = () => {
   const handleDrugSelect = (drug) => {
     setPrescData((prev) => ({
       ...prev,
-      MedName: drug.name,
-      Dosage: drug.dosage,
-      Form: drug.form,
-      RouteOfAdmin: drug.route,
+      MedName: drug.Product_Name,
+      Form: drug.Form,
     }));
     setSelectedDrug(drug);
     setActiveTab("Details");
@@ -116,9 +96,19 @@ export const Prescadd = () => {
     });
   };
 
-  const handleClick = () => {
-    console.log(prescData);
-  };
+  async function handleSearch(val) {
+    console.log(val);
+    await axiosPrivate.post("http://localhost:8000/search", {val},{
+    headers: {
+      'Authorization': 'Bearer ' + String(auth.payload)
+    }}).then(payload => setDrugs(payload.data))
+  }
+
+  const handleInput = (e) => {
+      console.log(e);
+      setSearchQuery(e);
+      handleSearch(e);
+  }
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden h-[500px] flex flex-col">
@@ -160,16 +150,16 @@ export const Prescadd = () => {
               placeholder="Search Name"
               className="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {handleInput(e.target.value)} }
             />
             <div>
-              {filteredDrugs.map((drug) => (
+            {drugs.map((drug) => (
                 <div
-                  key={drug.name}
+                  key={drug._id}
                   className="cursor-pointer p-2 hover:bg-gray-100"
                   onClick={() => handleDrugSelect(drug)}
                 >
-                  <div>{`${drug.name} ${drug.form} ${drug.dosage}`}</div>{" "}
+                  <div>{`${drug.Product_Name} ${drug.Brand_Name} ${drug.Form}`}</div>{" "}
                 </div>
               ))}
             </div>
@@ -326,7 +316,7 @@ export const Prescadd = () => {
       {}
       <div className="px-6 py-4 bg-gray-50">
         <button
-          onClick={handleClick}
+          onClick={submission}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
           Add Medication

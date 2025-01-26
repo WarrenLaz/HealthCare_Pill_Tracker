@@ -5,22 +5,24 @@ const addPrescription = (req, res) =>{
     try{
         const payload = req.body["prescData"];
         console.log(payload);
+        console.log(payload);
         db.updateData(db.getDB('Patients', "patient"), {
             _id : ObjectId(payload["id"])
         },{
             $push : {
                 Prescriptions : {
                 _id: ObjectId(),
-                Name: payload["PrescName"] ,
-                Start: "",
-                End: "",
-                Note: payload["Note"],
-                Units: payload["Units"],
-                Quantity : payload["Quantity"],
+                MedName: payload["MedName"],
                 Dosage: payload["Dosage"],
-                pill_log: [],
-                schedule: [],
-            }
+                Units: payload["Units"],
+                Form: payload["Form"],
+                RouteOfAdmin: payload["RouteOfAdmin"],
+                FrequencyDetails: payload["FrequencyDetails"],
+                Startdate: payload["Startdate"],
+                Quantity: payload["Quantity"],
+                Note: payload["Note"],
+                Schedule: payload["Schedule"]
+                }
         } 
         }).then(data => {
             console.log(data);
