@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Pressable, View } from 'react-native';
-import axios from 'axios';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, Pressable, View } from "react-native";
+import axios from "axios";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function HomeScreen() {
   let log = new Date();
@@ -12,11 +12,15 @@ export default function HomeScreen() {
     setDate({ log });
     console.log(String(date));
     try {
-      const response = await axios.post("http://localhost:8000/Logs", { date }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://141.215.199.24:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
+        { date },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log(response.data); // Should log the success message from the server
     } catch (error) {
       console.error("Error sending data:", error);
@@ -37,22 +41,22 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   takebutton: {
-    backgroundColor: '#407BFF',
+    backgroundColor: "#407BFF",
     width: 100,
     height: 100,
     borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   texts: {
-    color: '#3A3A3B',
-    fontFamily: 'inter-black',
+    color: "#3A3A3B",
+    fontFamily: "inter-black",
     marginBottom: 20,
     fontSize: 30,
-  }
+  },
 });

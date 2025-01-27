@@ -21,7 +21,8 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://141.215.223.200:8000/patientLogin",
+        "http://141.215.199.24:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },
         },
@@ -87,7 +88,9 @@ export default function LoginScreen() {
           navigation.navigate("Register");
         }}
       >
-        <Text style={styles.link}>Don't have an account? Sign up here</Text>
+        <Text style={styles.link}>
+          Don't have an account? Ask your Doctor about ReplenX!
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -140,7 +143,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   link: {
-    color: "#407BFF",
+    color: "black",
     textAlign: "center",
     marginTop: 15,
   },
