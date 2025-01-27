@@ -36,8 +36,8 @@ def Read_Doc(cluster, doc_no):
                 {
                 'Product_Name': line['Product Name'], 
                 'Brand_Name' : line['Brand Name'],
-                'Net_Contents' : float(re.sub(r'[^\d.]', '', Serving.group())),
-                'Serving_Size': float(re.sub(r'[^\d.]', '', Net.group())),
+                'Net_Contents' : float(re.sub(r'[^\d.]', '', Net.group())),
+                'Serving_Size': float(re.sub(r'[^\d.]', '', Serving.group())),
                 'Form' : line['Supplement Form [LanguaL]'],
                 'Suggested_Use': line['Suggested Use']
                 })
@@ -69,4 +69,4 @@ if __name__ == "__main__":
         threads[i].join()
         print(f'\033[0;36mThread {i+1} COMPLETE')
     elapsed_time = time.time() - start_time
-    print(f"Process elapsed time: {elapsed_time} seconds")
+    print(f"\033[0;35mProcess elapsed time: {elapsed_time} seconds")

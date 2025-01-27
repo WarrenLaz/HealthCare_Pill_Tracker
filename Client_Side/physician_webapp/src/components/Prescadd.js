@@ -7,12 +7,10 @@ import "react-calendar/dist/Calendar.css";
 
 export const Prescadd = () => {
   const [activeTab, setActiveTab] = useState("Search");
-  const [selectedDays, setSelectedDays] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDrug, setSelectedDrug] = useState(null);
   const [tempFrequency, setTempFrequency] = useState("");
   const [tempPillCount, setTempPillCount] = useState("");
-  const [date, setDate] = useState(new Date());
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const { pat } = usePat();
@@ -22,23 +20,13 @@ export const Prescadd = () => {
   const [prescData, setPrescData] = useState({
     id: pat._id,
     MedName: "",
-    Dosage: "",
-    Units: "",
+    Dosage: 0,
+    Quantity: 0,
     Form: "",
-    RouteOfAdmin: "",
     FrequencyDetails: [],
+    Interval: "",
     Startdate: "",
-    Quantity: "",
     Note: "",
-    Schedule: {
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],
-      Saturday: [],
-      Sunday: [],
-    },
   });
 
   const frequencyOptions = [
@@ -49,6 +37,10 @@ export const Prescadd = () => {
     "Midday",
     "At Dinner",
     "Before Bed",
+  ];
+  const frequencyDays = [
+    "Daily",
+    "Weekly",
   ];
 
   async function submission(e){
@@ -72,6 +64,9 @@ export const Prescadd = () => {
       ...prev,
       MedName: drug.Product_Name,
       Form: drug.Form,
+      Quantity: drug.Net_Contents,
+      Dosage: drug.Serving_Size,
+      Note: drug.Suggested_Use
     }));
     setSelectedDrug(drug);
     setActiveTab("Details");
@@ -159,7 +154,12 @@ export const Prescadd = () => {
                   className="cursor-pointer p-2 hover:bg-gray-100"
                   onClick={() => handleDrugSelect(drug)}
                 >
-                  <div>{`${drug.Product_Name} ${drug.Brand_Name} ${drug.Form}`}</div>{" "}
+                  <div> 
+                    <p className="font-bold">{`${drug.Product_Name}\n`}</p>
+                    <p className="font-style: italic">{` Form: ${drug.Form}`} </p>
+                    <p className="font-style: italic">{`Quantity: ${drug.Net_Contents}`}</p>
+                    <p className="font-style: italic">{`Dosage: ${drug.Serving_Size}`}</p>
+                      </div>{" "}
                 </div>
               ))}
             </div>
@@ -187,15 +187,7 @@ export const Prescadd = () => {
                 setPrescData((prev) => ({ ...prev, Dosage: e.target.value }))
               }
             />
-            <input
-              type="text"
-              placeholder="Units"
-              className="w-full p-2 border rounded"
-              value={prescData.Units}
-              onChange={(e) =>
-                setPrescData((prev) => ({ ...prev, Units: e.target.value }))
-              }
-            />
+
             <input
               type="text"
               placeholder="Form (e.g., Tablet)"
@@ -205,71 +197,6 @@ export const Prescadd = () => {
                 setPrescData((prev) => ({ ...prev, Form: e.target.value }))
               }
             />
-            <input
-              type="text"
-              placeholder="Route of Administration"
-              className="w-full p-2 border rounded"
-              value={prescData.RouteOfAdmin}
-              onChange={(e) =>
-                setPrescData((prev) => ({
-                  ...prev,
-                  RouteOfAdmin: e.target.value,
-                }))
-              }
-            />
-            <div>
-              <h3 className="font-medium">Add Time/Frequency:</h3>
-              <div className="flex items-center space-x-2">
-                <select
-                  className="p-2 border rounded w-full"
-                  value={tempFrequency}
-                  onChange={(e) => setTempFrequency(e.target.value)}
-                >
-                  <option value="">Select Time</option>
-                  {frequencyOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="number"
-                  placeholder="Count"
-                  className="p-2 border rounded w-20"
-                  value={tempPillCount}
-                  onChange={(e) => setTempPillCount(e.target.value)}
-                />
-              </div>
-              <button
-                className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
-                onClick={() => {
-                  if (tempFrequency && tempPillCount) {
-                    addFrequency(tempFrequency, tempPillCount);
-                    setTempFrequency("");
-                    setTempPillCount("");
-                  } else {
-                    alert("Please select a frequency and enter a pill count.");
-                  }
-                }}
-              >
-                Add Frequency
-              </button>
-              <div className="mt-2">
-                {prescData.FrequencyDetails.map((freq, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <span>
-                      {freq.pillCount} - {freq.frequency}
-                    </span>
-                    <button
-                      onClick={() => removeFrequency(index)}
-                      className="text-red-500 hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
 
             <input
               type="number"
@@ -298,21 +225,80 @@ export const Prescadd = () => {
         )}
         {/*Schedule*/}
         {activeTab === "Schedule" && (
-          <div className="space-y-3">
-            <div className="app">
-              <h1 className="text-center">Schedule</h1>
-              <div className="calendar-container">
-                <Calendar onChange={setDate} value={date} />
-              </div>
-              <p className="text-center">
-                <span className="bold">Selected Date:</span>{" "}
-                {date.toDateString()}
-              </p>
-            </div>
-          </div>
+                      <div>
+                        <h3 className="font-medium">Select Intervals: </h3>
+                        <select
+                          className="p-2 border rounded w-full mb-4"
+                          value={prescData.Internval}
+                          onChange={
+                            (e) => 
+                              setPrescData(
+                                (prev) => 
+                                  ({ ...prev , Interval: e.target.value})) 
+                          }
+                        >
+                          <option value="">Select Intervals</option>
+                          {frequencyDays.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+
+                      <h3 className="font-medium">Add Time/Frequency:</h3>
+                      <div className="flex items-center space-x-2">
+                        <select
+                          className="p-2 border rounded w-full"
+                          value={tempFrequency}
+                          onChange={(e) => setTempFrequency(e.target.value)}
+                        >
+                          <option value="">Select Time</option>
+                          {frequencyOptions.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="number"
+                          placeholder="Count"
+                          className="p-2 border rounded w-20"
+                          value={tempPillCount}
+                          onChange={(e) => setTempPillCount(e.target.value)}
+                        />
+                      </div>
+                      <button
+                        className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+                        onClick={() => {
+                          if (tempFrequency && tempPillCount) {
+                            addFrequency(tempFrequency, tempPillCount);
+                            setTempFrequency("");
+                            setTempPillCount("");
+                          } else {
+                            alert("Please select a frequency and enter a pill count.");
+                          }
+                        }}
+                      >
+                        Add Frequency
+                      </button>
+                      <div className="mt-2">
+                        {prescData.FrequencyDetails.map((freq, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <span>
+                              {freq.pillCount} - {freq.frequency}
+                            </span>
+                            <button
+                              onClick={() => removeFrequency(index)}
+                              className="text-red-500 hover:underline"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
         )}
       </div>
-
       {}
       <div className="px-6 py-4 bg-gray-50">
         <button
