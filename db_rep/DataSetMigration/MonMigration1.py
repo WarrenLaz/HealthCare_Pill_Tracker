@@ -5,11 +5,11 @@ import os
 from dotenv import load_dotenv
 import re
 import threading
-
+import time
 load_dotenv()
 uri = os.environ.get("MOGO_API")
 client = MongoClient(uri, server_api = ServerApi('1'))
-directory_path = '/Users/warren_lazarraga/Programming_projects/HealthCare_Pill_Tracker/db_rep/DataSetMigration'
+directory_path = os.environ.get("directory")
 def ping():
         try:
             client.admin.command('ping')
@@ -48,7 +48,10 @@ def Read_Doc(cluster, doc_no):
          
 
 if __name__ == "__main__":
+    start_time = time.time()
     cluster = ping()
+    threads = []
+
     while((ans := input('\033[1mWOULD YOU LIKE TO CLEAR DATABASE [0 NO] [1 YES]:')) not in ['1','0']):
         print('\033[0;31mINVALID ANSWER')
     if(ans):
@@ -56,38 +59,14 @@ if __name__ == "__main__":
         cluster.delete_many({})
         print('\033[0;32mFINISHED')
 
-    print(f'\033[1;34mInitializing thread {1}')
-    t1 = threading.Thread(target=Read_Doc, args=(cluster,1,))
-    t1.start()
-    print(f'\033[1;34mInitializing thread {2}')
-    t2 = threading.Thread(target=Read_Doc, args=(cluster,2,))
-    t2.start()
-    print(f'\033[1;34mInitializing thread {3}')
-    t3 = threading.Thread(target=Read_Doc, args=(cluster,3,))
-    t3.start()
-    print(f'\033[1;34mInitializing thread {4}')
-    t4 = threading.Thread(target=Read_Doc, args=(cluster,4,))
-    t4.start()
-    print(f'\033[1;34mInitializing thread {5}')
-    t5 = threading.Thread(target=Read_Doc, args=(cluster,5,))
-    t5.start()
-    print(f'\033[1;34mInitializing thread {6}')
-    t6 = threading.Thread(target=Read_Doc, args=(cluster,6,))
-    t6.start()  
-    print(f'\033[1;34mInitializing thread {7}')  
-    t7 = threading.Thread(target=Read_Doc, args=(cluster,7,))
-    t7.start()  
-    t1.join()
-    print(f'\033[0;36mThread {1} COMPLETE')
-    t2.join()
-    print(f'\033[0;36mThread {2} COMPLETE')
-    t3.join()
-    print(f'\033[0;36mThread {3} COMPLETE')
-    t4.join()
-    print(f'\033[0;36mThread {4} COMPLETE')
-    t5.join()
-    print(f'\033[0;36mThread {5} COMPLETE')
-    t6.join()
-    print(f'\033[0;36mThread {6} COMPLETE')
-    t7.join()
-    print(f'\033[0;36mThread {7} COMPLETE')
+    for i in range(1,8):    
+        print(f'\033[1;34mInitializing thread {i}')
+        t = threading.Thread(target=Read_Doc, args=(cluster,i,))
+        t.start()
+        threads.append(t)
+
+    for i in range(len(threads)):
+        threads[i].join()
+        print(f'\033[0;36mThread {i+1} COMPLETE')
+    elapsed_time = time.time() - start_time
+    print(f"Process elapsed time: {elapsed_time} seconds")
