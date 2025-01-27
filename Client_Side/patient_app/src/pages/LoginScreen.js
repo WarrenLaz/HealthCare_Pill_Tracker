@@ -34,7 +34,7 @@ export default function LoginScreen() {
       if (response.data.status === "200 OK") {
         setAuth({ token: response.data.packet });
         console.log("Login successful, navigating to Home");
-        navigation.navigate("Home");
+        navigation.navigate("HomeTabs");
       } else {
         console.warn("Login failed with status:", response.data.status);
         setError(response.data.status);
@@ -88,9 +88,8 @@ export default function LoginScreen() {
           navigation.navigate("Register");
         }}
       >
-        <Text style={styles.link}>
-          Don't have an account? Ask your Doctor about ReplenX!
-        </Text>
+        <Text style={styles.message}>Don't have an account?</Text>
+        <Text style={styles.message}>Ask your doctor about ReplenX</Text>
       </TouchableOpacity>
     </View>
   );
@@ -131,6 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     marginTop: 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: "#fff",
@@ -146,5 +146,10 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     marginTop: 15,
+  },
+  message: {
+    color: "#ADB7BD",
+    textAlign: "center",
+    marginTop: 2,
   },
 });
