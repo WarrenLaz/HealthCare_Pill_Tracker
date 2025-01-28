@@ -17,7 +17,7 @@ const MedCard = ({ name, times, dosage, frequency, remaining }) => (
     </View>
     <View style={styles.infoRow}>
       <Icon name="trending-down" size={20} color="#3A3A3B" />
-      <Text style={styles.infoText}>Remaining: {remaining} pills</Text>
+      <Text style={styles.infoText}>Remaining: {remaining}</Text>
     </View>
   </View>
 );
@@ -26,7 +26,7 @@ export default MedCard;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 4,
-    opacity: 0.9,
+    opacity: 0.85,
   },
   infoText: {
     marginLeft: 8,
     color: "#3A3A3B",
     fontSize: 16,
-    opacity: 0.9,
+    opacity: 0.85,
   },
 });

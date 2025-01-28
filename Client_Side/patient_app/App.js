@@ -55,7 +55,7 @@ function HomeTabs() {
           header: () => (
             <CustomHeader
               title="My Medications"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+              subtitle="View all medications currently prescribed to you."
             />
           ),
         }}
@@ -66,8 +66,8 @@ function HomeTabs() {
         options={{
           header: () => (
             <CustomHeader
-              title="Requests"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+              title="Batch Requests"
+              subtitle="Keep up-to-date with the batch requests you’ve sent out."
             />
           ),
         }}

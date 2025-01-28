@@ -9,7 +9,7 @@ export default function MedsScreen() {
       name: "Aspirin",
       times: ["After Dinner", "Before Bed"],
       dosage: "25mcg",
-      frequency: "Take 1 pill",
+      frequency: "Take 2",
       remaining: 23,
     },
     {
@@ -17,7 +17,7 @@ export default function MedsScreen() {
       name: "Vitamin D",
       times: ["After Breakfast"],
       dosage: "25mcg",
-      frequency: "Take 2 pills",
+      frequency: "Take 2",
       remaining: 10,
     },
     {
@@ -25,7 +25,7 @@ export default function MedsScreen() {
       name: "Ibuprofen",
       times: ["Before Breakfast", "Before Bed"],
       dosage: "25mcg",
-      frequency: "Take 2 pills",
+      frequency: "Take 2",
       remaining: 15,
     },
     {
@@ -33,7 +33,7 @@ export default function MedsScreen() {
       name: "Aspirin",
       times: ["After Dinner", "Before Bed"],
       dosage: "25mcg",
-      frequency: "Take 2 pills",
+      frequency: "Take 2",
       remaining: 23,
     },
     {
@@ -41,15 +41,15 @@ export default function MedsScreen() {
       name: "Vitamin D",
       times: ["After Breakfast"],
       dosage: "25mcg",
-      frequency: "Take 2 pills",
+      frequency: "Take 2",
       remaining: 10,
     },
     {
       id: "6",
       name: "Ibuprofen",
       times: ["Before Breakfast", "Before Bed"],
-      dosage: "1 tablet",
-      frequency: "Take 2 pills",
+      dosage: "25mcg",
+      frequency: "Take 2",
       remaining: 15,
     },
   ];
