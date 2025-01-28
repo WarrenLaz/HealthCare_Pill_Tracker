@@ -21,7 +21,7 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://141.215.199.24:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        "http://192.168.1.66:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
         //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },
@@ -77,20 +77,15 @@ export default function LoginScreen() {
         secureTextEntry
         onFocus={() => setFocusedInput("password")}
       />
-
+      <TouchableOpacity>
+        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => {
-          console.log("Navigating to Register screen");
-          navigation.navigate("Register");
-        }}
-      >
-        <Text style={styles.message}>Don't have an account?</Text>
-        <Text style={styles.message}>Ask your doctor about ReplenX</Text>
-      </TouchableOpacity>
+      <Text style={styles.message}>Don't have an account?</Text>
+      <Text style={styles.message}>Ask your doctor about ReplenX</Text>
     </View>
   );
 }
@@ -122,6 +117,7 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     fontSize: 16,
+    backgroundColor: "#F1F4FF",
   },
   button: {
     width: "90%",
@@ -151,5 +147,10 @@ const styles = StyleSheet.create({
     color: "#ADB7BD",
     textAlign: "center",
     marginTop: 2,
+  },
+  forgotPassword: {
+    fontWeight: "bold",
+    color: "#407BFF",
+    justifyContent: "space-between",
   },
 });

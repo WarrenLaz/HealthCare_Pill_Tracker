@@ -21,7 +21,9 @@ export const PatientProfile = () => {
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
-        <h1 className="text-3xl">{String(pat.First_Name + " " + pat.Last_Name)}</h1>
+        <h1 className="text-3xl">
+          {String(pat.First_Name + " " + pat.Last_Name)}
+        </h1>
       </div>
 
       <div className="flex flex-col sm:px-4 sm:py-6 md:flex-row bg-secondary w-full justify-center">
@@ -43,9 +45,15 @@ export const PatientProfile = () => {
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-          {Precription.length > 0 ? (
+            {Precription.length > 0 ? (
               Precription.map((prec) => (
-                <PrescriptionContainer key={prec._id} Name={prec.Name.toString()} Quantity={prec.Quantity} Dosage={prec.Dosage} Units={prec.Units}/>
+                <PrescriptionContainer
+                  key={prec._id}
+                  Name={prec.Name}
+                  Quantity={prec.Quantity}
+                  Dosage={prec.Dosage}
+                  Units={prec.Units}
+                />
               ))
             ) : (
               <p>None</p>

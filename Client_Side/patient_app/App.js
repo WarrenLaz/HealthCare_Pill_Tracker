@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import MedsScreen from "./src/pages/MedsScreen";
 import RequestsScreen from "./src/pages/RequestsScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
+import CustomHeader from "./src/components/ProfileHeader";
 
 // Create stack and bottom tab navigators
 const Stack = createNativeStackNavigator();
@@ -40,10 +41,49 @@ function HomeTabs() {
         tabBarInactiveTintColor: "gray", // Inactive tab color
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Meds" component={MedsScreen} />
-      <Tab.Screen name="Requests" component={RequestsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          header: () => <CustomHeader />,
+        }}
+      />
+      <Tab.Screen
+        name="Meds"
+        component={MedsScreen}
+        options={{
+          header: () => (
+            <CustomHeader
+              title="My Medications"
+              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Requests"
+        component={RequestsScreen}
+        options={{
+          header: () => (
+            <CustomHeader
+              title="Requests"
+              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          header: () => (
+            <CustomHeader
+              title="My Profile"
+              subtitle="If you find any of this information to be incorrect, reach out to your health care provider to make any changes."
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

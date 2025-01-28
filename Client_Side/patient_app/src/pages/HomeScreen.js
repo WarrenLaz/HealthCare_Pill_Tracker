@@ -13,7 +13,7 @@ export default function HomeScreen() {
     console.log(String(date));
     try {
       const response = await axios.post(
-        "http://141.215.199.24:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
+        "http://localhost:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
         { date },
         {
           headers: {
@@ -41,7 +41,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F1F4FF",
     alignItems: "center",
     justifyContent: "center",
   },
