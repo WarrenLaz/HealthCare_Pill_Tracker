@@ -37,17 +37,18 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      {/* General Info Section */}
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>Account Information</Text>
-
-        <TextInput style={styles.input} placeholder="First Name" />
-        <TextInput style={styles.input} placeholder="Last Name" />
-        <TextInput style={styles.input} placeholder="Phone Number" />
-        <TextInput style={styles.input} placeholder="Email Address" />
+        <Text style={styles.infoHeader}>First Name</Text>
+        <TextInput style={styles.input}>John</TextInput>
+        <Text style={styles.infoHeader}>Last Name</Text>
+        <TextInput style={styles.input}>Doe</TextInput>
+        <Text style={styles.infoHeader}>Email</Text>
+        <TextInput style={styles.input}>johndoe@gmail.com</TextInput>
+        <Text style={styles.infoHeader}>Phone Number</Text>
+        <TextInput style={styles.input} value="000-000-000" editable={false} />
       </View>
 
-      {/* Logout Button */}
       <TouchableOpacity onPress={handleLogout} style={styles.button}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#407BFF",
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 190,
+    marginTop: 120,
     marginBottom: 10,
     alignSelf: "center",
   },
@@ -85,14 +86,22 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: "#3A3A3B",
   },
+  infoHeader: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginBottom: 8.5,
+    color: "#3A3A3B",
+  },
   input: {
     width: "100%",
     padding: 10,
-    marginBottom: 13,
+    marginBottom: 17,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 5,
     fontSize: 13,
-    backgroundColor: "white",
+    backgroundColor: "#fcfcfc",
+    color: "black",
+    opacity: 0.5,
   },
 });
