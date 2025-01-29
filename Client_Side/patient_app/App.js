@@ -67,7 +67,7 @@ function HomeTabs() {
           header: () => (
             <CustomHeader
               title="Batch Requests"
-              subtitle="Keep up-to-date with the batch requests you’ve sent out."
+              subtitle="Stay up-to-date with your batch requests."
             />
           ),
         }}
@@ -79,7 +79,7 @@ function HomeTabs() {
           header: () => (
             <CustomHeader
               title="My Profile"
-              subtitle="If you find any of this information to be incorrect, reach out to your health care provider to make any changes."
+              subtitle="Contact your healthcare provider to make any changes."
             />
           ),
         }}
