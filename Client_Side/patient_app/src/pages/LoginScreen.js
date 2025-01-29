@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  ImageBackground,
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +18,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [focusedInput, setFocusedInput] = useState("");
+
   const handleLogin = async () => {
     try {
       console.log("Attempting to log in with:", username, password);
@@ -44,58 +46,71 @@ export default function LoginScreen() {
       setError("Login failed, please try again.");
     }
   };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Welcome to ReplenX</Text>
-      <Text style={styles.subHeader}>Login</Text>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+    <ImageBackground
+      source={require("../../assets/background.png")} // Ensure you have the image in the correct path
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.header}>Welcome to ReplenX</Text>
+        <Text style={styles.subHeader}>Login</Text>
+        {error && <Text style={styles.errorText}>{error}</Text>}
 
-      <TextInput
-        style={[
-          styles.input,
-          { borderColor: focusedInput === "username" ? "#407BFF" : "#ddd" },
-        ]}
-        placeholder="Email Address"
-        value={username}
-        onChangeText={(text) => {
-          setUsername(text);
-        }}
-        keyboardType="email-address"
-        onFocus={() => setFocusedInput("username")}
-      />
+        <TextInput
+          style={[
+            styles.input,
+            { borderColor: focusedInput === "username" ? "#407BFF" : "#ddd" },
+          ]}
+          placeholder="Email Address"
+          value={username}
+          onChangeText={(text) => {
+            setUsername(text);
+          }}
+          keyboardType="email-address"
+          onFocus={() => setFocusedInput("username")}
+        />
 
-      <TextInput
-        style={[
-          styles.input,
-          { borderColor: focusedInput === "password" ? "#407BFF" : "#ddd" },
-        ]}
-        placeholder="Password"
-        value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-        }}
-        secureTextEntry
-        onFocus={() => setFocusedInput("password")}
-      />
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={[
+            styles.input,
+            { borderColor: focusedInput === "password" ? "#407BFF" : "#ddd" },
+          ]}
+          placeholder="Password"
+          value={password}
+          onChangeText={(text) => {
+            setPassword(text);
+          }}
+          secureTextEntry
+          onFocus={() => setFocusedInput("password")}
+        />
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.message}>Don't have an account?</Text>
-      <Text style={styles.message}>Ask your doctor about ReplenX</Text>
-    </View>
+        <Text style={styles.message}>Don't have an account?</Text>
+        <Text style={styles.message}>Ask your doctor about ReplenX</Text>
+      </View>
+    </ImageBackground>
   );
 }
+
 const styles = StyleSheet.create({
-  container: {
+  background: {
+    flex: 1,
+    backgroundColor: "#fff",
+    width: "100%",
+    height: "100%",
+  },
+  overlay: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#fff",
   },
   header: {
     fontSize: 24,
@@ -125,7 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#407BFF",
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 25,
     marginBottom: 10,
   },
   buttonText: {
@@ -138,11 +153,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-  link: {
-    color: "black",
-    textAlign: "center",
-    marginTop: 15,
-  },
   message: {
     color: "#ADB7BD",
     textAlign: "center",
@@ -151,6 +161,5 @@ const styles = StyleSheet.create({
   forgotPassword: {
     fontWeight: "bold",
     color: "#407BFF",
-    justifyContent: "space-between",
   },
 });
