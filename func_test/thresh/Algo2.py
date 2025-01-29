@@ -8,6 +8,4 @@ def Auxillary(tuple_: list[tuple]):
     return newarray
 def Algorithm2(daysLeft: list, shipping: int):
     return
-x = Auxillary([(10,1),(30,4),(50,10)])
-print(heapq.heappop(x))
-print(heapq.heappop(x))
+

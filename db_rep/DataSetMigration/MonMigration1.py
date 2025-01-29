@@ -50,6 +50,7 @@ def Read_Doc(cluster, doc_no):
 if __name__ == "__main__":
     start_time = time.time()
     cluster = ping()
+    
     threads = []
 
     while((ans := input('\033[1mWOULD YOU LIKE TO CLEAR DATABASE [0 NO] [1 YES]:')) not in ['1','0']):

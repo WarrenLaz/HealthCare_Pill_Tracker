@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Sidebar, useSidebar } from "@rewind-ui/core";
 import {
   LuPackageOpen,

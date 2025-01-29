@@ -1,27 +1,38 @@
 const db = require('../dbcontroller');
 const { ObjectId } = require("mongodb");
 
+
 const addPrescription = (req, res) =>{
     try{
         const payload = req.body["prescData"];
         console.log(payload);
         console.log(payload);
+        var date_ = new Date();
+        var pleft = payload["Quantity"]
+        var dose = payload["Dosage"];
+        var frequency = 0
+        payload["FrequencyDetails"].forEach(element => {
+            console.log(element.pillCount)
+            frequency += parseInt(element.pillCount)
+        });
+        console.log(frequency)
         db.updateData(db.getDB('Patients', "patient"), {
             _id : ObjectId(payload["id"])
         },{
             $push : {
                 Prescriptions : {
-                _id: ObjectId(),
-                MedName: payload["MedName"],
-                Dosage: payload["Dosage"],
-                Units: payload["Units"],
-                Form: payload["Form"],
-                RouteOfAdmin: payload["RouteOfAdmin"],
-                FrequencyDetails: payload["FrequencyDetails"],
-                Startdate: payload["Startdate"],
-                Quantity: payload["Quantity"],
-                Note: payload["Note"],
-                Schedule: payload["Schedule"]
+                    _id: ObjectId(),
+                    MedName: payload["MedName"],
+                    Quantity: payload["Quantity"],
+                    pills_left: pleft,
+                    Dosage: dose,
+                    Form: payload["Form"],
+                    FrequencyDetails: payload["FrequencyDetails"],
+                    Interval: payload["Interval"],
+                    StartDate: date_,
+                    EndDate:  new Date( date_.setDate( date_.getDate() + (parseInt(pleft/(dose*frequency))))),
+                    Note: payload["Note"],
+                    
                 }
         } 
         }).then(data => {

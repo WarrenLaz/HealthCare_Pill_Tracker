@@ -25,7 +25,6 @@ export const Prescadd = () => {
     Form: "",
     FrequencyDetails: [],
     Interval: "",
-    Startdate: "",
     Note: "",
   });
 
@@ -38,6 +37,7 @@ export const Prescadd = () => {
     "At Dinner",
     "Before Bed",
   ];
+
   const frequencyDays = [
     "Daily",
     "Weekly",
@@ -156,10 +156,10 @@ export const Prescadd = () => {
                 >
                   <div> 
                     <p className="font-bold">{`${drug.Product_Name}\n`}</p>
-                    <p className="font-style: italic">{` Form: ${drug.Form}`} </p>
+                    <p className="font-style: italic">{`Form: ${drug.Form}`} </p>
                     <p className="font-style: italic">{`Quantity: ${drug.Net_Contents}`}</p>
                     <p className="font-style: italic">{`Dosage: ${drug.Serving_Size}`}</p>
-                      </div>{" "}
+                    </div>{" "}
                 </div>
               ))}
             </div>

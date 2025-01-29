@@ -94,7 +94,7 @@ function rightRotate(value, amount) {
 }
 
 // Example usage:
-let message = "Lazarraga2003";
+let message = "hello";
 
 let hash = sha256(message);
 console.log(hash);
