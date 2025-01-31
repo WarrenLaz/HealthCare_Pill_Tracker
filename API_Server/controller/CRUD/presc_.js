@@ -8,6 +8,7 @@ const addPrescription = (req, res) =>{
         console.log(payload);
         console.log(payload);
         var date_ = new Date();
+        var date2_ = new Date( date_.setDate( date_.getDate() + (parseInt(pleft/(dose*frequency)))))
         var pleft = payload["Quantity"]
         var dose = payload["Dosage"];
         var frequency = 0
@@ -30,7 +31,7 @@ const addPrescription = (req, res) =>{
                     FrequencyDetails: payload["FrequencyDetails"],
                     Interval: payload["Interval"],
                     StartDate: date_,
-                    EndDate:  new Date( date_.setDate( date_.getDate() + (parseInt(pleft/(dose*frequency))))),
+                    EndDate:  date2_,
                     Note: payload["Note"],
                     
                 }

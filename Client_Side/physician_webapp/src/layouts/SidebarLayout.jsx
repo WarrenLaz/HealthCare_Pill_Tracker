@@ -88,8 +88,19 @@ export const SidebarLayout = () => {
                     />
                   </div>
                 </Link>
+
+                <Link to="/MyProfile">
+                  <div className="hover:bg-gray-100">
+                    <Sidebar.Nav.Section.Item
+                      icon={<LuUserCircle className="text-2xl" />}
+                      label="new"
+                    />
+                  </div>
+                </Link>
                 <Sidebar.Separator />
               </Sidebar.Nav.Section>
+
+              
             </div>
             <div>
               <Sidebar.Nav.Section>
