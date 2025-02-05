@@ -1,9 +1,12 @@
 const db = require('../dbcontroller');
+
 const { ObjectId } = require("mongodb");
 
 
 const addPrescription = (req, res) =>{
     try{
+
+        const payload = req.body 
         const payload = req.body["prescData"];
         console.log(payload);
         console.log(payload);
@@ -33,7 +36,6 @@ const addPrescription = (req, res) =>{
                     StartDate: date_,
                     EndDate:  date2_,
                     Note: payload["Note"],
-                    
                 }
         } 
         }).then(data => {
@@ -60,7 +62,11 @@ const getPresc = (req, res) =>{
 }
 
 const deletePres = (req, res) =>{
-    
+    // payload = req.body["data"]  payload
+    // data : { id: "patientid", prescid : " "}
+
+    db.deleteData(db.getDB('Patients', 'Patient'), payload["id"], { }   )
+
 }
 
 const updatePresc = (req, res) =>{

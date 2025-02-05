@@ -45,5 +45,5 @@ const styles = StyleSheet.create({
     color: "#3A3A3B",
     fontSize: 16,
     opacity: 0.85,
-  },
+  }
 });

@@ -1,58 +1,11 @@
 import React from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import MedCard from "../components/MedCard";
+import useAuth from "../hooks/useAuth";
 
 export default function MedsScreen() {
-  const medsData = [
-    {
-      id: "1",
-      name: "Aspirin",
-      times: ["After Dinner", "Before Bed"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 23,
-    },
-    {
-      id: "2",
-      name: "Vitamin D",
-      times: ["After Breakfast"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 10,
-    },
-    {
-      id: "3",
-      name: "Ibuprofen",
-      times: ["Before Breakfast", "Before Bed"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 15,
-    },
-    {
-      id: "4",
-      name: "Aspirin",
-      times: ["After Dinner", "Before Bed"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 23,
-    },
-    {
-      id: "5",
-      name: "Vitamin D",
-      times: ["After Breakfast"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 10,
-    },
-    {
-      id: "6",
-      name: "Ibuprofen",
-      times: ["Before Breakfast", "Before Bed"],
-      dosage: "25mcg",
-      frequency: "Take 2",
-      remaining: 15,
-    },
-  ];
+  const {auth} = useAuth();
+  const medsData = auth.token.Prescriptions;
 
   return (
     <View style={styles.container}>
@@ -62,11 +15,11 @@ export default function MedsScreen() {
         renderItem={({ item }) => (
           <View style={styles.medCardContainer}>
             <MedCard
-              name={item.name}
-              times={item.times}
-              dosage={item.dosage}
-              frequency={item.frequency}
-              remaining={item.remaining}
+              name={"item.MedName"}
+              times={1}
+              dosage={"item.Dosage"}
+              frequency={1}
+              remaining={1} 
             />
           </View>
         )}
@@ -77,7 +30,6 @@ export default function MedsScreen() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

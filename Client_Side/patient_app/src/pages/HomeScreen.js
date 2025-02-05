@@ -3,17 +3,19 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, Pressable, View } from "react-native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import useAuth from "../hooks/useAuth";
+
 
 export default function HomeScreen() {
   let log = new Date();
   const [date, setDate] = useState({ log });
-
+  const {auth} = useAuth();
   async function sendLog() {
     setDate({ log });
     console.log(String(date));
     try {
       const response = await axios.post(
-        "http://localhost:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
+        "http://192.168.0.117:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
         { date },
         {
           headers: {
@@ -26,7 +28,7 @@ export default function HomeScreen() {
       console.error("Error sending data:", error);
     }
   }
-
+  console.log("auth: " , auth.token.Prescriptions);
   return (
     <View style={styles.container}>
       <Text style={styles.texts}>Vitamin D</Text>

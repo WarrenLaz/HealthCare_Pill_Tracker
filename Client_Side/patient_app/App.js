@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Auth } from "./src/context/Auth";
 import LoginScreen from "./src/pages/LoginScreen";
 import HomeScreen from "./src/pages/HomeScreen";
-import { View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MedsScreen from "./src/pages/MedsScreen";
 import RequestsScreen from "./src/pages/RequestsScreen";
@@ -23,7 +22,6 @@ function HomeTabs() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
           if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Meds") {
@@ -33,7 +31,6 @@ function HomeTabs() {
           } else if (route.name === "Profile") {
             iconName = focused ? "person" : "person-outline";
           }
-
           // Return the icon component
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -94,8 +91,8 @@ export default function App() {
     <Auth>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="HomeTabs" component={HomeTabs} />
+          <Stack.Screen name="Login" component={LoginScreen}/>
+          <Stack.Screen name="HomeTabs" component={HomeTabs}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Auth>

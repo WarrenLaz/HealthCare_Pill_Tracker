@@ -89,9 +89,7 @@ function sha256(message) {
 }
 
 // Helper function: Right Rotate
-function rightRotate(value, amount) {
-    return (value >>> amount) | (value << (32 - amount));
-}
+function rightRotate(value, amount){return (value >>> amount) | (value << (32 - amount));}
 
 // Example usage:
 let message = "hello";

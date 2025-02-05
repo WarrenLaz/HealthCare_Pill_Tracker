@@ -30,9 +30,8 @@ module.exports = {
           "sans-serif",
         ],
       },
-
-      components: {},
-    },
+        components: {}
+      },
   },
   plugins: [
     require("@tailwindcss/typography"),

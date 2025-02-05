@@ -18,7 +18,7 @@ async function sendSecureEmail() {
         to: 'wjlaz@umich.edu', // Recipient(s)
         subject: '', // Email subject
         text: '', // Plain text body
-        html: '", // HTML email body
+        html: '', // HTML email body
       };
   
       // 3️⃣ Send the email
