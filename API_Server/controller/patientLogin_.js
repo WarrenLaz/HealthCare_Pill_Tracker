@@ -2,6 +2,8 @@ const db = require("./dbcontroller");
 const sha256 = require("../encryptor/sha256");
 const jwt = require("jsonwebtoken");
 
+
+// 
 const patientLogin = (req, res) => {
   console.log(req.body);
   const payload = req.body["LoginForm"];
