@@ -5,8 +5,6 @@ const { ObjectId } = require("mongodb");
 
 const addPrescription = (req, res) =>{
     try{
-
-        const payload = req.body 
         const payload = req.body["prescData"];
         console.log(payload);
         console.log(payload);
@@ -62,11 +60,8 @@ const getPresc = (req, res) =>{
 }
 
 const deletePres = (req, res) =>{
-    // payload = req.body["data"]  payload
-    // data : { id: "patientid", prescid : " "}
-
-    db.deleteData(db.getDB('Patients', 'Patient'), payload["id"], { }   )
-
+    db.getData(db.getDB('Patients', 'patient'), req.body.data._id).then( data => {
+    })
 }
 
 const updatePresc = (req, res) =>{

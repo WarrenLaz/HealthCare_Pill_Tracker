@@ -14,8 +14,8 @@ import useAuth from "../hooks/useAuth";
 export default function LoginScreen() {
   const { setAuth } = useAuth();
   const navigation = useNavigation();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("wjlaz@umich.edu");
+  const [password, setPassword] = useState("s!r*_.gRsG7w");
   const [error, setError] = useState("");
   const [focusedInput, setFocusedInput] = useState("");
 
@@ -23,7 +23,7 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://192.168.0.117:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        "http://192.168.0.118:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
         //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },

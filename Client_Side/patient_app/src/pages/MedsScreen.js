@@ -15,11 +15,11 @@ export default function MedsScreen() {
         renderItem={({ item }) => (
           <View style={styles.medCardContainer}>
             <MedCard
-              name={"item.MedName"}
-              times={1}
-              dosage={"item.Dosage"}
-              frequency={1}
-              remaining={1} 
+              name={item.MedName}
+              times={item.FrequencyDetails}
+              dosage={item.Dosage}
+              frequency={item.Interval}
+              remaining={item.pills_left} 
             />
           </View>
         )}
