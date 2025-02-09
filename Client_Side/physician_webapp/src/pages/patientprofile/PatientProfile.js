@@ -14,9 +14,13 @@ export const PatientProfile = () => {
   const { pat } = usePat();
   const [Precription, setPrescription] = useState(pat.Prescriptions);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const prescriptionCount = Precription?.length || 0;
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+  const addNewPrescription = (newPresc) => {
+    setPrescription((prevPresc) => [...prevPresc, newPresc]);
   };
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
@@ -35,7 +39,7 @@ export const PatientProfile = () => {
         <div className="sm:w-full md:w-full lg:w-1/2">
           <div className="flex justify-between items-center p-6">
             <h2 className="text-xl font-semibold text-gray-800">
-              Prescriptions (4) {/*Change this here to get actual number*/}
+              Prescriptions ({Precription?.length || 0})
             </h2>
             <button
               onClick={toggleModal}
@@ -45,14 +49,11 @@ export const PatientProfile = () => {
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-            {Precription.length > 0 ? (
+            {Precription.length >= 0 ? (
               Precription.map((prec) => (
                 <PrescriptionContainer
-                  key={prec._id}
-                  Name={prec.MedName}
-                  Quantity={prec.Quantity}
-                  Dosage={prec.Dosage}
-                  Units={prec.Units}
+                  key={prec._id || prec.MedName}
+                  prescData={prec}
                 />
               ))
             ) : (
@@ -62,7 +63,7 @@ export const PatientProfile = () => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={toggleModal}>
-        <Prescadd />
+        <Prescadd addNewPrescription={addNewPrescription} />
       </Modal>
     </div>
   );

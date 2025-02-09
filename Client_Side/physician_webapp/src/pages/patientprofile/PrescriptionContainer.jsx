@@ -1,9 +1,29 @@
 import React from "react";
 
-const PrescriptionContainer = (Presc) => {
+const PrescriptionContainer = ({ prescData }) => {
+  if (!prescData) {
+    return <p className="text-gray-600">Invalid prescription data</p>;
+  }
+
   return (
     <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">
-      <h1 className="text-sm font-bold">Methocarbormol Tab 750 mg</h1>
+      <h1 className="text-sm font-bold">
+        {prescData.MedName} {prescData.Form} {prescData.Dosage} mg
+      </h1>
+      <p className="text-gray-600">Quantity: {prescData.Quantity || "N/A"}</p>
+      <p className="text-gray-600">Interval: {prescData.Interval || "N/A"}</p>
+      <p className="text-gray-600">
+        Frequency:{" "}
+        {Array.isArray(prescData.FrequencyDetails) &&
+        prescData.FrequencyDetails.length > 0
+          ? prescData.FrequencyDetails.map((freq, index) => (
+              <span key={index}>
+                {freq.pillCount} {freq.frequency}
+                {index < prescData.FrequencyDetails.length - 1 && ", "}
+              </span>
+            ))
+          : "N/A"}
+      </p>
     </div>
   );
 };
