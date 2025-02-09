@@ -47,7 +47,13 @@ export const PatientProfile = () => {
           <div className="flex flex-col justify-center items-center">
             {Precription.length > 0 ? (
               Precription.map((prec) => (
-                <PrescriptionContainer key={prec._id} Name={prec.MedName.toString()} Quantity={prec.Quantity} Dosage={prec.Dosage} Units={prec.Units}/>
+                <PrescriptionContainer
+                  key={prec._id}
+                  Name={prec.MedName}
+                  Quantity={prec.Quantity}
+                  Dosage={prec.Dosage}
+                  Units={prec.Units}
+                />
               ))
             ) : (
               <p>None</p>
