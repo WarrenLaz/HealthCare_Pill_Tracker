@@ -7,7 +7,7 @@ import Icon2 from "react-native-vector-icons/MaterialCommunityIcons"
 import useAuth from "../hooks/useAuth";
 
 
-const Log = ({sendLog, Med}) => {
+const Log = ({sendLog, Med, id}) => {
   const [Amount, setAmount] = useState(0);
   return(
   <View style={styles.container}>
@@ -23,7 +23,7 @@ const Log = ({sendLog, Med}) => {
           </Pressable>
         )}
       />
-  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Amount)}>
+  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Amount, id)}>
     <Icon name="check" size={50} color="#fff" />
   </Pressable>
   </View>
@@ -36,9 +36,10 @@ export default function HomeScreen() {
   const [Med, setMed] = useState("");
   const {auth} = useAuth();
   const medsData = auth.token.Prescriptions;
-
-  async function sendLog(MedName_, amount_) {
-    setLog({ date : new Date(), MedName : MedName_, amount : amount_ });
+  const p_id = auth.token._id;
+  console.log(p_id)
+  async function sendLog(MedName_, amount_, id_) {
+    setLog({ pid : id_, date : new Date(), MedName : MedName_, amount : amount_ });
     console.log(log);
     try {
       const response = await axios.post(
@@ -73,7 +74,7 @@ export default function HomeScreen() {
               </Pressable>
         )}
       />
-    {islog ? <Log sendLog= {sendLog} Med={Med}/> : null}
+    {islog ? <Log sendLog= {sendLog} Med={Med} id = {p_id}/> : null}
   </View>
   );
 }
