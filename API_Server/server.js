@@ -33,6 +33,8 @@ app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
 
+//logs
+app.use("/logs", require("./routes/logs"));
 
 //Prescription Info
 app.use("/prescription", require("./routes/prescription_"));
