@@ -5,22 +5,25 @@ import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons"
 import useAuth from "../hooks/useAuth";
-import RNPickerSelect from 'react-native-picker-select';
+
 
 const Log = ({sendLog, Med}) => {
-  const [numPills, setnumPills] = useState(0);
+  const [Amount, setAmount] = useState(0);
   return(
   <View style={styles.container}>
   <Text style={styles.texts}>{Med.MedName}</Text>
   <StatusBar style="auto" />
-  <Text style={styles.title}>Select Time: </Text>
-  <RNPickerSelect
-        onValueChange={(val)=>{setnumPills(val)}}
-        items={Med.FrequencyDetails}
-        value={numPills}
-        style={styles.title}
+  <FlatList
+        data={Med.FrequencyDetails}
+        keyExtractor={(item) => item.frequency}
+        renderItem={( {item} ) => (
+          <Pressable style={styles.card} onPress={setAmount(item.pillCount)}>
+              <Text style={styles.title}> {item.frequency} </Text>
+              <Text style={styles.title}> {item.pillCount} {Med.Form} </Text>
+          </Pressable>
+        )}
       />
-  <Pressable style={styles.takebutton} onPress={sendLog}>
+  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Amount)}>
     <Icon name="check" size={50} color="#fff" />
   </Pressable>
   </View>
@@ -31,12 +34,12 @@ export default function HomeScreen() {
   const [log, setLog] = useState({});
   const [islog, setislog] = useState(false);
   const [Med, setMed] = useState("");
-  const [amount_, setAmount] = useState(0);
   const {auth} = useAuth();
   const medsData = auth.token.Prescriptions;
 
-  async function sendLog() {
+  async function sendLog(MedName_, amount_) {
     setLog({ date : new Date(), MedName : MedName_, amount : amount_ });
+    console.log(log);
     try {
       const response = await axios.post(
         "http://192.168.0.118:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
@@ -47,18 +50,18 @@ export default function HomeScreen() {
           },
         }
       );
-      console.log(response.data); // Should log the success message from the server
+      //console.log(response.data); // Should log the success message from the server
     } catch (error) {
       console.error("Error sending data:", error);
     }
   }
   async function pressMed(med_) {
-    console.log(med_);
+    //(med_);
     setMed(med_);
     setislog(true);
   }
   
-  console.log("auth: " , auth.token.Prescriptions);
+  //console.log("auth: " , auth.token.Prescriptions);
   return (
   <View style={styles.innercontainer}>
     <FlatList
