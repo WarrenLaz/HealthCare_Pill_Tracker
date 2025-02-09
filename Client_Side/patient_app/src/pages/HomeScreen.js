@@ -3,94 +3,88 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, Pressable, View, FlatList } from "react-native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Icon2 from "react-native-vector-icons/MaterialCommunityIcons"
 import useAuth from "../hooks/useAuth";
 
-const Log = ({sendLog, MedName}) => {
+
+const Log = ({sendLog, Med}) => {
+  const [Amount, setAmount] = useState(0);
   return(
   <View style={styles.container}>
-  <Text style={styles.texts}>{MedName}</Text>
+  <Text style={styles.texts}>{Med.MedName}</Text>
   <StatusBar style="auto" />
-  <Pressable style={styles.takebutton} onPress={sendLog}>
+  <FlatList
+        data={Med.FrequencyDetails}
+        keyExtractor={(item) => item.frequency}
+        renderItem={( {item} ) => (
+          <Pressable style={styles.card} onPress={setAmount(item.pillCount)}>
+              <Text style={styles.title}> {item.frequency} </Text>
+              <Text style={styles.title}> {item.pillCount} {Med.Form} </Text>
+          </Pressable>
+        )}
+      />
+  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Amount)}>
     <Icon name="check" size={50} color="#fff" />
   </Pressable>
   </View>
   );
-};
+}
 
 export default function HomeScreen() {
-  let log = new Date();
-  const [Log, setLog] = useState({});
+  const [log, setLog] = useState({});
   const [islog, setislog] = useState(false);
-  const [MedName_, setMedName] = useState("");
-  const [amount_, setAmount] = useState("");
+  const [Med, setMed] = useState("");
   const {auth} = useAuth();
   const medsData = auth.token.Prescriptions;
-  
-  async function sendLog() {
+
+  async function sendLog(MedName_, amount_) {
     setLog({ date : new Date(), MedName : MedName_, amount : amount_ });
+    console.log(log);
     try {
       const response = await axios.post(
-        "http://192.168.0.117:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
-        { date },
+        "http://192.168.0.118:8000/Logs", //ip for school server; anywhere else change to local host OR ip of server (check login.js for command)
+        { log },
         {
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
-      console.log(response.data); // Should log the success message from the server
+      //console.log(response.data); // Should log the success message from the server
     } catch (error) {
       console.error("Error sending data:", error);
     }
   }
-  async function pressMed(MedName, amount) {
-    console.log(MedName);
-    setAmount()
-    setMedName(MedName);
+  async function pressMed(med_) {
+    //(med_);
+    setMed(med_);
     setislog(true);
   }
-  console.log("auth: " , auth.token.Prescriptions);
+  
+  //console.log("auth: " , auth.token.Prescriptions);
   return (
-  <View style={styles.container}>
+  <View style={styles.innercontainer}>
     <FlatList
         data={medsData}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-
-
-
-
-
-
-          <View style={styles.card}>
-          <FlatList 
-          data = {item.FrequencyDetails}
-          keyExtractor={(item_) => item_.frequency}
-          renderItem={
-            (item_) => (
-              <Pressable onPress={() => pressMed(item.MedName, item_.pillCount)}>
-              <Text style={styles.title}> {item.MedName} - {item_.pillCount} </Text>
+        renderItem={( {item} ) => (
+              <Pressable style={styles.card} onPress={() => pressMed(item)}>
+              <Text style={styles.title}>{<Icon2 name="pill" size={20} color="#3A3A3B" />} {item.MedName} </Text>
               </Pressable>
-            )
-
-
-          }
-          > 
-          </FlatList>
-          </View>
-
-
         )}
       />
-    {islog ? <Log sendLog= {sendLog} MedName={MedName_}/> : null}
+    {islog ? <Log sendLog= {sendLog} Med={Med}/> : null}
   </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  innercontainer:{
     backgroundColor: "#F1F4FF",
+  },
+  container: {
+    padding: 25,
+    backgroundColor: "#CBD4FF",
     alignItems: "center",
     justifyContent: "center",
   },

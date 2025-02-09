@@ -24,7 +24,7 @@ const MedCard = ({ name, times, dosage, frequency, remaining }) => (
           || (item.frequency == "At Breakfast")  ? 
           <Icon name="sunny" size={20} color="#3A3A3B"/> :  
           <Icon name="nightlight" size={20} color="#3A3A3B"/>
-          }{item.frequency} 
+          } {item.frequency} 
           [{item.pillCount}] </Text>
         ) }
           keyExtractor={(item) => item.frequency}
