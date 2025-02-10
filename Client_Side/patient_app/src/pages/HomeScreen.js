@@ -23,7 +23,7 @@ const Log = ({sendLog, Med, id}) => {
           </Pressable>
         )}
       />
-  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Amount, id)}>
+  <Pressable style={styles.takebutton} onPress={() => sendLog(Med.MedName, Med._id, Amount, Med.Dosage, id)}>
     <Icon name="check" size={50} color="#fff" />
   </Pressable>
   </View>
@@ -38,8 +38,9 @@ export default function HomeScreen() {
   const medsData = auth.token.Prescriptions;
   const p_id = auth.token._id;
   console.log(p_id)
-  async function sendLog(MedName_, amount_, id_) {
-    setLog({ pid : id_, date : new Date(), MedName : MedName_, amount : amount_ });
+
+  async function sendLog(MedName_, mid_, amount_, dose, id_) {
+    setLog({ pid : id_, mid: mid_, dosage : dose, mdate : new Date(), MedName : MedName_, amount : amount_ });
     console.log(log);
     try {
       const response = await axios.post(

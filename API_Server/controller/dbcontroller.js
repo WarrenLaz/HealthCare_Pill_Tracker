@@ -45,13 +45,13 @@ async function pushData(collection, query) {
 
 // updates data within a collection
 // we use the id to select which item to update
-async function updateData(collection, id, query) {
+async function updateData(collection, id, query, filter) {
   try {
     await MongoClient.connect();
     console.log("connected to Mongo [UPDATE]: ", collection);
     const table = collection;
-
-    await table.updateOne(id, query);
+    
+    filter==null ? await table.updateOne(id,query) : await table.updateOne(id, query, filter);
 
     return "200 OK";
   } catch (err) {
