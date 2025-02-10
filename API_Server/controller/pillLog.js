@@ -16,9 +16,21 @@ const Log = (req, res) => {
         }
     ).then(
         data=>{
-            console.log(data.modifiedCount)
-            res.sendStatus(200)
-        })
+            db.updateData(db.getDB('Patients', 'patient'), 
+            {_id : new ObjectId(log_['pid'])}, 
+                {
+                    $push: { Logs: 
+                    {
+                        _id : new ObjectId(),
+                        Medname: log_['MedName'],
+                        date : new Date(log_['date']),
+                        amount : parseInt(log_['amount'],10)*parseInt(log_['dosage'],10)
+                    } } 
+                }
+            )
+        }).then(
+            d=>{res.sendStatus(200)}
+        )
     
 }
 

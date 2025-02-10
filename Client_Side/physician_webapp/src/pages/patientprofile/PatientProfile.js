@@ -8,7 +8,7 @@ import Prescadd from "../../components/Prescadd";
 import PatientInfoContainer from "./PatientInfoContainer";
 import PrescriptionContainer from "./PrescriptionContainer";
 import usePat from "../../hooks/usePat";
-
+import GraphLogs from "./GraphLog";
 export const PatientProfile = () => {
   const { auth } = useAuth();
   const { pat } = usePat();
@@ -34,6 +34,8 @@ export const PatientProfile = () => {
         {/*left side for user info*/}
         <div className=" sm:w-full md:w-full lg:w-1/2 flex flex-col justify-start items-center">
           <PatientInfoContainer />
+          <GraphLogs className="mt-4" logs={pat.Logs}/>
+
         </div>
         {/*right side for prescriptions*/}
         <div className="sm:w-full md:w-full lg:w-1/2">

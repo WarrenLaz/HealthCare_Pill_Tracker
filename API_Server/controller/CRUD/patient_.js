@@ -62,6 +62,7 @@ const addPatient = (req, res) => {
           Phone_Number: payload["Phone_Number"],
           Physician: ObjectId(req.user["user"]),
           Prescriptions: [],
+          Logs: [],
           isNew: 1,
         }).then((d) => {
           db.getData(db.getDB("Patients", "patient"), {

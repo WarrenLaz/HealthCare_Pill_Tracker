@@ -10,7 +10,9 @@ const PrescriptionContainer = ({ prescData }) => {
       <h1 className="text-sm font-bold">
         {prescData.MedName} {prescData.Form} {prescData.Dosage} mg
       </h1>
+      <p className="text-gray-600">Progress : <progress value={prescData.pills_left/prescData.Quantity} /></p>
       <p className="text-gray-600">Quantity: {prescData.Quantity || "N/A"}</p>
+      <p className="text-gray-600">Pills Left: {prescData.pills_left || "N/A"}</p>
       <p className="text-gray-600">Interval: {prescData.Interval || "N/A"}</p>
       <p className="text-gray-600">
         Frequency:{" "}

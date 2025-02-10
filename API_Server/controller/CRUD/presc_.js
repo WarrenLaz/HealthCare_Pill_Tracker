@@ -9,8 +9,7 @@ const addPrescription = (req, res) =>{
         console.log(payload);
         console.log(payload);
         var date_ = new Date();
-        var date2_ = new Date( date_.setDate( date_.getDate() + (parseInt(pleft/(dose*frequency)))))
-        var pleft = payload["Quantity"]
+        var date2_ = new Date( date_.setDate( date_.getDate() + (parseInt(payload["Quantity"]/(dose*frequency)))))
         var dose = payload["Dosage"];
         var frequency = 0
         payload["FrequencyDetails"].forEach(element => {
@@ -26,7 +25,7 @@ const addPrescription = (req, res) =>{
                     _id: ObjectId(),
                     MedName: payload["MedName"],
                     Quantity: payload["Quantity"],
-                    pills_left: pleft,
+                    pills_left: payload["Quantity"],
                     Dosage: dose,
                     Form: payload["Form"],
                     FrequencyDetails: payload["FrequencyDetails"],
