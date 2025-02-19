@@ -4,7 +4,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 const MedCard = ({ name, times, dosage, frequency, remaining }) => (
   <View style={styles.card}>
-  <Text style={styles.title}>{name}</Text>
+    <Text style={styles.title}>{name}</Text>
     <View style={styles.infoRow}>
       <Icon name="calendar-today" size={20} color="#3A3A3B" />
       {/* 
@@ -17,17 +17,13 @@ const MedCard = ({ name, times, dosage, frequency, remaining }) => (
     "Before Bed"
       */}
       <FlatList
-          data={times}
-          renderItem={ ({item}) => (
-          <Text style={styles.infoText}> {
-          (item.frequency == "MidMorning") || (item.frequency == "Before Breakfast") 
-          || (item.frequency == "At Breakfast")  ? 
-          <Icon name="sunny" size={20} color="#3A3A3B"/> :  
-          <Icon name="nightlight" size={20} color="#3A3A3B"/>
-          } {item.frequency} 
-          [{item.pillCount}] </Text>
-        ) }
-          keyExtractor={(item) => item.frequency}
+        data={times}
+        renderItem={({ item }) => (
+          <Text style={styles.infoText}>
+            {item.frequency} [{item.pillCount}]
+          </Text>
+        )}
+        keyExtractor={(item) => item.frequency}
       />
     </View>
 
