@@ -40,11 +40,18 @@ export default function ProfileScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>Account Information</Text>
         <Text style={styles.infoHeader}>First Name</Text>
-        <TextInput style={styles.input}>John</TextInput>
+        <TextInput style={styles.input} value="John" editable={false} />
+
         <Text style={styles.infoHeader}>Last Name</Text>
-        <TextInput style={styles.input}>Doe</TextInput>
+        <TextInput style={styles.input} value="Doe" editable={false} />
+
         <Text style={styles.infoHeader}>Email</Text>
-        <TextInput style={styles.input}>johndoe@gmail.com</TextInput>
+        <TextInput
+          style={styles.input}
+          value="johndoe@gmail.com"
+          editable={false}
+        />
+
         <Text style={styles.infoHeader}>Phone Number</Text>
         <TextInput style={styles.input} value="000-000-000" editable={false} />
       </View>
