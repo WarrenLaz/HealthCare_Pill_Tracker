@@ -83,7 +83,7 @@ export default function HomeScreen() {
 
     try {
       const response = await axios.post(
-        "http://192.168.0.118:8000/Logs",
+        "http://141.215.213.8:8000/Logs",
         {
           log: {
             pid: id_,

@@ -5,7 +5,7 @@ const cors = require("cors");
 const corsOptions = require("./middleware/creds");
 const cookieParser = require('cookie-parser');
 const JWTver = require("./middleware/jwtver");
-
+const jwtver_0 = require("./middleware/jwtver_0");
 
 app.use(cookieParser());
 
@@ -32,7 +32,7 @@ app.use("/Reg", require("./routes/reg"));
 app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
-
+app.use(jwtver_0);
 //logs
 app.use("/logs", require("./routes/logs"));
 
