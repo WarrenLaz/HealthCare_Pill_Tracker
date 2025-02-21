@@ -32,6 +32,9 @@ app.use("/Reg", require("./routes/reg"));
 app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
+
+
+//This middlewear just verifies the JWT Token, it doesn't change the payload.
 app.use(jwtver_0);
 //logs
 app.use("/logs", require("./routes/logs"));
@@ -41,6 +44,8 @@ app.use("/prescription", require("./routes/prescription_"));
 
 app.use("/search", require("./routes/search_"));
 //used for verification, cannot sql inject without the jwt cookie. 
+
+//This middlewear both verifies the JWT Token, then changes the payload to the JWT Token decryption.
 app.use(JWTver);
 //userinfo
 app.use("/user", require("./routes/user_"));
