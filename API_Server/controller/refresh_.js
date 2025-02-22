@@ -24,7 +24,6 @@ const handleRefreshToken = (req, res) => {
                 process.env.ATS, 
                 {expiresIn: '30s'}
             );
-            console.log("GOOD");
             res.send({status: "200 OK", packet: accessToken});
         }
     );
