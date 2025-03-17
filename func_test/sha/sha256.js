@@ -91,8 +91,4 @@ function sha256(message) {
 // Helper function: Right Rotate
 function rightRotate(value, amount){return (value >>> amount) | (value << (32 - amount));}
 
-// Example usage:
-let message = "hello";
-
-let hash = sha256(message);
-console.log(hash);
+module.exports = sha256;

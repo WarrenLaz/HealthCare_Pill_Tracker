@@ -1,0 +1,9 @@
+SHA-256 Test Results
+=====================
+Test: Hash "hello" | Input: hello | Hash: 2a0a1e7a06724b4e5c7362fb4aa54f14-51d55981-753b2c10-4e15090f-666b943a
+Test: Hash empty string | Input:  | Hash: -3623ddb2-3ede91ca-789c583a4afb0aec035a22953d58022c25c9b2cc643cfb02
+Test: Hash quick brown fox | Input: The quick brown fox jumps over the lazy dog | Hash: 7dc7246a-61dd1d8754341eb76cc64897461ca74e-3c36c4ac-794506154db290cc
+Test: Hash "foo" | Input: foo | Hash: -62d6222d-7288764d28f4fcbf-39cff94b-64c24ed-58815c04-66688a85-367e6e86
+Test: Hash "bar" | Input: bar | Hash: 2ec4dc53-7e18424578ff4b77-625560f534207b4421777f3821857dde5add36bc
+Test: Hash 123 | Input: 123 | Hash: -15af3a9d-3168a673-24bc4485-5c90ff59575416a1-1e6c2536-17cf1ce8190dbfd5
+Test: Hash long string (1000 "a"s) | Input: (1000 chars) | Hash: -4568dc737f536d79-7d5874ef3d28ce19-23d319ed4dfbcef317cfc1b772bebfa2
