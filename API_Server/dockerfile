@@ -1,8 +1,8 @@
-# Use the official Node.js image
-FROM node:latest
+# Use an official Node.js runtime as the base image
+FROM node:18
 
-# Set the working directory in the container
-WORKDIR /app/data
+# Set the working directory inside the container
+WORKDIR /app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -10,11 +10,14 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application files
 COPY . .
 
-# Expose the port your server runs on
+# Expose the port the app runs on
 EXPOSE 8000
 
-# Start the server
-CMD ["npm", "start"]
+# Set environment variable (optional, can also be in a .env file)
+ENV NODE_ENV=development
+
+# Command to run the application
+CMD ["node", "server.js"]
