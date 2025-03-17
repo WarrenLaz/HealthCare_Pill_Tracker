@@ -26,7 +26,7 @@
 <h3> React Build:</h3>
 
 `docker build -t physician-webapp .` <br>
-`docker run -p 3000:3000 physician-webapp` <br>
+`docker run -p 3000:80 physician-webapp` <br>
 
 
 <h2> Overview </h2>
