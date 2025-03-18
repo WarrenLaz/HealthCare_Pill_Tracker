@@ -4,6 +4,8 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import LogModal from "../components/LogModal";
 import MiniMedCard from "../components/MiniMedCard";
+import CalendarStrip from "react-native-calendar-strip";
+import moment from "moment"; // Import moment
 
 export default function HomeScreen() {
   const [isLog, setIsLog] = useState(false);
@@ -47,13 +49,29 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={medsData}
-        keyExtractor={(item) => item._id.toString()} // Ensure it's a unique value and converted to a string
-        renderItem={({ item }) => (
-          <MiniMedCard item={item} onPress={pressMed} />
-        )}
+      {/* Adjusted CalendarStrip with skinnier styling */}
+      <CalendarStrip
+        scrollable
+        style={styles.calendarStrip}
+        calendarHeaderStyle={{ color: "black", fontSize: 16 }}
+        dateNumberStyle={{ color: "black", fontSize: 14 }}
+        dateNameStyle={{ color: "black", fontSize: 14 }}
+        highlightDateNameStyle={{ color: "blue" }}
+        highlightDateNumberStyle={{ color: "blue" }}
+        calendarColor={"#ffffff"}
+        selectedDate={moment()} // Set the current date as selected
+        onDateSelected={(date) => console.log("Selected Date:", date.format())} // Example of onDateSelected handler
       />
+
+      <View style={styles.medsList}>
+        <FlatList
+          data={medsData}
+          keyExtractor={(item) => item._id.toString()} // Ensure it's a unique value and converted to a string
+          renderItem={({ item }) => (
+            <MiniMedCard item={item} onPress={pressMed} />
+          )}
+        />
+      </View>
 
       {isLog && Med && (
         <LogModal
@@ -70,8 +88,19 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F1F4FF",
+    backgroundColor: "#ffffff",
+    padding: 0,
+    paddingTop: 50,
+  },
+  calendarStrip: {
+    height: 80, // Reduced height for a skinnier calendar strip
+    marginBottom: 10, // Reduced margin to fit it as a header
+    paddingTop: 0, // Adjust the top padding
+    paddingBottom: 5, // Adjust the bottom padding
+  },
+  medsList: {
     padding: 20,
-    paddingTop: 80,
+    height: "100%",
+    backgroundColor: "#F1F4FF",
   },
 });
