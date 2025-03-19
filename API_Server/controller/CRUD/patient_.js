@@ -6,6 +6,7 @@ const { ObjectId } = require("mongodb");
 const nodemailer = require("nodemailer");
 
 async function sendSecureEmail(Email_Address, Password) {
+  console.log("\x1bPASSWORD: \x1b[0m" + Password);
   try {
     // 1️⃣ Configure the email transporter
     const transporter = nodemailer.createTransport({
