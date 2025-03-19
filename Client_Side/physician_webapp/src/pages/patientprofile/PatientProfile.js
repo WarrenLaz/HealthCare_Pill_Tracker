@@ -22,6 +22,13 @@ export const PatientProfile = () => {
   const addNewPrescription = (newPresc) => {
     setPrescription((prevPresc) => [...prevPresc, newPresc]);
   };
+
+  // Handle Delete Function
+  const handleDeletePrescription = (id) => {
+    // NEEDS WORK HERE - handle actually deleting the presc from both the DB and the UI
+    console.log(`Prescription Deleted: ${id}`);
+  };
+
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
@@ -34,8 +41,7 @@ export const PatientProfile = () => {
         {/*left side for user info*/}
         <div className=" sm:w-full md:w-full lg:w-1/2 flex flex-col justify-start items-center">
           <PatientInfoContainer />
-          <GraphLogs className="mt-4" logs={pat.Logs}/>
-
+          <GraphLogs className="mt-4" logs={pat.Logs} />
         </div>
         {/*right side for prescriptions*/}
         <div className="sm:w-full md:w-full lg:w-1/2">
@@ -56,6 +62,7 @@ export const PatientProfile = () => {
                 <PrescriptionContainer
                   key={prec._id || prec.MedName}
                   prescData={prec}
+                  onDelete={handleDeletePrescription}
                 />
               ))
             ) : (

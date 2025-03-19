@@ -35,7 +35,7 @@ const PrescriptionContainer = ({ prescData, onDelete }) => {
       <div className="flex justify-end ">
         <button
           className=" bottom-2 right-2 text-red-500 hover:text-red-700"
-          onClick={() => onDelete(prescData.id)}
+          onClick={() => onDelete(prescData._id)}
         >
           <FaTrash size={18} />
         </button>
