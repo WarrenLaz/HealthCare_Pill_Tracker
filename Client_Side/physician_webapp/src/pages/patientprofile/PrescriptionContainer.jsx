@@ -1,6 +1,7 @@
 import React from "react";
+import { FaTrash } from "react-icons/fa";
 
-const PrescriptionContainer = ({ prescData }) => {
+const PrescriptionContainer = ({ prescData, onDelete }) => {
   if (!prescData) {
     return <p className="text-gray-600">Invalid prescription data</p>;
   }
@@ -10,9 +11,14 @@ const PrescriptionContainer = ({ prescData }) => {
       <h1 className="text-sm font-bold">
         {prescData.MedName} {prescData.Form} {prescData.Dosage} mg
       </h1>
-      <p className="text-gray-600">Progress : <progress value={prescData.pills_left/prescData.Quantity} /></p>
+      <p className="text-gray-600">
+        Progress :{" "}
+        <progress value={prescData.pills_left / prescData.Quantity} />
+      </p>
       <p className="text-gray-600">Quantity: {prescData.Quantity || "N/A"}</p>
-      <p className="text-gray-600">Pills Left: {prescData.pills_left || "N/A"}</p>
+      <p className="text-gray-600">
+        Pills Left: {prescData.pills_left || "N/A"}
+      </p>
       <p className="text-gray-600">Interval: {prescData.Interval || "N/A"}</p>
       <p className="text-gray-600">
         Frequency:{" "}
@@ -26,6 +32,14 @@ const PrescriptionContainer = ({ prescData }) => {
             ))
           : "N/A"}
       </p>
+      <div className="flex justify-end ">
+        <button
+          className=" bottom-2 right-2 text-red-500 hover:text-red-700"
+          onClick={() => onDelete(prescData.id)}
+        >
+          <FaTrash size={18} />
+        </button>
+      </div>
     </div>
   );
 };
