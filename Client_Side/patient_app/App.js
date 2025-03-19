@@ -42,7 +42,7 @@ function HomeTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          header: () => <CustomHeader />,
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -91,8 +91,8 @@ export default function App() {
     <Auth>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen}/>
-          <Stack.Screen name="HomeTabs" component={HomeTabs}/>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="HomeTabs" component={HomeTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </Auth>
