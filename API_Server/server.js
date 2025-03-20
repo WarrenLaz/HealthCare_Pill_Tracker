@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT;
 const cors = require("cors");
 const corsOptions = require("./middleware/creds");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const JWTver = require("./middleware/jwtver");
 const jwtver_0 = require("./middleware/jwtver_0");
 
@@ -17,12 +17,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
 
-
-//PATIENT APP 
+//PATIENT APP
 // ----------------------------------------------
 app.use("/patientLogin", require("./routes/patientLogin"));
 
-//PHYSICIAN WEBAPP 
+//PHYSICIAN WEBAPP
 // ----------------------------------------------
 //Login
 app.use("/Login", require("./routes/login"));
@@ -33,7 +32,6 @@ app.use("/refresh", require("./routes/refresh"));
 //refresh
 app.use("/logout", require("./routes/logout"));
 
-
 //This middlewear just verifies the JWT Token, it doesn't change the payload.
 app.use(jwtver_0);
 //logs
@@ -41,9 +39,10 @@ app.use("/logs", require("./routes/logs"));
 
 //Prescription Info
 app.use("/prescription", require("./routes/prescription_"));
+app.use("/prescription", require("./routes/deletepresc"));
 
 app.use("/search", require("./routes/search_"));
-//used for verification, cannot sql inject without the jwt cookie. 
+//used for verification, cannot sql inject without the jwt cookie.
 
 //This middlewear both verifies the JWT Token, then changes the payload to the JWT Token decryption.
 app.use(JWTver);
