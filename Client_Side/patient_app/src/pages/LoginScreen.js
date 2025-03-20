@@ -23,7 +23,7 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://141.215.213.8:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        "http://192.168.1.136:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
         //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },
@@ -49,7 +49,7 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require("../../assets/background.png")} // Ensure you have the image in the correct path
+      source={require("../../assets/background.png")}
       style={styles.background}
       resizeMode="cover"
     >

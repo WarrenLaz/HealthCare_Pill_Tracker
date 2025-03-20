@@ -9,10 +9,25 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import useAuth from "../hooks/useAuth";
 
 export default function ProfileScreen() {
   const navigation = useNavigation(); // Initialize navigation
-
+  const { auth } = useAuth();
+  const firstname = auth.token.First_Name;
+  const lastname = auth.token.Last_Name;
+  const email = auth.token.Email_Address;
+  const phone = auth.token.Phone_Number;
+  const formatPhoneNumber = (phoneNumber) => {
+    if (phoneNumber && phoneNumber.length === 10) {
+      return `${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+        3,
+        6
+      )}-${phoneNumber.slice(6)}`;
+    }
+    return phoneNumber;
+  };
+  const formattedPhone = formatPhoneNumber(phone);
   // Handle Logout Function
   const handleLogout = () => {
     Alert.alert(
@@ -40,20 +55,20 @@ export default function ProfileScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionHeader}>Account Information</Text>
         <Text style={styles.infoHeader}>First Name</Text>
-        <TextInput style={styles.input} value="John" editable={false} />
+        <TextInput style={styles.input} value={firstname} editable={false} />
 
         <Text style={styles.infoHeader}>Last Name</Text>
-        <TextInput style={styles.input} value="Doe" editable={false} />
+        <TextInput style={styles.input} value={lastname} editable={false} />
 
         <Text style={styles.infoHeader}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value="johndoe@gmail.com"
-          editable={false}
-        />
+        <TextInput style={styles.input} value={email} editable={false} />
 
         <Text style={styles.infoHeader}>Phone Number</Text>
-        <TextInput style={styles.input} value="000-000-000" editable={false} />
+        <TextInput
+          style={styles.input}
+          value={formattedPhone}
+          editable={false}
+        />
       </View>
 
       <TouchableOpacity onPress={handleLogout} style={styles.button}>
