@@ -40,7 +40,7 @@ const DocInfoContainer = () => {
         phoneNumber: credentials.Phone_Number || "",
       });
     }
-  }, [credentials]); // Update formData when credentials change
+  }, [credentials]);
 
   const [initialData, setInitialData] = useState({ ...formData });
 
@@ -54,14 +54,18 @@ const DocInfoContainer = () => {
   };
 
   const handleCancel = () => {
-    setFormData({ ...initialData }); // Reset the form to its initial state
-    setIsEditing(false); // Exit edit mode
+    setFormData({ ...initialData });
+    setIsEditing(false);
   };
 
   const handleSave = () => {
-    setInitialData({ ...formData }); // Save current form data as initial data
-    setIsEditing(false); // Exit edit mode
+    setInitialData({ ...formData });
+    setIsEditing(false);
   };
+
+  if (!credentials) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">

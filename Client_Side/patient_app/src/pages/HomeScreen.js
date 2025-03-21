@@ -1,21 +1,29 @@
-import React, { useState } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import React, { useState, useMemo } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import LogModal from "../components/LogModal";
 import MiniMedCard from "../components/MiniMedCard";
 import CalendarStrip from "react-native-calendar-strip";
-import moment from "moment"; // Import moment
+import moment from "moment";
 
 export default function HomeScreen() {
-  const [isLog, setIsLog] = useState(false);
-  const [Med, setMed] = useState(null);
+  const [isLog, setIsLog] = useState(false); // state for controlling log modal visibility
+  const [Med, setMed] = useState(null); // state for tracking selected medication
+  const [selectedDate, setSelectedDate] = useState(moment()); // state for tracking selected date, default to current date
+
   const { auth } = useAuth();
   const medsData = auth.token.Prescriptions;
   const p_id = auth.token._id;
 
   async function sendLog(MedName_, mid_, amount_, dose, id_) {
-    console.log("Logging data:", { MedName_, mid_, amount_, dose, id_ });
+    console.log("Logging data:", {
+      MedName_,
+      mid_,
+      amount_,
+      dose,
+      id_,
+    });
 
     try {
       const response = await axios.post(
@@ -38,41 +46,102 @@ export default function HomeScreen() {
     }
   }
 
-  function pressMed(med_) {
-    setMed(med_);
+  // function to open log modal and set selected medication
+  function pressMed(med) {
+    setMed(med);
     setIsLog(true);
   }
 
+  // function to close log modal
   function closeModal() {
     setIsLog(false);
   }
 
+  // function to check if a medication should be displayed on the selected date
+  //THIS FUNCTION NEEDS WORK, right now it displays meds from march 20-april 20.
+  //  we need the actual start and end date
+  function shouldDisplayMed(med, date) {
+    const startDate = moment("2025-03-20");
+    const endDate = moment("2025-04-20");
+
+    // check if selected date is within the valid range
+    if (!date.isBetween(startDate, endDate, "day", "[]")) return false;
+
+    // get medication interval (daily, weekly, etc.)
+    const interval = med.Interval.toLowerCase();
+    // get the day of the week for selected date
+    const dayOfWeek = date.format("dddd");
+
+    // if medication is daily, always show it
+    // if medication is weekly, only show it on sundays
+    // THIS NEEDS WORK as well. we should use the start date as the single day it is displayed
+    return (
+      interval === "daily" || (interval === "weekly" && dayOfWeek === "Sunday")
+    );
+  }
+
+  // memoized function to filter medications based on frequency and selected date
+  const filteredMedsByFrequency = useMemo(() => {
+    return (frequency) =>
+      medsData.filter(
+        (med) =>
+          // check if the medication should be displayed on the selected date
+          shouldDisplayMed(med, selectedDate) &&
+          // check if the medication has a frequency detail that matches the given frequency
+          med.FrequencyDetails?.some((detail) => detail.frequency === frequency)
+      );
+  }, [medsData, selectedDate]); // re-run the filtering only when medications data or selected date changes
+
   return (
     <View style={styles.container}>
-      {/* Adjusted CalendarStrip with skinnier styling */}
+      {/* calendar strip to allow users to select a date */}
       <CalendarStrip
         scrollable
         style={styles.calendarStrip}
-        calendarHeaderStyle={{ color: "black", fontSize: 16 }}
-        dateNumberStyle={{ color: "black", fontSize: 14 }}
-        dateNameStyle={{ color: "black", fontSize: 14 }}
-        highlightDateNameStyle={{ color: "blue" }}
-        highlightDateNumberStyle={{ color: "blue" }}
-        calendarColor={"#ffffff"}
-        selectedDate={moment()} // Set the current date as selected
-        onDateSelected={(date) => console.log("Selected Date:", date.format())} // Example of onDateSelected handler
+        calendarHeaderStyle={styles.calendarHeader}
+        dateNumberStyle={styles.dateText}
+        dateNameStyle={styles.dateText}
+        highlightDateNameStyle={styles.highlightedDate}
+        highlightDateNumberStyle={styles.highlightedDate}
+        calendarColor="#ffffff"
+        selectedDate={selectedDate}
+        onDateSelected={setSelectedDate} // update selected date when user picks a new one
       />
 
-      <View style={styles.medsList}>
-        <FlatList
-          data={medsData}
-          keyExtractor={(item) => item._id.toString()} // Ensure it's a unique value and converted to a string
-          renderItem={({ item }) => (
-            <MiniMedCard item={item} onPress={pressMed} />
-          )}
-        />
-      </View>
+      {/* list of our generic medication times (morning, lunch, etc.) */}
+      <FlatList
+        contentContainerStyle={styles.medsList}
+        data={[
+          "Before Breakfast",
+          "At Breakfast",
+          "MidMorning",
+          "At Lunch",
+          "Midday",
+          "At Dinner",
+          "Before Bed",
+        ]}
+        keyExtractor={(item) => item}
+        renderItem={({ item: frequency }) => {
+          // get medications that match the selected frequency and date
+          const filteredMeds = filteredMedsByFrequency(frequency);
 
+          // if no medications exist for this time, don't render anything
+          if (filteredMeds.length === 0) return null;
+
+          return (
+            <View>
+              {/* display section header for each frequency */}
+              <Text style={styles.sectionHeader}>{frequency}</Text>
+              {/* render each medication as a mini med card */}
+              {filteredMeds.map((med) => (
+                <MiniMedCard key={med._id} item={med} onPress={pressMed} />
+              ))}
+            </View>
+          );
+        }}
+      />
+
+      {/* modal for logging medication intake */}
       {isLog && Med && (
         <LogModal
           sendLog={sendLog}
@@ -86,21 +155,17 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    padding: 0,
-    paddingTop: 50,
+  container: { flex: 1, backgroundColor: "#ffffff", paddingTop: 50 },
+  calendarStrip: { height: 80, marginBottom: 10, paddingBottom: 5 },
+  medsList: { padding: 20, backgroundColor: "#F1F4FF", flexGrow: 1 },
+  sectionHeader: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5,
+    color: "#333",
   },
-  calendarStrip: {
-    height: 80, // Reduced height for a skinnier calendar strip
-    marginBottom: 10, // Reduced margin to fit it as a header
-    paddingTop: 0, // Adjust the top padding
-    paddingBottom: 5, // Adjust the bottom padding
-  },
-  medsList: {
-    padding: 20,
-    height: "100%",
-    backgroundColor: "#F1F4FF",
-  },
+  calendarHeader: { color: "black", fontSize: 16 },
+  dateText: { color: "black", fontSize: 14 },
+  highlightedDate: { color: "blue" },
 });

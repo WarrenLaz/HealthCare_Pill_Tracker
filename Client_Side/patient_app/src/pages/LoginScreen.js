@@ -49,7 +49,7 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require("../../assets/background.png")} // Ensure you have the image in the correct path
+      source={require("../../assets/background.png")}
       style={styles.background}
       resizeMode="cover"
     >

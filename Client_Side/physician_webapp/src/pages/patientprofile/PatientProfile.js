@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import Modal from "../../components/modals/Modal";
@@ -9,24 +8,36 @@ import PatientInfoContainer from "./PatientInfoContainer";
 import PrescriptionContainer from "./PrescriptionContainer";
 import usePat from "../../hooks/usePat";
 import GraphLogs from "./GraphLog";
+
 export const PatientProfile = () => {
   const { auth } = useAuth();
   const { pat } = usePat();
-  const [Precription, setPrescription] = useState(pat.Prescriptions);
+  const [Precription, setPrescription] = useState(pat.Prescriptions); // make sure it's singular here
   const [isModalOpen, setIsModalOpen] = useState(false);
   const prescriptionCount = Precription?.length || 0;
+
   // Function to toggle the modal visibility
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   const addNewPrescription = (newPresc) => {
     setPrescription((prevPresc) => [...prevPresc, newPresc]);
   };
 
   // Handle Delete Function
-  const handleDeletePrescription = (id) => {
-    // NEEDS WORK HERE - handle actually deleting the presc from both the DB and the UI
-    console.log(`Prescription Deleted: ${id}`);
+  const handleDeletePrescription = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/prescription/${id}`, {
+        headers: { Authorization: `Bearer ${auth.payload}` },
+      });
+
+      setPrescription((prev) =>
+        prev.filter((prescription) => prescription._id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting prescription:", error);
+    }
   };
 
   return (
@@ -57,7 +68,7 @@ export const PatientProfile = () => {
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-            {Precription.length >= 0 ? (
+            {Precription.length > 0 ? ( // corrected to check for valid length
               Precription.map((prec) => (
                 <PrescriptionContainer
                   key={prec._id || prec.MedName}
