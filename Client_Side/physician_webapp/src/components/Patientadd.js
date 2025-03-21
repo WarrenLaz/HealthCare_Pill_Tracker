@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/axiosPrivate";
+import { formatInput } from "../utils/formatInput";
 
 export const Patientadd = () => {
   const { auth } = useAuth();
@@ -12,19 +13,25 @@ export const Patientadd = () => {
     Email_Address: "",
     Phone_Number: "",
   });
-  
+
   const axiosprivate = useAxiosPrivate();
 
   async function submittion(e) {
     e.preventDefault();
     console.log(RegForm);
-    {/*Axios private uses the UseAxiosPrivate hook which uses a private domain to use stuff*/}
+    {
+      /*Axios private uses the UseAxiosPrivate hook which uses a private domain to use stuff*/
+    }
     await axiosprivate
-      .post("http://localhost:8000/patients", { RegForm },  {
-        headers: {
-          'Authorization': 'Bearer ' + String(auth.payload)
+      .post(
+        "http://localhost:8000/patients",
+        { RegForm },
+        {
+          headers: {
+            Authorization: "Bearer " + String(auth.payload),
+          },
         }
-      })
+      )
       .then((resp) => {
         console.log(resp.data);
         setResp(resp.data);
@@ -32,7 +39,8 @@ export const Patientadd = () => {
   }
 
   const inputs = (e) => {
-    setRegForm({ ...RegForm, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setRegForm({ ...RegForm, [name]: formatInput(name, value) });
   };
 
   return (
