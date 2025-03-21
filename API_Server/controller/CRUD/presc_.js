@@ -67,7 +67,6 @@ const getPresc = (req, res) => {
 
 const deletePres = (req, res) => {
   const { id } = req.params; // Get prescription ID from URL parameter
-  console.log("hi");
   if (!id) {
     return res.status(400).json({ error: "Prescription ID is required" });
   }

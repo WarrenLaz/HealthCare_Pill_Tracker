@@ -84,11 +84,28 @@ const addPatient = (req, res) => {
     });
 };
 
-const deletePatient = (req, res) => {
-  const payload = req.body["id"];
-  db.deleteData(db.getDB("Patients", "patient"), {
-    _id: payload,
-  });
+const deletePatient = async (req, res) => {
+  try {
+    const { id } = req.params; // Get patient ID from request parameters
+    if (!id) {
+      return res.status(400).json({ error: "Patient ID is required" });
+    }
+
+    const patientId = new ObjectId(id);
+
+    await db.getDB("Patients", "patient").deleteOne({ _id: patientId });
+
+    await db.updateData(
+      db.getDB("Physicians", "Physician"),
+      { Patients: patientId },
+      { $pull: { Patients: patientId } }
+    );
+
+    res.json({ message: "Patient successfully deleted and reference removed" });
+  } catch (err) {
+    console.error("Error deleting patient:", err);
+    res.status(500).json({ error: "Error deleting patient" });
+  }
 };
 
 const getPatients = (req, res) => {
