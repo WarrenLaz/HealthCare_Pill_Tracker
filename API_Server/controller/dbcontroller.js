@@ -20,7 +20,7 @@ async function getData(collection, query) {
     await MongoClient.connect();
     console.log("connected to Mongo [GET]: ", collection);
     const table = collection;
-    return await table.find(query).toArray();
+    return table.find(query).toArray();
   } catch (err) {
     console.log("Error Unsucessful: ", err);
     return err;

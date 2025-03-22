@@ -29,7 +29,7 @@ export const Login = () => {
         setResp(resp.data['status']);
         const payload = resp?.data?.packet;
         setAuth({payload});
-        if(resp.data['status'] == "200 OK"){
+        if(resp.data['status'] === "200 OK"){
           console.log('ok');
           navigate(from, {replace:true});
         }
