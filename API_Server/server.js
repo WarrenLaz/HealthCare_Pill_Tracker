@@ -50,5 +50,6 @@ app.use(JWTver);
 app.use("/user", require("./routes/user_"));
 //patient info
 app.use("/patients", require("./routes/patient"));
+app.use("/patients", require("./routes/delepat"));
 
 app.listen(port, () => console.log("Server is running", port));
