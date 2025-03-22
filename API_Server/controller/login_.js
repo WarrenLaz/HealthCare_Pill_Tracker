@@ -1,52 +1,55 @@
-const db = require('./dbcontroller');
-const sha256 = require('../encryptor/sha256');
-const jwt = require('jsonwebtoken');
+const db = require("./dbcontroller");
+const sha256 = require("../encryptor/sha256");
+const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongodb");
 
 //Login
-const Login  = (req,res) =>{
-    payload = req.body['LoginForm'];
-    db.getData(db.getDB('Physicians', 'Physician'), {Email_Address : payload['Username']}).then(
-        data => data[0]
-    ).then(
-        data => {
-            if (typeof data === 'undefined') {
-                //invalid email
-                res.send({status : "Invalid Email", packet: ""});
-            } else{
-                const pass = sha256(payload['Password']);
-                if(data['Password'] === pass){
-                    //VALID
-                    accessToken = jwt.sign(
-                        {"user" : data['_id']}, 
-                        process.env.ATS, 
-                        {expiresIn: '30s'}
-                    );
-                    refreshToken = jwt.sign(
-                        {"user" : data['_id']}, 
-                        process.env.RTS, 
-                        {expiresIn: '1d'}
-                    );
-                    
-                    console.log(refreshToken);
+const Login = (req, res) => {
+  payload = req.body["LoginForm"];
+  db.getData(db.getDB("Physicians", "Physician"), {
+    Email_Address: payload["Username"],
+  })
+    .then((data) => data[0])
+    .then((data) => {
+      if (typeof data === "undefined") {
+        //invalid email
+        res.send({ status: "Invalid Email", packet: "" });
+      } else {
+        const pass = sha256(payload["Password"]);
+        if (data["Password"] === pass) {
+          //VALID
+          accessToken = jwt.sign({ user: data["_id"] }, process.env.ATS, {
+            expiresIn: "30s",
+          });
+          refreshToken = jwt.sign({ user: data["_id"] }, process.env.RTS, {
+            expiresIn: "1d",
+          });
 
-                    res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 })
+          console.log(refreshToken);
 
-                    db.updateData(db.getDB('Physicians', 'Physician'), 
-                        {_id : ObjectId(data['_id'])}, 
-                        {$set : {jwtauth : refreshToken}}
-                    ).then(res => console.log(res));
+          res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true,
+            maxAge: 24 * 60 * 60 * 1000,
+          });
 
-                    res.send({status: "200 OK", packet: accessToken});
-                } else{
-                    //invalid password
-                    res.send({status: "Invalid Password",packet: ""} );
-                }
-            }
-    })
+          db.updateData(
+            db.getDB("Physicians", "Physician"),
+            { _id: ObjectId(data["_id"]) },
+            { $set: { jwtauth: refreshToken } }
+          ).then((res) => console.log(res));
 
-    // payload = res.get()
-    console.log("Login Successful");
-}
+          res.send({ status: "200 OK", packet: accessToken });
+        } else {
+          //invalid password
+          res.send({ status: "Invalid Password", packet: "" });
+        }
+      }
+    });
+
+  // payload = res.get()
+  console.log("Login Successful");
+};
 
 module.exports = Login;

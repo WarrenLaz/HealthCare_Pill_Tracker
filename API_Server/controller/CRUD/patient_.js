@@ -124,32 +124,45 @@ const getPatients = (req, res) => {
     });
 };
 
-const updatePatient = (req, res) => {
-  const payload = req.body;
-  const patientId = payload["id"]; // The patient's unique identifier (assumes ObjectId as string)
-  const updates = payload["updates"]; // An object containing the fields to be updated
+const updatePatient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
 
-  if (!patientId || !updates) {
-    res.status(400).send("Invalid Request: Missing id or updates");
-    return;
+    // Validate ObjectId format
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid Patient ID" });
+    }
+    const patientId = new ObjectId(id);
+
+    // Prevent updating restricted fields like _id
+    delete updates._id;
+
+    // Check if patient exists before updating
+    const patient = await db
+      .getDB("Patients", "patient")
+      .findOne({ _id: patientId });
+    if (!patient) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    // Perform the update
+    const result = await db
+      .getDB("Patients", "patient")
+      .updateOne({ _id: patientId }, { $set: updates });
+
+    // Check if any changes were made
+    if (result.modifiedCount === 0) {
+      return res
+        .status(200)
+        .json({ message: "No changes made to the patient record" });
+    }
+
+    res.json({ message: "Patient successfully updated" });
+  } catch (err) {
+    console.error("Error updating patient:", err);
+    res.status(500).json({ error: "An internal error occurred" });
   }
-
-  db.updateData(
-    db.getDB("Patients", "patient"),
-    { _id: ObjectId(patientId) }, // Filter to find the patient by ID
-    { $set: updates } // Updates to apply
-  )
-    .then((result) => {
-      if (result.matchedCount === 0) {
-        res.status(404).send("Patient Not Found");
-      } else {
-        res.send("Patient Updated Successfully");
-      }
-    })
-    .catch((err) => {
-      console.error("Error updating patient:", err);
-      res.status(500).send("Internal Server Error");
-    });
 };
 
 module.exports = { addPatient, deletePatient, getPatients, updatePatient };
