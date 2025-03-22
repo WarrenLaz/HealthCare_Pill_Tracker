@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FiEdit, FiCheck } from "react-icons/fi";
 import usePat from "../../hooks/usePat";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { formatInput } from "../../utils/formatInput";
+import useAxiosPrivate from "../../hooks/axiosPrivate";
 
 const PatientInfoContainer = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,6 +11,7 @@ const PatientInfoContainer = () => {
   const { pat, setPat } = usePat();
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     setFormData({
@@ -48,7 +49,7 @@ const PatientInfoContainer = () => {
     }
 
     try {
-      const response = await axios.put(
+      const response = await axiosPrivate.put(
         `http://localhost:8000/patients/${pat._id}`,
         {
           First_Name: formData.firstName,

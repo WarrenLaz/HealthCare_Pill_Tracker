@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import Modal from "../../components/modals/Modal";
 import { BsPlusLg } from "react-icons/bs";
@@ -9,6 +8,7 @@ import PrescriptionContainer from "./PrescriptionContainer";
 import usePat from "../../hooks/usePat";
 import GraphLogs from "./GraphLog";
 import { useNavigate } from "react-router-dom";
+import useAxiosPrivate from "../../hooks/axiosPrivate";
 
 export const PatientProfile = () => {
   const { auth } = useAuth();
@@ -18,6 +18,7 @@ export const PatientProfile = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete confirmation modal
   const [isPatientDeleted, setIsPatientDeleted] = useState(false); // To track if the patient was deleted
   const prescriptionCount = Precription?.length || 0;
+  const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   // Function to toggle the modal visibility
   const toggleModal = () => {
@@ -35,7 +36,7 @@ export const PatientProfile = () => {
   // Handle Delete Prescription Function
   const handleDeletePrescription = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/prescription/${id}`, {
+      await axiosPrivate.delete(`http://localhost:8000/prescription/${id}`, {
         headers: { Authorization: `Bearer ${auth.payload}` },
       });
 
@@ -50,7 +51,7 @@ export const PatientProfile = () => {
   // Handle Delete Patient Function
   const handleDeletePatient = async () => {
     try {
-      await axios.delete(`http://localhost:8000/patients/${pat._id}`, {
+      await axiosPrivate.delete(`http://localhost:8000/patients/${pat._id}`, {
         headers: { Authorization: `Bearer ${auth.payload}` },
       });
 
