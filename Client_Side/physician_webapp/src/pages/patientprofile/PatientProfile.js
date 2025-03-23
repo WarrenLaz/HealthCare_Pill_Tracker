@@ -9,6 +9,7 @@ import usePat from "../../hooks/usePat";
 import GraphLogs from "./GraphLog";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/axiosPrivate";
+import toast from "react-hot-toast";
 
 export const PatientProfile = () => {
   const { auth } = useAuth();
@@ -43,8 +44,10 @@ export const PatientProfile = () => {
       setPrescription((prev) =>
         prev.filter((prescription) => prescription._id !== id)
       );
+      toast.success("Medication successfully removed");
     } catch (error) {
       console.error("Error deleting prescription:", error);
+      toast.error("Error deleting prescription");
     }
   };
 

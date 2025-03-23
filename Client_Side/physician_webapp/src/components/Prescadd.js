@@ -4,6 +4,7 @@ import usePat from "../hooks/usePat";
 import Calendar from "react-calendar";
 import useAuth from "../hooks/useAuth";
 import "react-calendar/dist/Calendar.css";
+import toast from "react-hot-toast";
 
 export const Prescadd = ({ addNewPrescription }) => {
   const [activeTab, setActiveTab] = useState("Search");
@@ -75,8 +76,8 @@ export const Prescadd = ({ addNewPrescription }) => {
       return;
     }
 
-    await axiosPrivate
-      .post(
+    try {
+      await axiosPrivate.post(
         "http://localhost:8000/prescription",
         { prescData },
         {
@@ -84,11 +85,14 @@ export const Prescadd = ({ addNewPrescription }) => {
             Authorization: "Bearer " + String(auth.payload),
           },
         }
-      )
-      .then((data) => {
-        addNewPrescription(prescData);
-        console.log("Prescription Added", data);
-      });
+      );
+
+      addNewPrescription(prescData);
+      toast.success("Medication successfully added!");
+    } catch (error) {
+      toast.error("Failed to add medication. Please try again.");
+      console.error("Error adding prescription:", error);
+    }
   };
 
   // handlea drug selection an  details
@@ -146,7 +150,7 @@ export const Prescadd = ({ addNewPrescription }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden h-[500px] flex flex-col">
+    <div className="max-w-md mx-auto bg-white  rounded-lg overflow-hidden h-[500px] flex flex-col">
       {}
       <div className="px-6 py-4 border-b">
         <h2 className="text-2xl font-bold">Add New Prescription</h2>
@@ -354,7 +358,7 @@ export const Prescadd = ({ addNewPrescription }) => {
         )}
       </div>
       {}
-      <div className="px-6 py-4 bg-gray-50">
+      <div className="px-6 py-4 ">
         <button
           onClick={submission}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
