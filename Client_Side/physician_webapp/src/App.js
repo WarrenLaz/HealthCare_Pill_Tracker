@@ -12,31 +12,33 @@ import { Batches } from "./pages/BatchesPage/Batches";
 import { MyProfile } from "./pages/DocProfile/MyProfile";
 import PersistLogin from "./components/PersistLogin";
 import RequirePatient from "./components/RequirePatient";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/Reg" element={<Reg />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Prescadd" element={<Prescadd />} />
+      <Toaster />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/Reg" element={<Reg />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Prescadd" element={<Prescadd />} />
 
-          {/* Private Routes */}
-          <Route element = {<PersistLogin/>}>
+        {/* Private Routes */}
+        <Route element={<PersistLogin />}>
           <Route element={<RequireAuth />}>
-            <Route element={<SidebarLayout />}> 
+            <Route element={<SidebarLayout />}>
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/Batches" element={<Batches />} />
               <Route path="/MyProfile" element={<MyProfile />} />
-              <Route element = {<RequirePatient/>}>
-              <Route path="/PatientProfile" element={<PatientProfile />} />
+              <Route element={<RequirePatient />}>
+                <Route path="/PatientProfile" element={<PatientProfile />} />
               </Route>
-            </Route> 
+            </Route>
           </Route>
-          </Route>
-        </Routes>
+        </Route>
+      </Routes>
     </Router>
   );
 }
