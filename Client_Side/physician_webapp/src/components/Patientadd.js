@@ -1,12 +1,23 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/axiosPrivate";
 import { formatInput } from "../utils/formatInput";
+import { z } from "zod";
+
+const patientSchema = z.object({
+  First_Name: z.string().min(1, "First Name is required"),
+  Last_Name: z.string().min(1, "Last Name is required"),
+  Email_Address: z.string().email("Invalid email format"),
+  Phone_Number: z
+    .string()
+    .min(10, "Phone Number must be at least 10 digits")
+    .max(15, "Phone Number is too long"),
+});
 
 export const Patientadd = () => {
   const { auth } = useAuth();
   const [Resp, setResp] = useState("");
+  const [errors, setErrors] = useState({});
   const [RegForm, setRegForm] = useState({
     First_Name: "",
     Last_Name: "",
@@ -16,14 +27,27 @@ export const Patientadd = () => {
 
   const axiosprivate = useAxiosPrivate();
 
+  const handleValidation = () => {
+    try {
+      patientSchema.parse(RegForm);
+      setErrors({});
+      return true;
+    } catch (err) {
+      const formattedErrors = err.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+      setErrors(formattedErrors);
+      return false;
+    }
+  };
+
   async function submittion(e) {
     e.preventDefault();
-    console.log(RegForm);
-    {
-      /*Axios private uses the UseAxiosPrivate hook which uses a private domain to use stuff*/
-    }
-    await axiosprivate
-      .post(
+    if (!handleValidation()) return;
+
+    try {
+      const resp = await axiosprivate.post(
         "http://localhost:8000/patients",
         { RegForm },
         {
@@ -31,11 +55,12 @@ export const Patientadd = () => {
             Authorization: "Bearer " + String(auth.payload),
           },
         }
-      )
-      .then((resp) => {
-        console.log(resp.data);
-        setResp(resp.data);
-      });
+      );
+      console.log(resp.data);
+      setResp(resp.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   }
 
   const inputs = (e) => {
@@ -47,50 +72,32 @@ export const Patientadd = () => {
     <div className="p-8 space-y-4">
       <h1 className="text-xl font-semibold mb-4">Add New Patient</h1>
       <form onSubmit={submittion} className="space-y-4">
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="First_Name" className="text-sm font-medium">
-            First Name
-          </label>
-          <input
-            type="text"
-            name="First_Name"
-            onChange={inputs}
-            className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="Last_Name" className="text-sm font-medium">
-            Last Name
-          </label>
-          <input
-            type="text"
-            name="Last_Name"
-            onChange={inputs}
-            className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="Email_Address" className=" text-sm font-medium">
-            Email Address
-          </label>
-          <input
-            type="email"
-            name="Email_Address"
-            onChange={inputs}
-            className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
-        <div className="flex flex-col space-y-2">
-          <label htmlFor="Phone_Number" className="text-sm font-medium">
-            Phone Number
-          </label>
-          <input
-            type="number"
-            name="Phone_Number"
-            onChange={inputs}
-            className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-        </div>
+        {[
+          { label: "First Name", name: "First_Name", type: "text" },
+          { label: "Last Name", name: "Last_Name", type: "text" },
+          { label: "Email Address", name: "Email_Address", type: "email" },
+          { label: "Phone Number", name: "Phone_Number", type: "text" },
+        ].map((field) => (
+          <div key={field.name} className="flex flex-col space-y-2">
+            <label htmlFor={field.name} className="text-sm font-medium">
+              {field.label}
+            </label>
+            <input
+              type={field.type}
+              name={field.name}
+              value={RegForm[field.name]}
+              onChange={inputs}
+              className={`px-4 py-2 rounded-md border ${
+                errors[field.name] ? "border-red-500" : "border-gray-300"
+              } focus:outline-none focus:ring-2 ${
+                errors[field.name] ? "focus:ring-red-500" : "focus:ring-primary"
+              }`}
+            />
+            {errors[field.name] && (
+              <span className="text-red-500 text-sm">{errors[field.name]}</span>
+            )}
+          </div>
+        ))}
         <button
           type="submit"
           className="w-full py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-all duration-300"
