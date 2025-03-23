@@ -2,7 +2,8 @@
   "dependencies": {
     "react": "^19.0.0",
     "react-calendar": "^5.1.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2"
   },
   "devDependencies": {
     "cypress": "^14.1.0"

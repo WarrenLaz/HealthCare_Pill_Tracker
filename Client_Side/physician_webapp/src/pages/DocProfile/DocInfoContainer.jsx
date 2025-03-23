@@ -2,26 +2,27 @@ import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { formatInput } from "../../utils/formatInput";
+import useAxiosPrivate from "../../hooks/axiosPrivate";
 
 const DocInfoContainer = () => {
   const { auth } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [credentials, setCreds] = useState({});
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-  });
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState("");
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(auth.payload);
         const res = await axios.get("http://localhost:8000/user", {
           headers: {
             Authorization: "Bearer " + String(auth.payload),
           },
         });
+        console.log(res.data); // Update state with the fetched data
         setCreds(res.data);
       } catch (error) {
         console.error("Error fetching doctors:", error);
@@ -29,38 +30,70 @@ const DocInfoContainer = () => {
     };
 
     fetchData();
-  }, [auth.payload]);
+  }, [auth.payload]); // Only runs when auth.payload changes
 
   useEffect(() => {
     if (credentials) {
       setFormData({
-        firstName: credentials.First_Name || "",
-        lastName: credentials.Last_Name || "",
-        email: credentials.Email_Address || "",
-        phoneNumber: credentials.Phone_Number || "",
+        id: credentials._id,
+        firstName: credentials.First_Name,
+        lastName: credentials.Last_Name,
+        email: credentials.Email_Address,
+        phoneNumber: credentials.Phone_Number,
       });
     }
-  }, [credentials]);
+  }, [credentials]); // Runs only when credentials change
 
-  const [initialData, setInitialData] = useState({ ...formData });
-
+  console.log(credentials);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: formatInput(name, value),
+    }));
   };
 
   const toggleEdit = () => {
+    setError("");
     setIsEditing(!isEditing);
   };
 
   const handleCancel = () => {
-    setFormData({ ...initialData });
     setIsEditing(false);
   };
 
-  const handleSave = () => {
-    setInitialData({ ...formData });
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const response = await axiosPrivate.put(
+        `http://localhost:8000/user/${credentials.id}`, // Ensure credentials._id is correct here
+        {
+          First_Name: formData.firstName,
+          Last_Name: formData.lastName,
+          Email_Address: formData.email,
+          Phone_Number: formData.phoneNumber,
+        },
+        {
+          headers: { Authorization: `Bearer ${auth.payload}` },
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        // Update local state to reflect changes
+        setCreds((prevState) => ({
+          ...prevState,
+          First_Name: formData.firstName,
+          Last_Name: formData.lastName,
+          Email_Address: formData.email,
+          Phone_Number: formData.phoneNumber,
+        }));
+        toggleEdit();
+      }
+    } catch (error) {
+      console.error("Error updating physician info:", error);
+      setError("Failed to update physician information. Please try again.");
+    }
   };
 
   if (!credentials) {

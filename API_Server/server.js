@@ -48,6 +48,7 @@ app.use("/search", require("./routes/search_"));
 app.use(JWTver);
 //userinfo
 app.use("/user", require("./routes/user_"));
+app.use("/user", require("./routes/updatePhys"));
 //patient info
 app.use("/patients", require("./routes/patient"));
 app.use("/patients", require("./routes/delepat"));

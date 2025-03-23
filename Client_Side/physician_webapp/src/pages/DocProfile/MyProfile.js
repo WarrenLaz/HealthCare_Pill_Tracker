@@ -1,19 +1,12 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
-import BatchCount from "../BatchesPage/BatchCount";
 import DocInfoContainer from "./DocInfoContainer";
 
 export const MyProfile = () => {
   const { auth } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [credentials, setCreds] = useState({});
-
-  // Function to toggle the modal visibility
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,30 +17,33 @@ export const MyProfile = () => {
             Authorization: "Bearer " + String(auth.payload),
           },
         });
-        console.log(res.data); // Update state with the fetched data
+        console.log(res.data);
         setCreds(res.data);
       } catch (error) {
         console.error("Error fetching doctors:", error);
+      } finally {
+        setTimeout(() => setLoading(false), 1000); // Add delay before removing loading state
       }
     };
 
     fetchData();
   }, [auth.payload]);
 
-  console.log(auth.payload);
   return (
     <div className="pr-12 pl-16 py-6 bg-secondary w-full h-full">
       <div className="flex-col items-center ">
         <h1 className="text-2xl font-semibold">
-          {" "}
-          Welcome {String(credentials.First_Name)}{" "}
-          {String(credentials.Last_Name)}
+          {loading
+            ? "Loading..."
+            : `Welcome ${credentials.First_Name || "User"} ${
+                credentials.Last_Name || ""
+              }`}
         </h1>
       </div>
       <div className="flex mt-6 flex-col">
         <div className="flex justify-between"></div>
 
-        <DocInfoContainer />
+        {!loading && <DocInfoContainer />}
       </div>
     </div>
   );
