@@ -7,7 +7,10 @@ import { z } from "zod";
 const patientSchema = z.object({
   First_Name: z.string().min(1, "First Name is required"),
   Last_Name: z.string().min(1, "Last Name is required"),
-  Email_Address: z.string().email("Invalid email format"),
+  Email_Address: z
+    .string()
+    .email("Invalid email format")
+    .min(1, "Email Address is required"),
   Phone_Number: z
     .string()
     .min(10, "Phone Number must be at least 10 digits")
@@ -24,6 +27,7 @@ export const Patientadd = () => {
     Email_Address: "",
     Phone_Number: "",
   });
+  const [emailExists, setEmailExists] = useState(false);
 
   const axiosprivate = useAxiosPrivate();
 
@@ -31,6 +35,7 @@ export const Patientadd = () => {
     try {
       patientSchema.parse(RegForm);
       setErrors({});
+      setEmailExists(false); // Reset email error before validating
       return true;
     } catch (err) {
       const formattedErrors = err.errors.reduce((acc, error) => {
@@ -42,9 +47,32 @@ export const Patientadd = () => {
     }
   };
 
+  const checkEmailExists = async () => {
+    try {
+      const response = await axiosprivate.get(
+        `http://localhost:8000/patients/email/${RegForm.Email_Address}`,
+        {
+          headers: {
+            Authorization: "Bearer " + String(auth.payload),
+          },
+        }
+      );
+      return response.data.exists; // Assuming the API returns { exists: true } if email is found
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
+  };
+
   async function submittion(e) {
     e.preventDefault();
     if (!handleValidation()) return;
+
+    const emailInUse = await checkEmailExists();
+    if (emailInUse) {
+      setEmailExists(true);
+      return; // Stop form submission if email exists
+    }
 
     try {
       const resp = await axiosprivate.post(
@@ -65,7 +93,12 @@ export const Patientadd = () => {
 
   const inputs = (e) => {
     const { name, value } = e.target;
-    setRegForm({ ...RegForm, [name]: formatInput(name, value) });
+    // Normalize email to lowercase before setting the state
+    if (name === "Email_Address") {
+      setRegForm({ ...RegForm, [name]: value.toLowerCase() });
+    } else {
+      setRegForm({ ...RegForm, [name]: formatInput(name, value) });
+    }
   };
 
   return (
@@ -98,6 +131,9 @@ export const Patientadd = () => {
             )}
           </div>
         ))}
+        {emailExists && (
+          <span className="text-red-500 text-sm">Email already in use</span>
+        )}
         <button
           type="submit"
           className="w-full py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-all duration-300"
