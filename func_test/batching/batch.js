@@ -5,15 +5,18 @@ const perDay =     [1,   2,  3,   4, 1];
 const Thresh_a = 5;
 const Thresh_b = 10;
 const Testval = 200;
+
 var reorder = false;
 
 const Batching = (req, res = []) => {
+
     for(var j = 0; j < Testval; j++){
         for(var k = 0; k < currentQuant.length; k++){
             currentQuant[k][0] -= perDay[k];
             if(currentQuant[k][0]/perDay[i] < Thresh_b)
                 currentQuant[k][1] = 1;
         }
+
         console.log(currentQuant);
         for(var i = 0; i < currentQuant.length; i++){
             if(currentQuant[i][0]/perDay[i] < Thresh_a){
@@ -35,4 +38,4 @@ const Batching = (req, res = []) => {
     return res
 }
 
-console.log("new")
+console.log(Batching(1))

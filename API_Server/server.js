@@ -45,13 +45,15 @@ app.use("/search", require("./routes/search_"));
 //used for verification, cannot sql inject without the jwt cookie.
 
 //This middlewear both verifies the JWT Token, then changes the payload to the JWT Token decryption.
-app.use(JWTver);
 //userinfo
+app.use(JWTver);
 app.use("/user", require("./routes/user_"));
 app.use("/user", require("./routes/updatePhys"));
+
 //patient info
 app.use("/patients", require("./routes/patient"));
 app.use("/patients", require("./routes/delepat"));
 app.use("/patients", require("./routes/editpat"));
 
 app.listen(port, () => console.log("Server is running", port));
+
