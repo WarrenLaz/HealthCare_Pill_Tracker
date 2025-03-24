@@ -33,7 +33,7 @@ app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
 //This middlewear just verifies the JWT Token, it doesn't change the payload.
-app.use(jwtver_0);
+//app.use(jwtver_0);
 //logs
 app.use("/logs", require("./routes/logs"));
 
