@@ -13,8 +13,12 @@ const patientSchema = z.object({
     .min(1, "Email Address is required"),
   Phone_Number: z
     .string()
-    .min(10, "Phone Number must be at least 10 digits")
-    .max(15, "Phone Number is too long"),
+    .min(1, "Phone Number is required")
+    .refine((val) => {
+      // Check if the phone number follows a simple US format
+      // accepts format 303-230-3203 or 3032303203 or else retunr
+      return /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val);
+    }, "Invalid phone number format"),
 });
 
 export const Patientadd = () => {
@@ -93,14 +97,23 @@ export const Patientadd = () => {
 
   const inputs = (e) => {
     const { name, value } = e.target;
-    // Normalize email to lowercase before setting the state
+
     if (name === "Email_Address") {
       setRegForm({ ...RegForm, [name]: value.toLowerCase() });
+    } else if (name === "Phone_Number") {
+      // Remove non-numeric characters except dashes
+      let numericValue = value.replace(/\D/g, "");
+
+      // Format as XXX-XXX-XXXX while typing
+      let formattedValue = numericValue
+        .slice(0, 10)
+        .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+
+      setRegForm({ ...RegForm, [name]: formattedValue });
     } else {
       setRegForm({ ...RegForm, [name]: formatInput(name, value) });
     }
   };
-
   return (
     <div className="p-8 space-y-4">
       <h1 className="text-xl font-semibold mb-4">Add New Patient</h1>
