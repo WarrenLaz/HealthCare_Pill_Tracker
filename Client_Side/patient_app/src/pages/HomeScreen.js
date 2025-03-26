@@ -33,7 +33,7 @@ export default function HomeScreen() {
             pid: id_,
             mid: mid_,
             dosage: dose,
-            mdate: new Date(),
+            mdate: new Date().toISOString(),
             MedName: MedName_,
             amount: amount_,
           },
