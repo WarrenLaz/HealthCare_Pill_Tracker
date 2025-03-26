@@ -4,33 +4,46 @@ import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 import { formatInput } from "../../utils/formatInput";
 import useAxiosPrivate from "../../hooks/axiosPrivate";
+import { z } from "zod";
+
+// Define validation schema with Zod
+const profileSchema = z.object({
+  firstName: z.string().min(1, "First Name is required"),
+  lastName: z.string().min(1, "Last Name is required"),
+  email: z.string().email("Invalid email format").min(1, "Email is required"),
+  phoneNumber: z
+    .string()
+    .min(1, "Phone Number is required")
+    .refine(
+      (val) => /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val),
+      "Invalid phone number format"
+    ),
+});
 
 const DocInfoContainer = () => {
   const { auth } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [credentials, setCreds] = useState({});
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [resp, setResp] = useState("");
+  const [status, setStatus] = useState(""); // success | error
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(auth.payload);
         const res = await axios.get("http://localhost:8000/user", {
-          headers: {
-            Authorization: "Bearer " + String(auth.payload),
-          },
+          headers: { Authorization: "Bearer " + String(auth.payload) },
         });
-        console.log(res.data); // Update state with the fetched data
         setCreds(res.data);
       } catch (error) {
-        console.error("Error fetching doctors:", error);
+        console.error("Error fetching doctor info:", error);
       }
     };
 
     fetchData();
-  }, [auth.payload]); // Only runs when auth.payload changes
+  }, [auth.payload]);
 
   useEffect(() => {
     if (credentials) {
@@ -42,31 +55,46 @@ const DocInfoContainer = () => {
         phoneNumber: credentials.Phone_Number,
       });
     }
-  }, [credentials]); // Runs only when credentials change
+  }, [credentials]);
 
-  console.log(credentials);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: formatInput(name, value),
-    }));
+    if (name === "email") {
+      setFormData({ ...formData, [name]: value.toLowerCase() });
+    } else if (name === "phoneNumber") {
+      let numericValue = value.replace(/\D/g, "").slice(0, 10);
+      let formattedValue = numericValue.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        "$1-$2-$3"
+      );
+      setFormData({ ...formData, [name]: formattedValue });
+    } else {
+      setFormData({ ...formData, [name]: formatInput(name, value) });
+    }
   };
 
-  const toggleEdit = () => {
-    setError("");
-    setIsEditing(!isEditing);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
+  const validateForm = () => {
+    try {
+      profileSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (err) {
+      const formattedErrors = err.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+      setErrors(formattedErrors);
+      return false;
+    }
   };
 
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     try {
       const response = await axiosPrivate.put(
-        `http://localhost:8000/user/${credentials.id}`, // Ensure credentials._id is correct here
+        `http://localhost:8000/user/${credentials.id}`,
         {
           First_Name: formData.firstName,
           Last_Name: formData.lastName,
@@ -80,25 +108,26 @@ const DocInfoContainer = () => {
       );
 
       if (response.status === 200) {
-        // Update local state to reflect changes
-        setCreds((prevState) => ({
-          ...prevState,
+        setResp("Profile updated successfully.");
+        setStatus("success");
+        setCreds({
+          ...credentials,
           First_Name: formData.firstName,
           Last_Name: formData.lastName,
           Email_Address: formData.email,
           Phone_Number: formData.phoneNumber,
-        }));
-        toggleEdit();
+        });
+        setIsEditing(false);
       }
     } catch (error) {
-      console.error("Error updating physician info:", error);
-      setError("Failed to update physician information. Please try again.");
+      setResp("Error updating physician info.");
+
+      setStatus("error");
+      console.error("Error updating physician info", error);
     }
   };
 
-  if (!credentials) {
-    return <div>Loading...</div>;
-  }
+  if (!credentials) return <div>Loading...</div>;
 
   return (
     <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">
@@ -106,76 +135,55 @@ const DocInfoContainer = () => {
         <h1 className="text-xl font-semibold text-gray-800">My Profile</h1>
         {!isEditing && (
           <button
-            onClick={toggleEdit}
+            onClick={() => setIsEditing(true)}
             className="text-gray-600 hover:text-gray-900 transition"
           >
-            <FiEdit size={20} />{" "}
+            <FiEdit size={20} />
           </button>
         )}
       </div>
       <div className="space-y-4">
-        <div className="flex gap-6">
-          <div className="flex flex-col">
-            <label className="text-gray-600 text-sm">First Name</label>
+        {["firstName", "lastName", "email", "phoneNumber"].map((field) => (
+          <div key={field} className="flex flex-col">
+            <label className="text-gray-600 text-sm capitalize">
+              {field.replace(/([A-Z])/g, " $1")}
+            </label>
             {isEditing ? (
               <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={formData[field]}
                 onChange={handleInputChange}
-                className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
+                className={`border p-2 rounded-md text-gray-800 focus:outline-blue-500 ${
+                  errors[field] ? "border-red-500" : "border-gray-300"
+                }`}
               />
             ) : (
-              <p className="text-gray-800">{formData.firstName}</p>
+              <p className="text-gray-800">{formData[field]}</p>
+            )}
+            {errors[field] && (
+              <span className="text-red-500 text-sm">{errors[field]}</span>
             )}
           </div>
-          <div className="flex flex-col">
-            <label className="text-gray-600 text-sm">Last Name</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-              />
-            ) : (
-              <p className="text-gray-800">{formData.lastName}</p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm">Email</label>
-          {isEditing ? (
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-            />
-          ) : (
-            <p className="text-gray-800">{formData.email}</p>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm">Phone Number</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-            />
-          ) : (
-            <p className="text-gray-800">{formData.phoneNumber}</p>
-          )}
-        </div>
+        ))}
       </div>
+
+      {resp && (
+        <div
+          className={`mt-4 ${
+            status === "success" ? "text-green-500" : "text-red-500"
+          }`}
+        >
+          {resp}
+        </div>
+      )}
+
       {isEditing && (
         <div className="flex justify-end gap-4 mt-4">
-          <button onClick={handleCancel} className=" text-gray-500 py-2">
+          <button
+            onClick={() => setIsEditing(false)}
+            className="text-gray-500 py-2"
+          >
             Cancel
           </button>
           <button
