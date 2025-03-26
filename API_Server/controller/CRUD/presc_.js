@@ -36,7 +36,7 @@ const addPrescription = (req, res) => {
             Form: payload["Form"],
             FrequencyDetails: payload["FrequencyDetails"],
             Interval: payload["Interval"],
-            StartDate: date_,
+            StartDate: new Date().toISOString(),
             EndDate: date2_,
             Note: payload["Note"],
           },
