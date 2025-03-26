@@ -15,8 +15,6 @@ const patientSchema = z.object({
     .string()
     .min(1, "Phone Number is required")
     .refine((val) => {
-      // Check if the phone number follows a simple US format
-      // accepts format 303-230-3203 or 3032303203 or else retunr
       return /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val);
     }, "Invalid phone number format"),
 });
@@ -31,7 +29,6 @@ export const Patientadd = () => {
     Email_Address: "",
     Phone_Number: "",
   });
-  const [emailExists, setEmailExists] = useState(false);
 
   const axiosprivate = useAxiosPrivate();
 
@@ -39,7 +36,6 @@ export const Patientadd = () => {
     try {
       patientSchema.parse(RegForm);
       setErrors({});
-      setEmailExists(false); // Reset email error before validating
       return true;
     } catch (err) {
       const formattedErrors = err.errors.reduce((acc, error) => {
@@ -51,32 +47,9 @@ export const Patientadd = () => {
     }
   };
 
-  const checkEmailExists = async () => {
-    try {
-      const response = await axiosprivate.get(
-        `http://localhost:8000/patients/email/${RegForm.Email_Address}`,
-        {
-          headers: {
-            Authorization: "Bearer " + String(auth.payload),
-          },
-        }
-      );
-      return response.data.exists; // Assuming the API returns { exists: true } if email is found
-    } catch (error) {
-      console.error("Error checking email:", error);
-      return false;
-    }
-  };
-
   async function submittion(e) {
     e.preventDefault();
     if (!handleValidation()) return;
-
-    const emailInUse = await checkEmailExists();
-    if (emailInUse) {
-      setEmailExists(true);
-      return; // Stop form submission if email exists
-    }
 
     try {
       const resp = await axiosprivate.post(
@@ -88,10 +61,14 @@ export const Patientadd = () => {
           },
         }
       );
-      console.log(resp.data);
-      setResp(resp.data);
+      setResp(resp.data); // Set the success response
+      setErrors({}); // Clear errors on success
     } catch (error) {
-      console.error("Error submitting form:", error);
+      if (error.response && error.response.data.error) {
+        setErrors({ server: error.response.data.error });
+      } else {
+        console.error("Error submitting form:", error);
+      }
     }
   }
 
@@ -101,19 +78,16 @@ export const Patientadd = () => {
     if (name === "Email_Address") {
       setRegForm({ ...RegForm, [name]: value.toLowerCase() });
     } else if (name === "Phone_Number") {
-      // Remove non-numeric characters except dashes
       let numericValue = value.replace(/\D/g, "");
-
-      // Format as XXX-XXX-XXXX while typing
       let formattedValue = numericValue
         .slice(0, 10)
         .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-
       setRegForm({ ...RegForm, [name]: formattedValue });
     } else {
       setRegForm({ ...RegForm, [name]: formatInput(name, value) });
     }
   };
+
   return (
     <div className="p-8 space-y-4">
       <h1 className="text-xl font-semibold mb-4">Add New Patient</h1>
@@ -144,9 +118,10 @@ export const Patientadd = () => {
             )}
           </div>
         ))}
-        {emailExists && (
-          <span className="text-red-500 text-sm">Email already in use</span>
-        )}
+        {errors.server && (
+          <span className="text-red-500 text-sm">{errors.server}</span>
+        )}{" "}
+        {/* Display server-side error */}
         <button
           type="submit"
           className="w-full py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-all duration-300"

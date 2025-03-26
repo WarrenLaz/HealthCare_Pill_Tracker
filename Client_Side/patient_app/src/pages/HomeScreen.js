@@ -33,7 +33,7 @@ export default function HomeScreen() {
             pid: id_,
             mid: mid_,
             dosage: dose,
-            mdate: new Date(),
+            mdate: new Date().toISOString(),
             MedName: MedName_,
             amount: amount_,
           },
@@ -58,13 +58,13 @@ export default function HomeScreen() {
   }
 
   // function to check if a medication should be displayed on the selected date
-  //THIS FUNCTION NEEDS WORK, right now it displays meds from march 20-april 20.
-  //  we need the actual start and end date
+  //THIS FUNCTION NEEDS WORK, right now it displays meds from start date to enddate which is (startdate + 30days)
+  //  we need the actual end date (fix backend)
   function shouldDisplayMed(med, date) {
-    const startDate = moment("2025-03-20");
-    const endDate = moment("2025-04-20");
+    const startDate = moment(med.StartDate).format("YYYY-MM-DD");
+    const endDate = moment(startDate).add(30, "days").format("YYYY-MM-DD");
 
-    // check if selected date is within the valid range
+    // Check if the selected date is within the start and end dates
     if (!date.isBetween(startDate, endDate, "day", "[]")) return false;
 
     // get medication interval (daily, weekly, etc.)
@@ -73,10 +73,10 @@ export default function HomeScreen() {
     const dayOfWeek = date.format("dddd");
 
     // if medication is daily, always show it
-    // if medication is weekly, only show it on sundays
-    // THIS NEEDS WORK as well. we should use the start date as the single day it is displayed
+    // if medication is weekly, only show it on one day per week ( the day of the startdate)
     return (
-      interval === "daily" || (interval === "weekly" && dayOfWeek === "Sunday")
+      interval === "daily" ||
+      (interval === "weekly" && dayOfWeek === moment(startDate).format("dddd"))
     );
   }
 

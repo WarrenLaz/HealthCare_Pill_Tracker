@@ -146,6 +146,22 @@ const updatePatient = async (req, res) => {
       return res.status(404).json({ error: "Patient not found" });
     }
 
+    // Check for duplicate email or phone number (excluding current patient)
+    const conflict = await db.getDB("Patients", "patient").findOne({
+      _id: { $ne: patientId },
+      $or: [
+        { Email_Address: updates.Email_Address },
+        { Phone_Number: updates.Phone_Number },
+      ],
+    });
+
+    if (conflict) {
+      return res.status(400).json({
+        error:
+          "Email Address or Phone Number already exists for another patient",
+      });
+    }
+
     // Perform the update
     const result = await db
       .getDB("Patients", "patient")
