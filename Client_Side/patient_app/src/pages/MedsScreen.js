@@ -22,6 +22,7 @@ export default function MedsScreen() {
               remaining={item.pills_left} 
             />
           </View>
+      
         )}
         contentContainerStyle={styles.flatListContainer}
         showsVerticalScrollIndicator={false} // Hide vertical scroll indicator for FlatList

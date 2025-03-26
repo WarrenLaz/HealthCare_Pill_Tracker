@@ -1,10 +1,13 @@
 from matplotlib import pyplot as plt
+import math
+
 
 T_a = 2
 T_b = 10
 sa = [[40,2],[20,4],[60,3],[40,1],[80,4]]
 st = [40,20,60,40,80]
 runs = 100
+shipping = 20
 signals = []
 a1 = []
 a2 = []
@@ -38,6 +41,7 @@ for day in range(runs):
             reorder(cache)
             cache = []
     signals.append(sig)
+
 print(len(a1))
 print(len(a2))
 
@@ -45,7 +49,7 @@ plt.plot([i for i in range(100)],a1, label = "1")
 plt.plot([i for i in range(100)],a2, label = "2")
 plt.plot([i for i in range(100)],a3, label = "3")
 plt.plot([i for i in range(100)],a4, label = "4")
-plt.plot([i for i in range(100)],a5, label = "5")
+plt.plot([i for i in range(100)],a5, label = "5") 
 plt.scatter(signals, [0 for i in range(100)])
 plt.show()
 

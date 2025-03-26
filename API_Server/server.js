@@ -44,6 +44,7 @@ app.use("/prescription", require("./routes/deletepresc"));
 app.use("/search", require("./routes/search_"));
 //used for verification, cannot sql inject without the jwt cookie.
 
+
 //This middlewear both verifies the JWT Token, then changes the payload to the JWT Token decryption.
 //userinfo
 app.use(JWTver);

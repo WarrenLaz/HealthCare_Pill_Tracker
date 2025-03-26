@@ -16,7 +16,6 @@ const Batching = (req, res = []) => {
             if(currentQuant[k][0]/perDay[i] < Thresh_b)
                 currentQuant[k][1] = 1;
         }
-
         console.log(currentQuant);
         for(var i = 0; i < currentQuant.length; i++){
             if(currentQuant[i][0]/perDay[i] < Thresh_a){
@@ -24,7 +23,6 @@ const Batching = (req, res = []) => {
                 break;
             }
         }
-    
         if(reorder == true){
             for(var x = 0; x < currentQuant.length; x++){
                 if(currentQuant[x][1] == 1){

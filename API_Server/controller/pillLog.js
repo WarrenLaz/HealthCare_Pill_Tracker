@@ -9,6 +9,7 @@ const Log = (req, res) => {
     db.updateData(db.getDB('Patients', 'patient'), 
     {_id : new ObjectId(log_['pid'])}, 
         {
+            //amount * dosage
             $inc: { "Prescriptions.$[elem].pills_left": -parseInt(log_['amount'],10)*parseInt(log_['dosage'],10) }
         },
         {
