@@ -4,49 +4,72 @@ import usePat from "../../hooks/usePat";
 import useAuth from "../../hooks/useAuth";
 import { formatInput } from "../../utils/formatInput";
 import useAxiosPrivate from "../../hooks/axiosPrivate";
+import { z } from "zod";
+
+const profileSchema = z.object({
+  firstName: z.string().min(1, "First Name is required"),
+  lastName: z.string().min(1, "Last Name is required"),
+  email: z.string().email("Invalid email format").min(1, "Email is required"),
+  phoneNumber: z
+    .string()
+    .min(1, "Phone Number is required")
+    .refine(
+      (val) => /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val),
+      "Invalid phone number format"
+    ),
+});
 
 const PatientInfoContainer = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { auth } = useAuth();
   const { pat, setPat } = usePat();
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState({ text: "", type: "" });
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     setFormData({
-      firstName: pat.First_Name,
-      lastName: pat.Last_Name,
-      email: pat.Email_Address,
-      phoneNumber: pat.Phone_Number,
+      firstName: pat.First_Name || "",
+      lastName: pat.Last_Name || "",
+      email: pat.Email_Address || "",
+      phoneNumber: pat.Phone_Number || "",
     });
   }, [pat]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: formatInput(name, value),
-    }));
+    if (name === "email") {
+      setFormData({ ...formData, [name]: value.toLowerCase() });
+    } else if (name === "phoneNumber") {
+      let numericValue = value.replace(/\D/g, "").slice(0, 10);
+      let formattedValue = numericValue.replace(
+        /(\d{3})(\d{3})(\d{4})/,
+        "$1-$2-$3"
+      );
+      setFormData({ ...formData, [name]: formattedValue });
+    } else {
+      setFormData({ ...formData, [name]: formatInput(name, value) });
+    }
   };
-
-  const toggleEdit = () => {
-    setError("");
-    setIsEditing(!isEditing);
+  const validateForm = () => {
+    try {
+      profileSchema.parse(formData);
+      setErrors({});
+      return true;
+    } catch (err) {
+      const validationErrors = {};
+      err.errors.forEach((error) => {
+        validationErrors[error.path[0]] = error.message;
+      });
+      setErrors(validationErrors);
+      return false;
+    }
   };
 
   const handleSave = async () => {
-    // prevent unnecessary API calls if everything remains the same
-    if (
-      formData.firstName === pat.First_Name &&
-      formData.lastName === pat.Last_Name &&
-      formData.email === pat.Email_Address &&
-      formData.phoneNumber === pat.Phone_Number
-    ) {
-      setIsEditing(false);
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       const response = await axiosPrivate.put(
@@ -64,7 +87,6 @@ const PatientInfoContainer = () => {
       );
 
       if (response.status === 200) {
-        // update local state to trigger rerender
         setPat((prevState) => ({
           ...prevState,
           First_Name: formData.firstName,
@@ -72,97 +94,71 @@ const PatientInfoContainer = () => {
           Email_Address: formData.email,
           Phone_Number: formData.phoneNumber,
         }));
-        toggleEdit();
+        setMessage({ text: "Profile updated successfully!", type: "success" });
+        setTimeout(() => toggleEdit(), 1500);
       }
     } catch (error) {
-      console.error("Error updating patient info:", error);
-      setError("Failed to update patient information. Please try again.");
+      setMessage({ text: "Error updating profile.", type: "error" });
     }
   };
 
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+    setMessage({ text: "", type: "" });
+  };
+
   return (
-    <div className="border border-gray-300 shadow-lg rounded-lg p-6 w-[90%] h-fit bg-white mt-4">
+    <div className="border p-6 w-[90%] h-fit bg-white mt-4 shadow-lg rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold text-gray-800">Patient Info</h1>
-        {isEditing ? (
-          <button
-            onClick={handleSave}
-            className="text-green-600 hover:text-green-800 transition"
-          >
-            <FiCheck size={20} />
-          </button>
-        ) : (
-          <button
-            onClick={toggleEdit}
-            className="text-gray-600 hover:text-gray-900 transition"
-          >
+        <button
+          onClick={isEditing ? handleSave : toggleEdit}
+          className="text-gray-600 hover:text-gray-900 transition"
+        >
+          {isEditing ? (
+            <FiCheck size={20} className="text-green-600" />
+          ) : (
             <FiEdit size={20} />
-          </button>
-        )}
+          )}
+        </button>
       </div>
-
-      {error && <p className="text-red-600 text-sm">{error}</p>}
-
+      {message.text && (
+        <p
+          className={`text-sm ${
+            message.type === "success" ? "text-green-600" : "text-red-600"
+          }`}
+        >
+          {message.text}
+        </p>
+      )}
       <div className="space-y-4">
-        <div className="flex gap-6">
-          <div className="flex flex-col">
-            <label className="text-gray-600 text-sm">First Name</label>
+        {[
+          { label: "First Name", name: "firstName" },
+          { label: "Last Name", name: "lastName" },
+          { label: "Email", name: "email" },
+          { label: "Phone Number", name: "phoneNumber" },
+        ].map(({ label, name }) => (
+          <div key={name} className="flex flex-col">
+            <label className="text-gray-600 text-sm">{label}</label>
             {isEditing ? (
               <input
-                type="text"
-                name="firstName"
-                value={formData.firstName}
+                type={name === "email" ? "email" : "text"}
+                name={name}
+                value={formData[name]}
                 onChange={handleInputChange}
-                className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-                autoFocus
+                className={`border p-2 rounded-md text-gray-800 focus:outline-blue-500 ${
+                  errors[name] ? "border-red-500" : "border-gray-300"
+                }`}
+                autoFocus={name === "firstName"}
               />
             ) : (
-              <p className="text-gray-800">{formData.firstName}</p>
+              <p className="text-gray-800">{formData[name]}</p>
+            )}
+            {errors[name] && (
+              <p className="text-red-500 text-xs mt-1">{errors[name]}</p>
             )}
           </div>
-          <div className="flex flex-col">
-            <label className="text-gray-600 text-sm">Last Name</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-              />
-            ) : (
-              <p className="text-gray-800">{formData.lastName}</p>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm">Email</label>
-          {isEditing ? (
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-            />
-          ) : (
-            <p className="text-gray-800">{formData.email}</p>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm">Phone Number</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              className="border border-gray-300 rounded-md p-2 text-gray-800 focus:outline-blue-500"
-            />
-          ) : (
-            <p className="text-gray-800">{formData.phoneNumber}</p>
-          )}
-        </div>
+        ))}
       </div>
     </div>
   );
