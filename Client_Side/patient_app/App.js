@@ -10,6 +10,7 @@ import MedsScreen from "./src/pages/MedsScreen";
 import RequestsScreen from "./src/pages/RequestsScreen";
 import ProfileScreen from "./src/pages/ProfileScreen";
 import CustomHeader from "./src/components/ProfileHeader";
+import NewPatientScreen from "./src/pages/NewPatient";
 
 // Create stack and bottom tab navigators
 const Stack = createNativeStackNavigator();
@@ -93,6 +94,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="HomeTabs" component={HomeTabs} />
+          <Stack.Screen name="NewPatient" component={NewPatientScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Auth>

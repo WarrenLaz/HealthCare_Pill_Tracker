@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 //PATIENT APP
 // ----------------------------------------------
 app.use("/patientLogin", require("./routes/patientLogin"));
+app.use("/updatePassword", require("./routes/updatePassword"));
 
 //PHYSICIAN WEBAPP
 // ----------------------------------------------
@@ -57,4 +58,3 @@ app.use("/patients", require("./routes/delepat"));
 app.use("/patients", require("./routes/editpat"));
 
 app.listen(port, () => console.log("Server is running", port));
-

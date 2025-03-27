@@ -15,7 +15,7 @@ export default function LoginScreen() {
   const { setAuth } = useAuth();
   const navigation = useNavigation();
   const [username, setUsername] = useState("wjlaz@umich.edu");
-  const [password, setPassword] = useState("s!r*_.gRsG7w");
+  const [password, setPassword] = useState("mood");
   const [error, setError] = useState("");
   const [focusedInput, setFocusedInput] = useState("");
 
@@ -23,7 +23,7 @@ export default function LoginScreen() {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://141.215.196.101:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        "http://192.168.1.112:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
         //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },
@@ -35,8 +35,14 @@ export default function LoginScreen() {
 
       if (response.data.status === "200 OK") {
         setAuth({ token: response.data.packet });
-        console.log("Login successful, navigating to Home");
-        navigation.navigate("HomeTabs");
+
+        if (response.data.isNew === 1) {
+          console.log("First-time login detected, navigating to NewPatient");
+          navigation.navigate("NewPatient");
+        } else {
+          console.log("Login successful, navigating to Home");
+          navigation.navigate("HomeTabs");
+        }
       } else {
         console.warn("Login failed with status:", response.data.status);
         setError(response.data.status);
