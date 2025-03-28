@@ -1,6 +1,6 @@
 const db = require("./dbcontroller");
 const { ObjectId } = require("mongodb");
-import Batching from "./batching";
+const Batching = require("./batching");
 
 //
 const Log = (req, res) => {
