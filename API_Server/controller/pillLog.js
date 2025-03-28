@@ -1,6 +1,6 @@
 const db = require("./dbcontroller");
 const { ObjectId } = require("mongodb");
-const Batch = require("./batch.js")
+const Batch = require("./batch.js");
 //
 const Log = (req, res) => {
   //pid mid mdate MedName amount
@@ -19,7 +19,7 @@ const Log = (req, res) => {
       arrayFilters: [{ "elem._id": new ObjectId(log_["mid"]) }],
     }
   )
-    .then(()=> {
+    .then(() => {
       db.updateData(
         db.getDB("Patients", "patient"),
         { _id: new ObjectId(log_["pid"]) },
@@ -31,17 +31,17 @@ const Log = (req, res) => {
               date: new Date().toISOString(),
               amount:
                 parseInt(log_["amount"], 10) * parseInt(log_["dosage"], 10),
-              timeOfday: log_["timeOfday_"]
+              timeOfday: log_["timeOfday"],
             },
           },
         }
-      ).then(()=>{
-        //BATCHING CALCULATION
-      }).then( ()=>{
-
-      })
+      )
+        .then(() => {
+          //BATCHING CALCULATION
+        })
+        .then(() => {});
     })
-    .then(d => {
+    .then((d) => {
       res.sendStatus(200);
     });
 };
