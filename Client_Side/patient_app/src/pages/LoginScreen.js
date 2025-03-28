@@ -10,20 +10,21 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import useAuth from "../hooks/useAuth";
+import { IPADDRESS } from '@env';
 
 export default function LoginScreen() {
+  console.log(IPADDRESS);
   const { setAuth } = useAuth();
   const navigation = useNavigation();
   const [username, setUsername] = useState("wjlaz@umich.edu");
   const [password, setPassword] = useState("mood");
   const [error, setError] = useState("");
   const [focusedInput, setFocusedInput] = useState("");
-
   const handleLogin = async () => {
     try {
       console.log("Attempting to log in with:", username, password);
       const response = await axios.post(
-        "http://192.168.1.112:8000/patientLogin", //ip for school server; anywhere else change to local host OR ip of server
+        `http://${IPADDRESS}:8000/patientLogin`, //ip for school server; anywhere else change to local host OR ip of server
         //ipconfig getifaddr en0 for mac to get ip address
         {
           LoginForm: { Username: username, Password: password },

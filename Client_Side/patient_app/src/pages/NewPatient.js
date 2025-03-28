@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IPADDRESS } from '@env';
 import {
   View,
   Text,
@@ -35,7 +36,7 @@ export default function NewPatientScreen() {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.112:8000/updatePassword",
+        `http://${IPADDRESS}:8000/updatePassword`,
         {
           Email_Address: userEmail,
           newPassword: newPassword,

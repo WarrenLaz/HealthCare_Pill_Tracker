@@ -6,12 +6,11 @@ import LogModal from "../components/LogModal";
 import MiniMedCard from "../components/MiniMedCard";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
-
+import { IPADDRESS } from '@env';
 export default function HomeScreen() {
   const [isLog, setIsLog] = useState(false); // state for controlling log modal visibility
   const [Med, setMed] = useState(null); // state for tracking selected medication
   const [selectedDate, setSelectedDate] = useState(moment()); // state for tracking selected date, default to current date
-
   const { auth } = useAuth();
   const medsData = auth.token.Prescriptions;
   const p_id = auth.token._id;
@@ -27,7 +26,7 @@ export default function HomeScreen() {
 
     try {
       const response = await axios.post(
-        "http://141.215.196.101:8000/Logs",
+        `http://${IPADDRESS}:8000/Logs`,
         {
           log: {
             pid: id_,

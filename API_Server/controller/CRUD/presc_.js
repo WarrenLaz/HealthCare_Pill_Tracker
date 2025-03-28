@@ -6,20 +6,20 @@ const addPrescription = (req, res) => {
   try {
     const payload = req.body["prescData"];
     console.log(payload);
-    console.log(payload);
-    var date_ = new Date();
-    var date2_ = new Date(
-      date_.setDate(
-        date_.getDate() + parseInt(payload["Quantity"] / (dose * frequency))
-      )
-    );
     var dose = payload["Dosage"];
     var frequency = 0;
     payload["FrequencyDetails"].forEach((element) => {
       console.log(element.pillCount);
       frequency += parseInt(element.pillCount);
     });
-    console.log(frequency);
+    console.log(payload)
+    console.log('Q',payload["Quantity"])
+    var date_Start = new Date(); // Create a new Date object
+    var daysToAdd = Math.floor(parseInt(payload["Quantity"]) / (dose * frequency)); // Calculate days to add
+    var date_End = new Date(date_Start); // Clone date_Start
+    date_End.setDate(date_End.getDate() + daysToAdd);
+    console.log(daysToAdd);
+    console.log(date_End);
     db.updateData(
       db.getDB("Patients", "patient"),
       {
@@ -36,8 +36,8 @@ const addPrescription = (req, res) => {
             Form: payload["Form"],
             FrequencyDetails: payload["FrequencyDetails"],
             Interval: payload["Interval"],
-            StartDate: new Date().toISOString(),
-            EndDate: date2_,
+            StartDate: date_Start.toISOString(),
+            EndDate: date_End.toISOString(),
             Note: payload["Note"],
           },
         },

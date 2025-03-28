@@ -21,6 +21,7 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-calendar-strip": "^2.2.6",
+    "react-native-dotenv": "^3.4.11",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "^2.21.2",
     "react-native-picker-select": "^9.3.1",
