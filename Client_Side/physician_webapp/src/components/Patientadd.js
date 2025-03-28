@@ -48,7 +48,6 @@ export const Patientadd = () => {
   };
 
   async function submittion(e) {
-    e.preventDefault();
     if (!handleValidation()) return;
 
     try {

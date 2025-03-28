@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const schema = z
   .object({
@@ -35,6 +37,7 @@ const schema = z
   });
 
 export const Reg = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -46,14 +49,14 @@ export const Reg = () => {
   const onSubmit = async (data) => {
     //console.log(data)
     try {
-      const response = await axios.post(
-        "http://localhost:8000/Reg",
-        {data}
-      );
-      alert(String(response.data));
+      const response = await axios.post("http://localhost:8000/Reg", { data });
+      toast.success("Success!");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
     } catch (error) {
       console.error("Error submitting form", error);
-      alert("There was an issue with the registration");
+      toast.error("Error with Registration");
     }
   };
   return (
@@ -80,7 +83,7 @@ export const Reg = () => {
             Become a member and make managing your patients easier.
           </p>
           <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
+            <div>
               <label htmlFor="First_Name">First Name</label>
               <input
                 type="text"
@@ -111,9 +114,7 @@ export const Reg = () => {
             </div>
 
             <div>
-              <label htmlFor="Practice_Email_Address">
-                Email Address
-              </label>
+              <label htmlFor="Practice_Email_Address">Email Address</label>
               <input
                 type="text"
                 {...register("Practice_Email_Address")}
@@ -130,11 +131,8 @@ export const Reg = () => {
               )}
             </div>
 
-
             <div>
-              <label htmlFor="Practice_Phone_Number">
-                Phone Number
-              </label>
+              <label htmlFor="Practice_Phone_Number">Phone Number</label>
 
               <input
                 type="number"
@@ -151,7 +149,6 @@ export const Reg = () => {
                   {errors.Practice_Phone_Number.message}
                 </span>
               )}
-
             </div>
 
             <div>
