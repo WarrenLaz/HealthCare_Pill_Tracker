@@ -46,7 +46,7 @@ const LogModal = ({ sendLog, Med, id, closeModal }) => {
             style={styles.takeButton}
             onPress={() => {
               if (selectedFrequency && Amount > 0) {
-                sendLog(Med.MedName, Med._id, Amount, Med.Dosage, id);
+                sendLog(Med.MedName, Med._id, Amount, Med.Dosage, id, selectedFrequency);
               }
             }}
           >

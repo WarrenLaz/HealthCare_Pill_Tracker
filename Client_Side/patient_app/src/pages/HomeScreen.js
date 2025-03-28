@@ -15,15 +15,16 @@ export default function HomeScreen() {
   const medsData = auth.token.Prescriptions;
   const p_id = auth.token._id;
 
-  async function sendLog(MedName_, mid_, amount_, dose, id_) {
+  async function sendLog(MedName_, mid_, amount_, dose, id_, timeOfday_) {
     console.log("Logging data:", {
       MedName_,
       mid_,
       amount_,
       dose,
       id_,
+      timeOfday_
     });
-
+    console.log(IPADDRESS)
     try {
       const response = await axios.post(
         `http://${IPADDRESS}:8000/Logs`,
@@ -35,6 +36,7 @@ export default function HomeScreen() {
             mdate: new Date().toISOString(),
             MedName: MedName_,
             amount: amount_,
+            timeOfday: timeOfday_
           },
         },
         { headers: { "Content-Type": "application/json" } }

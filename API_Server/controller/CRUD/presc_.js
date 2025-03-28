@@ -12,7 +12,6 @@ const addPrescription = (req, res) => {
       console.log(element.pillCount);
       frequency += parseInt(element.pillCount);
     });
-    console.log(payload)
     console.log('Q',payload["Quantity"])
     var date_Start = new Date(); // Create a new Date object
     var daysToAdd = Math.floor(parseInt(payload["Quantity"]) / (dose * frequency)); // Calculate days to add

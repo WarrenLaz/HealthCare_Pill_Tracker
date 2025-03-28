@@ -5,7 +5,6 @@ const cors = require("cors");
 const corsOptions = require("./middleware/creds");
 const cookieParser = require("cookie-parser");
 const JWTver = require("./middleware/jwtver");
-const jwtver_0 = require("./middleware/jwtver_0");
 
 app.use(cookieParser());
 
