@@ -3,31 +3,28 @@ import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
+import usePat from "../../hooks/usePat";
 import useAxiosPrivate from "../../hooks/axiosPrivate";
 
-const BatchesTable = () => {
+const BatchesTable = ({ onRowSubmit }) => {
   const { auth } = useAuth();
-  const [patient, setPatients] = useState([]);
+  const [patients, setPatients] = useState([]);
   const axiosprivate = useAxiosPrivate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const keys = auth.payload.p; // Extract keys from auth
-        console.log(keys);
         const res = await axiosprivate.get("http://localhost:8000/patients", {
-          headers: {
-            Authorization: "Bearer " + String(auth.payload),
-          },
+          headers: { Authorization: "Bearer " + String(auth.payload) },
         });
-        console.log(res.data);
-        setPatients(res.data); // Update state with the fetched data
+        setPatients(res.data);
       } catch (error) {
         console.error("Error fetching patients:", error);
       }
     };
 
     fetchData();
-  }, [auth.payload.p]);
+  }, [auth.payload]);
 
   return (
     <div>
@@ -47,14 +44,12 @@ const BatchesTable = () => {
           <select className="bg-transparent outline-none w-full text-slate-600 cursor-pointer">
             <option value="">Sort By</option>
             <option value="name">Alphabetical (A-Z)</option>
-            <option value="option2">(another option here)</option>
           </select>
         </div>
       </div>
 
       <div className="bg-slate-50 p-8 rounded-xl shadow-lg mt-6">
         <table className="min-w-full table-auto">
-          {/* Table Header */}
           <thead className="bg-gray-200">
             <tr>
               <th className="text-gray-500 px-4 py-2 text-left text-sm font-semibold">
@@ -76,13 +71,11 @@ const BatchesTable = () => {
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
-            {/* Map over the dummy data */}
-            {patient.map((patient, index) => (
+            {patients.map((patient, index) => (
               <tr
                 key={index}
-                className="hover:bg-gray-100  border-b  border-gray-300"
+                className="hover:bg-gray-100 border-b border-gray-300"
               >
                 <td className="px-4 py-2">{patient.First_Name}</td>
                 <td className="px-4 py-2">{patient.Last_Name}</td>
@@ -90,7 +83,10 @@ const BatchesTable = () => {
                 <td className="px-4 py-2">{patient.Email_Address}</td>
                 <td className="px-4 py-2">{patient.Phone_Number}</td>
                 <td className="px-4 py-2">
-                  <button className="bg-[#e1f6df] text-[#5F8D4E] px-4 py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-[#5F8D4E] hover:text-[#F4FFF3] hover:shadow-lg">
+                  <button
+                    className="bg-[#e1f6df] text-[#5F8D4E] px-4 py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-[#5F8D4E] hover:text-[#F4FFF3] hover:shadow-lg"
+                    onClick={() => onRowSubmit(patient)}
+                  >
                     <p className="font-semibold">Fulfill</p>
                   </button>
                 </td>
