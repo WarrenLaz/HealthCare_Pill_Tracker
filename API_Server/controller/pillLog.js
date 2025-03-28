@@ -1,6 +1,7 @@
 const db = require("./dbcontroller");
-
 const { ObjectId } = require("mongodb");
+import Batching from "./batching";
+
 //
 const Log = (req, res) => {
   //pid mid mdate MedName amount
@@ -34,7 +35,10 @@ const Log = (req, res) => {
             },
           },
         }
-      );
+      ).then( data =>{
+        Patient = db.getData(db.getDB("Patients", "patient"),{ _id: new ObjectId(log_["pid"])})
+        print(Patient)
+      })
     })
     .then((d) => {
       res.sendStatus(200);

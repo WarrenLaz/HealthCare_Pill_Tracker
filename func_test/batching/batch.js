@@ -8,32 +8,39 @@ const Testval = 200;
 
 var reorder = false;
 
-const Batching = (req, res = []) => {
+const Batching = (req, res = {data: {Medications: [], LowPrescriptions: []} }) => {
 
-    for(var j = 0; j < Testval; j++){
-        for(var k = 0; k < currentQuant.length; k++){
-            currentQuant[k][0] -= perDay[k];
-            if(currentQuant[k][0]/perDay[i] < Thresh_b)
-                currentQuant[k][1] = 1;
-        }
-        console.log(currentQuant);
-        for(var i = 0; i < currentQuant.length; i++){
-            if(currentQuant[i][0]/perDay[i] < Thresh_a){
-                reorder = true
-                break;
-            }
-        }
-        if(reorder == true){
-            for(var x = 0; x < currentQuant.length; x++){
-                if(currentQuant[x][1] == 1){
-                    currentQuant[x][0] += batches[x];
-                    currentQuant[x][1] = 0;
-                }
-            }
-        }
-        
-    }
-    return res
+
+        meds[1] -= amnt_Taken
+    return cost, Medications_q_f, LowPrescriptions*/
+    /*def Batching(T_a, T_b, Medications_q_f, LowPrescriptions, shipping):
+    cost = 0
+    for key, meds in Medications_q_f.items():
+        quantity = meds[0]
+        Left = meds[1]
+        amnt_Taken = meds[2]
+        days_Left = Left/amnt_Taken
+        print(LowPrescriptions)
+        if(days_Left <= T_b):
+            LowPrescriptions.append(key)
+        if(days_Left <= T_a):
+            for pres in LowPrescriptions:
+                Medications_q_f[pres][1] += quantity
+            LowPrescriptions.clear()
+            cost += shipping
+
+        meds[1] -= amnt_Taken
+    return cost, Medications_q_f, LowPrescriptions*/
+
+
+    //Get the pills_left 
+    //the frequency* dosage
+    //daysleft = pills_left/(frequency*dosage)
+    //End_date = Current_Date + daysleft
+    //if(daysleft < thresh_1)
+    //  add lowbatch
+    
+
 }
 
 console.log(Batching(1))
