@@ -6,7 +6,7 @@ import LogModal from "../components/LogModal";
 import MiniMedCard from "../components/MiniMedCard";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
-import { IPADDRESS } from '@env';
+import { IPADDRESS } from "@env";
 export default function HomeScreen() {
   const [isLog, setIsLog] = useState(false); // state for controlling log modal visibility
   const [Med, setMed] = useState(null); // state for tracking selected medication
@@ -22,9 +22,9 @@ export default function HomeScreen() {
       amount_,
       dose,
       id_,
-      timeOfday_
+      timeOfday_,
     });
-    console.log(IPADDRESS)
+    console.log(IPADDRESS);
     try {
       const response = await axios.post(
         `http://${IPADDRESS}:8000/Logs`,
@@ -36,7 +36,7 @@ export default function HomeScreen() {
             mdate: new Date().toISOString(),
             MedName: MedName_,
             amount: amount_,
-            timeOfday: timeOfday_
+            timeOfday: timeOfday_,
           },
         },
         { headers: { "Content-Type": "application/json" } }
@@ -59,11 +59,9 @@ export default function HomeScreen() {
   }
 
   // function to check if a medication should be displayed on the selected date
-  //THIS FUNCTION NEEDS WORK, right now it displays meds from start date to enddate which is (startdate + 30days)
-  //  we need the actual end date (fix backend)
   function shouldDisplayMed(med, date) {
     const startDate = moment(med.StartDate).format("YYYY-MM-DD");
-    const endDate = moment(startDate).add(30, "days").format("YYYY-MM-DD");
+    const endDate = moment(med.EndDate).format("YYYY-MM-DD");
 
     // Check if the selected date is within the start and end dates
     if (!date.isBetween(startDate, endDate, "day", "[]")) return false;
