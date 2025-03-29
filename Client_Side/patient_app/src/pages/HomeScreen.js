@@ -11,7 +11,7 @@ export default function HomeScreen() {
   const [isLog, setIsLog] = useState(false); // state for controlling log modal visibility
   const [Med, setMed] = useState(null); // state for tracking selected medication
   const [selectedDate, setSelectedDate] = useState(moment()); // state for tracking selected date, default to current date
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const medsData = auth.token.Prescriptions;
   const p_id = auth.token._id;
 
@@ -24,7 +24,7 @@ export default function HomeScreen() {
       id_,
       timeOfday_,
     });
-    console.log(IPADDRESS);
+
     try {
       const response = await axios.post(
         `http://${IPADDRESS}:8000/Logs`,
@@ -41,10 +41,46 @@ export default function HomeScreen() {
         },
         { headers: { "Content-Type": "application/json" } }
       );
+
       console.log("Log sent successfully:", response.data);
+
+      // Update local state with new log
+      setAuth((prevAuth) => ({
+        ...prevAuth,
+        token: {
+          ...prevAuth.token,
+          Logs: [
+            ...(prevAuth.token.Logs || []),
+            {
+              Medname: MedName_,
+              mid: mid_,
+              dosage: dose,
+              date: new Date().toISOString(),
+              amount: amount_,
+              timeOfday: timeOfday_,
+            },
+          ],
+        },
+      }));
+
+      closeModal(); // Ensure modal closes only after successful response
     } catch (error) {
       console.error("Error sending data:", error);
     }
+  }
+
+  function isLogged(med, selectedDate, timeOfday) {
+    const logs = auth.token.Logs || [];
+    return logs.some((log) => {
+      const logDate = moment(log.date);
+      const selectedMoment = moment(selectedDate);
+      const matches =
+        log.Medname.trim().toLowerCase() === med.MedName.trim().toLowerCase() &&
+        logDate.isSame(selectedMoment, "day") &&
+        log.timeOfday.trim().toLowerCase() === timeOfday.trim().toLowerCase();
+      console.log("Checking log:", { log, matches });
+      return matches;
+    });
   }
 
   // function to open log modal and set selected medication
@@ -133,7 +169,12 @@ export default function HomeScreen() {
               <Text style={styles.sectionHeader}>{frequency}</Text>
               {/* render each medication as a mini med card */}
               {filteredMeds.map((med) => (
-                <MiniMedCard key={med._id} item={med} onPress={pressMed} />
+                <MiniMedCard
+                  key={med._id}
+                  item={med}
+                  onPress={pressMed}
+                  taken={isLogged(med, selectedDate, frequency)}
+                />
               ))}
             </View>
           );
